@@ -1,0 +1,20 @@
+working
+- how will gameloopstate interact with larger program?
+  - entering and exiting
+  - how to send things to UI and rendering
+
+
+To do
+- decide what parts of base combatstate you want
+- decide what parts of GameLoopState are essential
+  - refactor GameLoopState to be more clear
+
+- what vs extensions do I want?
+  - cursor extensions?
+  - linter?
+
+Things to try in Cursor
+  - different models
+  - terminal commands?
+  - way to give cursor the overall context/goals of the proejct
+
