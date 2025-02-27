@@ -1,7 +1,49 @@
 working
-- how will gameloopstate interact with larger program?
+
+going through the phases in COmbatEngine
+reaction, mime and quick all have a queue as can be multiple
+  the flags are stored on the player units. which combat engine needs. where should the processing of that be done?
+    maybe combatobject?
+
+
+- DONE how will gameloopstate interact with larger program?
+  -MODULARIZE AS MUCH AS POSSIBLE, CAN RECONSTRUCT FROM THE COMPONENTS
   - entering and exiting
   - how to send things to UI and rendering
+
+/// 2. Implement cleaner separation of concerns:
+///    - GameModel: Pure data structures representing game state
+///    - GameLogic: Rules and state transitions (platform-agnostic)
+///    - Presentation: Rendering and UI (platform-specific)
+///    - Input: User interaction handling (platform-specific)
+
+  example in chat. way to modularize everything. pretty neat
+  starting here. going to break things down into components. will go back to state system but first want things
+  as modular as possible
+
+/// 3. Use dependency injection instead of singletons
+///    - Replace PlayerManager.Instance, StatusManager.Instance, etc. with injected dependencies
+///    - Makes testing easier and components more reusable
+/// 
+/// 4. Extract smaller, focused classes from this large state class
+///    - PhaseHandler classes for each game phase
+///    - ActionResolver classes for different action types
+
+/// 4. Extract smaller, focused classes from this large state class
+///    - PhaseHandler classes for each game phase
+///    - ActionResolver classes for different action types
+
+- dependency injections for gameloopstate instead of singletsons
+  private readonly IStatusManager _statusManager;
+  private readonly ISpellManager _spellManager;
+  
+  // Dependencies provided through constructor
+  public GameLoopState(IStatusManager statusManager, ISpellManager spellManager)
+  {
+      _statusManager = statusManager;
+      _spellManager = spellManager;
+  }
+    
 
 
 To do
@@ -12,6 +54,9 @@ To do
 - what vs extensions do I want?
   - cursor extensions?
   - linter?
+
+backlog
+  refreshing the turns list and other UI stuff will need some sort of listener
 
 Things to try in Cursor
   - different models
