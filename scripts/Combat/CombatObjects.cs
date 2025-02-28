@@ -15,6 +15,12 @@ public class CombatObject
 
     public List<int> mimeQueue { get; set; }
 
+    /// <summary>
+    /// Get the potential reaction, mime, or quick phase
+    /// If none exist then return the current phase, which will mean the next
+    /// phase can be processed according to the current phase processing logic
+    /// IE for slowactions, the next phase is CTIncrement
+    /// </summary>
     public Phases getPotentialReactionMimeQuickPhase(Phase currentPhase)
     {
 
@@ -66,8 +72,10 @@ public class CombatObject
 	// 	}
 	// 	else if (PlayerManager.Instance.QuickFlagCheckPhase() && midActiveTurn == 0)
 	// 	{
+    // //   remember that logic here is different for slow phase vs. midActiveTurn phase. if a unit is mid active turn, quick doesn't go next.
 	// 		//mid turn indicator is for ActiveTurns, can't jump from a midActiveTurn active turn into a Quick turn  
 	// 		return Phases.Quick;
+
 	// 	}
 	// 	return currentPhase;
 	// }

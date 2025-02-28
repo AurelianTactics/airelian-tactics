@@ -8,18 +8,18 @@ namespace AirelianTactics.Core.Logic
         // Services injected via constructor
         private readonly IStatusService _statusService;
         private readonly ISpellService _spellService;
-        private readonly IPlayerManager _playerManager;
+        private readonly IUnitService _unitService;
         
         public CombatEngine(
             CombatObject combatObject,
             IStatusService statusService,
             ISpellService spellService,
-            IPlayerManager playerManager)
+            IUnitService unitService)
         {
             _combatObject = combatObject;
             _statusService = statusService;
             _spellService = spellService;
-            _playerManager = playerManager;
+            _unitService = unitService;
         }
         
         // Core game loop logic
@@ -95,77 +95,85 @@ namespace AirelianTactics.Core.Logic
                     _combatObject.CurrentPhase = Phases.CTIncrement;
                 }
             }
-            
-
-            
         }
 
-        // private void ProcessCTIncrement()
-        // {
-        //     // Process CT increment for all units
-        //     _spellService.ProcessCTIncrement();
+        private void ProcessCTIncrement()
+        {
+            // Process CT increment for all units
+            _unitService.ProcessCTIncrement();
 
-        //     // Transition to next phase
-        //     _combatObject.CurrentPhase = Phases.ActiveTurn; 
-        // }
+            // Transition to next phase
+            _combatObject.CurrentPhase = Phases.ActiveTurn; 
+        }
 
-        // private void ProcessActiveTurn()
-        // {
-        //     // Process active turn for all units
-        //     _spellService.ProcessActiveTurn();  
+        private void ProcessActiveTurn()
+        {
+            // can be here due to beginning of an active turn
+            // can be here mid turn due to a reaction or mime (maybe a slow action but unlikely)
 
-        //     // Transition to next phase
-        //     _combatObject.CurrentPhase = Phases.EndActiveTurn;
-        // }       
+            // check if a flag interrupts before active turn goes
+            _combatObject.CurrentPhase = _combatObject.getPotentialReactionMimeQuickPhase(_combatObject.CurrentPhase);
 
+            if (_combatObject.CurrentPhase == Phases.ActiveTurn){
+
+                bool isActiveTurn = _unitManager.IsActiveTurn();
+
+                if (isActiveTurn){
+                    // to do: handle the active turn. Possibly a call to the next state?
+                    Console.WriteLine("To do: handle active turn"); 
+                }
+                else {
+                    _combatObject.CurrentPhase = Phases.StatusTick;
+                }
+                // Process next slow action if it exists
+                wasSlowActionProcessed = _spellService.ProcessNextSlowAction();
+
+            }
+
+            
+        }       
+
+        // not sure if needed here. can probably handle with flags or after a unit ends their turn
         // private void ProcessEndActiveTurn()
         // {
-        //     // Process end active turn for all units
-        //     _spellService.ProcessEndActiveTurn();   
 
-        //     // Transition to next phase
-        //     _combatObject.CurrentPhase = Phases.Mime;
         // }
 
+        // to do: I think i can handle with flags
         // private void ProcessMime()
         // {
-        //     // Process mime for all units
-        //     _spellService.ProcessMime();
 
-        //     // Transition to next phase
-        //     _combatObject.CurrentPhase = Phases.Reaction;
         // }
 
+        // to do: I think i can handle with flags
         // private void ProcessReaction()
         // {
-        //     // quick and slow actions can boot out of reaction so can't stay here until all are done
-        //     // Process reaction for all units
-        //     _spellService.ProcessReaction();
 
-        //     // Transition to next phase
-        //     _combatObject.CurrentPhase = Phases.Quick;
         // }
 
+        // to do: I think i can handle with flags
         // private void ProcessQuick()
         // {   
-        //     // Process quick for all units
-        //     _spellService.ProcessQuick();
 
-        //     // Transition to next phase
-        //     //_combatObject.CurrentPhase = Phases.Standby;    
         // }
     }
     
-    // Service interfaces
-    public interface IStatusService
-    {
-        void ProcessStatusEffects(PlayerUnit unit);
-        bool IsTurnActable(int unitId);
-    }
+    // // Service interfaces
+    // public interface IStatusService
+    // {
+    //     void ProcessStatusEffects(PlayerUnit unit);
+    //     bool IsTurnActable(int unitId);
+    // }
     
-    public interface ISpellService
-    {
-        void ProcessSlowActions();
-        SpellSlow GetNextSlowAction();
-    }
+    // public interface ISpellService
+    // {
+    //     void ProcessSlowActions();
+    //     SpellSlow GetNextSlowAction();
+    // }
+
+    // public interface IUnitManager
+    // {
+    //     bool IsActiveTurn();
+    //     void ProcessCTIncrement();
+    // }
 }
