@@ -3,7 +3,7 @@ working
 
 DONE think through how going from gameengine to different states
 
-want to outline
+DONE want to outline
   core game loop that runs
   state manager that smartly manages states
     need the interface
@@ -12,6 +12,21 @@ want to outline
       my game engine state needs to kick out more often: ie for slow actions needs to kick out so
         stuff can resolve
   ask agent to write it first and then go from there
+
+so next steps
+  DONE can run a C# program. compile it and do hello world
+  then do the really basic state stuff. abstract out user input
+
+I think I want to demo and mock up a simple build and run of the state stuff to make sure
+  I understand it
+  It works properly
+  That how I am doing the core game engine makes sense with it.
+    like current logic for slowaction resolve is just resolve it. Nice for readability and simplicity
+    but I think it has to be its own state as it might have its own rendering things so would be nice
+    to make it like that maybe? Or maybe that can be done later when it's needed?
+      kind of leaning towards later. when  you need the state, then create ita nd use it
+
+
 
 
 
@@ -61,6 +76,8 @@ To do
   - linter?
 
 backlog
+  debugging and running C# in cursor is a pain as of 3/3/25. Research indicates need to use visual studio
+    or something else side by side.
   refreshing the turns list and other UI stuff will need some sort of listener
   service files have a bunch of placeholders
 

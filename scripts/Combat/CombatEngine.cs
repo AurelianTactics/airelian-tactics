@@ -157,23 +157,5 @@ namespace AirelianTactics.Core.Logic
 
         // }
     }
-    
-    // // Service interfaces
-    // public interface IStatusService
-    // {
-    //     void ProcessStatusEffects(PlayerUnit unit);
-    //     bool IsTurnActable(int unitId);
-    // }
-    
-    // public interface ISpellService
-    // {
-    //     void ProcessSlowActions();
-    //     SpellSlow GetNextSlowAction();
-    // }
 
-    // public interface IUnitManager
-    // {
-    //     bool IsActiveTurn();
-    //     void ProcessCTIncrement();
-    // }
 }
