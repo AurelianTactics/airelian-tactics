@@ -66,6 +66,9 @@ I think I want to demo and mock up a simple build and run of the state stuff to 
 
 
 To do
+- PlayerUnit: need to strip this way down. too much going on, too many dependencies
+  - need to make it much more subbed out and go from there
+  - basic functionality first then see what needs to be added
 - when / how to go from different states. particulary in combatengine going to a unit takes the next state
 - decide what parts of base combatstate you want
 - decide what parts of GameLoopState are essential
