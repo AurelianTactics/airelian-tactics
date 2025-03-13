@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
 /// <summary>
 /// Directions a PlayerUnit can face N,E,S,W

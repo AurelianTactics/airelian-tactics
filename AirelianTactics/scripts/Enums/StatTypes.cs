@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿
 
 /// <summary>
 /// Not implemented may be used in future versions (with the correct stats) 

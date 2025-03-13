@@ -1,4 +1,4 @@
 Usage
 dotnet run
 
-Call from base directory
+Call from directory of HelloWorld

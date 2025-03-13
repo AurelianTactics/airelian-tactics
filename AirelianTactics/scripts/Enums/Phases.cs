@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿
 
 /// <summary>
 /// Phases GameLoop.cs can be in

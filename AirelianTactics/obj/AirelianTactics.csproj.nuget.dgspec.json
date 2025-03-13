@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\james\\github_repos\\airelian-tactics\\HelloWorld\\HelloWorld.csproj": {}
+    "C:\\Users\\james\\github_repos\\airelian-tactics\\AirelianTactics\\AirelianTactics.csproj": {}
   },
   "projects": {
-    "C:\\Users\\james\\github_repos\\airelian-tactics\\HelloWorld\\HelloWorld.csproj": {
+    "C:\\Users\\james\\github_repos\\airelian-tactics\\AirelianTactics\\AirelianTactics.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\james\\github_repos\\airelian-tactics\\HelloWorld\\HelloWorld.csproj",
-        "projectName": "HelloWorld",
-        "projectPath": "C:\\Users\\james\\github_repos\\airelian-tactics\\HelloWorld\\HelloWorld.csproj",
+        "projectUniqueName": "C:\\Users\\james\\github_repos\\airelian-tactics\\AirelianTactics\\AirelianTactics.csproj",
+        "projectName": "AirelianTactics",
+        "projectPath": "C:\\Users\\james\\github_repos\\airelian-tactics\\AirelianTactics\\AirelianTactics.csproj",
         "packagesPath": "C:\\Users\\james\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\james\\github_repos\\airelian-tactics\\HelloWorld\\obj\\",
+        "outputPath": "C:\\Users\\james\\github_repos\\airelian-tactics\\AirelianTactics\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

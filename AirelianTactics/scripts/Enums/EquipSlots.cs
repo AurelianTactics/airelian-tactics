@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
 //not implemnted, might be used in future versions (with editing)
 

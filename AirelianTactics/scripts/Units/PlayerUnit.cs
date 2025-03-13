@@ -9,11 +9,11 @@ using System.Collections.Generic;
 [System.Serializable]
 public class PlayerUnit {
 
-    //tells victory conditions to check to see if a unit is knocked out
-    public static string DidChangeNotification()
-    {
-        return "PlayerUnit.AbleToFightDidChange";
-    }
+    // //tells victory conditions to check to see if a unit is knocked out
+    // public static string DidChangeNotification()
+    // {
+    //     return "PlayerUnit.AbleToFightDidChange";
+    // }
 
     private bool TwoSwordsEligible { get; set; }
     private bool OnMoveEffect { get; set; }

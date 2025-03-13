@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
 /// <summary>
 /// PlayerUnit relationship status with another PlayerUnit. Ie allied, hostile, etc.

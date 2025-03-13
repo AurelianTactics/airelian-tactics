@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
 /// <summary>
 /// Way a PlayerUnit can face another PlayerUnit/other type of object. Front, Side, Back

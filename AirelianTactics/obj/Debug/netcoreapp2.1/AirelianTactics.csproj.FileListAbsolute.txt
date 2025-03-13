@@ -1,0 +1,4 @@
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.csprojAssemblyReference.cache
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.csproj.CoreCompileInputs.cache
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.AssemblyInfoInputs.cache
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.AssemblyInfo.cs

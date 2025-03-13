@@ -1,8 +1,10 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "HelloWorld\HelloWorld.csproj", "{3A798C92-DA22-B784-11D5-249F2DEA19E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirelianTactics", "AirelianTactics\AirelianTactics.csproj", "{CE21C491-FC8A-4EC6-8723-6841501207C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,6 +16,10 @@ Global
 		{3A798C92-DA22-B784-11D5-249F2DEA19E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A798C92-DA22-B784-11D5-249F2DEA19E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A798C92-DA22-B784-11D5-249F2DEA19E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE21C491-FC8A-4EC6-8723-6841501207C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE21C491-FC8A-4EC6-8723-6841501207C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE21C491-FC8A-4EC6-8723-6841501207C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE21C491-FC8A-4EC6-8723-6841501207C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
