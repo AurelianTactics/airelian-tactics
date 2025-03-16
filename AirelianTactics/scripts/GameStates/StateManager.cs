@@ -19,10 +19,21 @@ public class StateManager
     private Dictionary<Type, IState> states = new Dictionary<Type, IState>();
 
     /// <summary>
+    /// Dictionary defining the flow between states.
+    /// Key is the current state type, value is the next state type.
+    /// </summary>
+    private Dictionary<Type, Type> stateFlow = new Dictionary<Type, Type>();
+
+    /// <summary>
     /// Event triggered when a state transition occurs.
     /// Provides the previous state and the new state.
     /// </summary>
     public event Action<IState, IState> OnStateChanged;
+
+    /// <summary>
+    /// Flag indicating if the current state has completed its work.
+    /// </summary>
+    private bool currentStateCompleted = false;
 
     /// <summary>
     /// Registers a state with the state manager.
@@ -41,6 +52,40 @@ public class StateManager
         {
             // Add new state
             states.Add(stateType, state);
+        }
+    }
+
+    /// <summary>
+    /// Defines the flow between states.
+    /// </summary>
+    /// <typeparam name="TFrom">The source state type.</typeparam>
+    /// <typeparam name="TTo">The destination state type.</typeparam>
+    public void DefineStateFlow<TFrom, TTo>()
+        where TFrom : IState
+        where TTo : IState
+    {
+        Type fromType = typeof(TFrom);
+        Type toType = typeof(TTo);
+
+        if (!states.ContainsKey(fromType))
+        {
+            throw new ArgumentException($"State of type {fromType.Name} is not registered with the StateManager.");
+        }
+
+        if (!states.ContainsKey(toType))
+        {
+            throw new ArgumentException($"State of type {toType.Name} is not registered with the StateManager.");
+        }
+
+        if (stateFlow.ContainsKey(fromType))
+        {
+            // Replace existing flow if it's already defined
+            stateFlow[fromType] = toType;
+        }
+        else
+        {
+            // Add new flow
+            stateFlow.Add(fromType, toType);
         }
     }
 
@@ -81,6 +126,7 @@ public class StateManager
 
         // Set and enter the new state
         currentState = newState;
+        currentStateCompleted = false;
         currentState.Enter();
 
         // Trigger the state changed event
@@ -94,7 +140,25 @@ public class StateManager
     {
         if (currentState != null)
         {
+            // Update the current state
             currentState.Update();
+            
+            // Check if the state has completed its work
+            if (currentState is State state && state.IsCompleted)
+            {
+                currentStateCompleted = true;
+            }
+            
+            // If the current state has completed, transition to the next state
+            if (currentStateCompleted)
+            {
+                Type currentStateType = currentState.GetType();
+                if (stateFlow.ContainsKey(currentStateType))
+                {
+                    Type nextStateType = stateFlow[currentStateType];
+                    ChangeState(nextStateType);
+                }
+            }
         }
     }
 
@@ -121,5 +185,14 @@ public class StateManager
         }
 
         return (T)states[stateType];
+    }
+
+    /// <summary>
+    /// Marks the current state as completed.
+    /// This will trigger a transition to the next state in the flow.
+    /// </summary>
+    public void CompleteCurrentState()
+    {
+        currentStateCompleted = true;
     }
 } 

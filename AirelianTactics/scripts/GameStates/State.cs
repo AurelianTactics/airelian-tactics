@@ -13,12 +13,18 @@ public abstract class State : IState
     protected StateManager stateManager;
 
     /// <summary>
+    /// Flag indicating if this state has completed its work.
+    /// </summary>
+    public bool IsCompleted { get; protected set; }
+
+    /// <summary>
     /// Constructor that takes a state manager.
     /// </summary>
     /// <param name="stateManager">The state manager that will manage this state.</param>
     public State(StateManager stateManager)
     {
         this.stateManager = stateManager;
+        IsCompleted = false;
     }
 
     /// <summary>
@@ -27,6 +33,7 @@ public abstract class State : IState
     /// </summary>
     public virtual void Enter()
     {
+        IsCompleted = false;
         AddListeners();
     }
 
@@ -64,6 +71,15 @@ public abstract class State : IState
     protected virtual void RemoveListeners()
     {
         // Default implementation does nothing
+    }
+
+    /// <summary>
+    /// Marks this state as completed.
+    /// This will trigger a transition to the next state in the flow.
+    /// </summary>
+    protected void CompleteState()
+    {
+        IsCompleted = true;
     }
 
     /// <summary>
