@@ -1,3 +1,6 @@
+using AirelianTactics.Services;
+
+
 namespace AirelianTactics.Core.Logic
 {
     // Core game logic
@@ -61,7 +64,7 @@ namespace AirelianTactics.Core.Logic
         private void ProcessStatusTick()
         {
             // Process status effects for all units
-            _statusService.ProcessStatusEffects(_playerManager);
+            //_statusService.ProcessStatusEffects(_unitService);
 
             // Transition to next phase
             _combatObject.CurrentPhase = Phases.SlowActionTick;
@@ -70,7 +73,7 @@ namespace AirelianTactics.Core.Logic
         private void ProcessSlowActionTick()
         {
             // Process slow actions tick
-            _spellService.ProcessSlowActionTick();
+            //_spellService.ProcessSlowActionTick();
 
             // Transition to next phase
             _combatObject.CurrentPhase = Phases.SlowAction;
@@ -78,29 +81,29 @@ namespace AirelianTactics.Core.Logic
 
         private void ProcessSlowAction()
         {
-            _combatObject.CurrentPhase = _combatObject.getPotentialReactionMimeQuickPhase(_combatObject.CurrentPhase);
+            // _combatObject.CurrentPhase = _combatObject.getPotentialReactionMimeQuickPhase(_combatObject.CurrentPhase);
 
-            if (_combatObject.CurrentPhase == Phases.SlowAction){
-                // Process next slow action if it exists
-                wasSlowActionProcessed = _spellService.ProcessNextSlowAction();
+            // if (_combatObject.CurrentPhase == Phases.SlowAction){
+            //     // Process next slow action if it exists
+            //     wasSlowActionProcessed = _spellService.ProcessNextSlowAction();
 
-                if (wasSlowActionProcessed){
-                    // return here to see if there are more slow actions or if a flag interupts before the next slow action
-                    // ie reaction goes next
-                    _combatObject.CurrentPhase = Phases.SlowAction;
-                }
-                else{
-                    // no slow action to process, so CTIncrement
-                    // Transition to next phase
-                    _combatObject.CurrentPhase = Phases.CTIncrement;
-                }
-            }
+            //     if (wasSlowActionProcessed){
+            //         // return here to see if there are more slow actions or if a flag interupts before the next slow action
+            //         // ie reaction goes next
+            //         _combatObject.CurrentPhase = Phases.SlowAction;
+            //     }
+            //     else{
+            //         // no slow action to process, so CTIncrement
+            //         // Transition to next phase
+            //         _combatObject.CurrentPhase = Phases.CTIncrement;
+            //     }
+            // }
         }
 
         private void ProcessCTIncrement()
         {
             // Process CT increment for all units
-            _unitService.ProcessCTIncrement();
+            //_unitService.ProcessCTIncrement();
 
             // Transition to next phase
             _combatObject.CurrentPhase = Phases.ActiveTurn; 
@@ -108,54 +111,54 @@ namespace AirelianTactics.Core.Logic
 
         private void ProcessActiveTurn()
         {
-            // can be here due to beginning of an active turn
-            // can be here mid turn due to a reaction or mime (maybe a slow action but unlikely)
+            // // can be here due to beginning of an active turn
+            // // can be here mid turn due to a reaction or mime (maybe a slow action but unlikely)
 
-            // check if a flag interrupts before active turn goes
-            _combatObject.CurrentPhase = _combatObject.getPotentialReactionMimeQuickPhase(_combatObject.CurrentPhase);
+            // // check if a flag interrupts before active turn goes
+            // _combatObject.CurrentPhase = _combatObject.getPotentialReactionMimeQuickPhase(_combatObject.CurrentPhase);
 
-            if (_combatObject.CurrentPhase == Phases.ActiveTurn){
+            // if (_combatObject.CurrentPhase == Phases.ActiveTurn){
 
-                bool isActiveTurn = _unitManager.IsActiveTurn();
+            //     bool isActiveTurn = _unitManager.IsActiveTurn();
 
-                if (isActiveTurn){
-                    // to do: handle the active turn. Possibly a call to the next state?
-                    Console.WriteLine("To do: handle active turn"); 
-                }
-                else {
-                    _combatObject.CurrentPhase = Phases.StatusTick;
-                }
-                // Process next slow action if it exists
-                wasSlowActionProcessed = _spellService.ProcessNextSlowAction();
+            //     if (isActiveTurn){
+            //         // to do: handle the active turn. Possibly a call to the next state?
+            //         Console.WriteLine("To do: handle active turn"); 
+            //     }
+            //     else {
+            //         _combatObject.CurrentPhase = Phases.StatusTick;
+            //     }
+            //     // Process next slow action if it exists
+            //     wasSlowActionProcessed = _spellService.ProcessNextSlowAction();
 
-            }
+            // }
 
             
         }       
 
         // not sure if needed here. can probably handle with flags or after a unit ends their turn
-        // private void ProcessEndActiveTurn()
-        // {
+        private void ProcessEndActiveTurn()
+        {
 
-        // }
-
-        // to do: I think i can handle with flags
-        // private void ProcessMime()
-        // {
-
-        // }
+        }
 
         // to do: I think i can handle with flags
-        // private void ProcessReaction()
-        // {
+        private void ProcessMime()
+        {
 
-        // }
+        }
 
         // to do: I think i can handle with flags
-        // private void ProcessQuick()
-        // {   
+        private void ProcessReaction()
+        {
 
-        // }
+        }
+
+        // to do: I think i can handle with flags
+        private void ProcessQuick()
+        {   
+
+        }
     }
 
 }

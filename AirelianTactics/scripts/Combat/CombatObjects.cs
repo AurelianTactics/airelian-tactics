@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using AirelianTactics.Services;
+using AirelianTactics.Core.Logic;
+
 /// <summary>
 /// CombatObject is a class that contains all the data for a combat session.
 /// Used in CombatEngine to process the game loop.  
@@ -6,6 +11,8 @@
 public class CombatObject
 {
 
+    //private readonly IUnitService _unitService;
+    
     public Phases CurrentPhase { get; set; }
     public int ActiveTurnUnitId { get; set; }
     public bool isReactionFlag { get; set; }
@@ -21,15 +28,15 @@ public class CombatObject
     /// phase can be processed according to the current phase processing logic
     /// IE for slowactions, the next phase is CTIncrement
     /// </summary>
-    public Phases getPotentialReactionMimeQuickPhase(Phase currentPhase)
+    public Phases getPotentialReactionMimeQuickPhase(Phases currentPhase)
     {
 
-        this.isReactionFlag = GetAnyPlayerUnitReactionFlag(PlayerManager.Instance);
+        // this.isReactionFlag = GetAnyPlayerUnitReactionFlag(PlayerManager.Instance);
 
-        if (this.isReactionFlag)
-        {
-            return Phases.Reaction;
-        }
+        // if (this.isReactionFlag)
+        // {
+        //     return Phases.Reaction;
+        // }
 
         // to do mime stuff and quicks tuff
         // else if (isMimeFlag)
@@ -52,10 +59,12 @@ public class CombatObject
     /// If there is no reaction, return false.
     /// the existence of one reaction means that the reaction phase needs to be processed.
     /// </summary>
-    public void GetAnyPlayerUnitReactionFlag(IPlayerManager _playerManager){
-        bool isReaction = _playerManager.GetReactionFlag();
+    public bool GetAnyPlayerUnitReactionFlag(IUnitService _unitService){
+        // to do: implement this
+        return false;
+        // bool isReaction = _unitService.GetReactionFlag();
         
-        return isReaction;
+        // return isReaction;
     }
 
     // Phases CheckForFlag(Phases currentPhase, int midActiveTurn = 0)

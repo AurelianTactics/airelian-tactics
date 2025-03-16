@@ -2,3 +2,10 @@ C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreap
 C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.csproj.CoreCompileInputs.cache
 C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.AssemblyInfoInputs.cache
 C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.AssemblyInfo.cs
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\bin\Debug\netcoreapp2.1\AirelianTactics.deps.json
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\bin\Debug\netcoreapp2.1\AirelianTactics.runtimeconfig.json
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\bin\Debug\netcoreapp2.1\AirelianTactics.runtimeconfig.dev.json
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\bin\Debug\netcoreapp2.1\AirelianTactics.dll
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\bin\Debug\netcoreapp2.1\AirelianTactics.pdb
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.dll
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\netcoreapp2.1\AirelianTactics.pdb

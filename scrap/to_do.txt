@@ -78,6 +78,10 @@ To do
   - cursor extensions?
   - linter?
 
+  abstract reaction/quick/mime/slow action/ immediate fast action into something more general
+    this must have been how it was done. unlikely made this complicated initially. it's probably like a queue
+    that can be pulled and added to at various spots. and sometimes a toggle to let a unit go first or not
+
 backlog
   debugging and running C# in cursor is a pain as of 3/3/25. Research indicates need to use visual studio
     or something else side by side.
