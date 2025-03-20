@@ -61,10 +61,15 @@ I think I want to demo and mock up a simple build and run of the state stuff to 
 
 TEST minimal unit service
 
-- PlayerUnit: need to strip this way down. too much going on, too many dependencies
+- DONE minimal PlayerUnit: need to strip this way down. too much going on, too many dependencies
   - need to make it much more subbed out and go from there
-  - basic functionality first then see what needs to be added
-  - CT, speed, PA, HP, move, jump
+  - DONE basic functionality first then see what needs to be added
+    - decrement HP
+    - DONE not aliver or not
+    - DONE increment CT
+  - DONE flag for if AT available probably. think it makes sense to handle here? at least have the flag and function here
+    - maybe call it elsewhere
+  - DONE CT, speed, PA, HP, move, jump
 
 
 To do
