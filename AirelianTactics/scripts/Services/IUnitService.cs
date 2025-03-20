@@ -16,5 +16,25 @@ namespace AirelianTactics.Services
         void AddUnit(PlayerUnit unit);
         void RemoveUnit(PlayerUnit unit);
         
+        void IncrementCTAll();
+
+        void AlterHP(PlayerUnit unit, int hp);
+
+        void SetEligibleForActiveTurn();
+
+        /// <summary>
+        /// Gets the Mid Active Turn Unit that should go next or
+        /// the first eligible unit if no unit is mid active turn
+        /// or null if no units are eligible
+        /// May want a list version of this
+        /// </summary>
+        /// <returns></returns>
+        PlayerUnit GetNextActiveTurnPlayerUnit();
+
+        bool IsAnyUnitMidActiveTurn();
+
+        // not sure if going to use this or direct PlayerUnit. Not sure what arg will be ifused
+        void SetUnitMidActiveTurn(PlayerUnit unit);
     }
+
 } 

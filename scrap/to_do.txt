@@ -60,6 +60,7 @@ I think I want to demo and mock up a simple build and run of the state stuff to 
 
 
 TEST minimal unit service
+  - alter HP, increment CT, set next turn etc
 
 - DONE minimal PlayerUnit: need to strip this way down. too much going on, too many dependencies
   - need to make it much more subbed out and go from there
@@ -70,6 +71,37 @@ TEST minimal unit service
   - DONE flag for if AT available probably. think it makes sense to handle here? at least have the flag and function here
     - maybe call it elsewhere
   - DONE CT, speed, PA, HP, move, jump
+
+other minimal stuff to do
+- do team and victory as classes and pass around for now. can add listeners later
+- want to store team information and alliance in a class
+  - unitservice just sets the values on the units and checks the data from the class
+  - can be a listener or passed to player unit and updated if a unit is incapacitated
+- need a victory condition
+  - one team incapacitated or not
+  - can be a listener or uses team class object to tell
+
+- need a game board. would like to be able to render it
+  - want tiles as well
+  - would be nice to do square and hex
+
+- to set teams and alliances between teams
+  - team can be a dict. team id, name, then dict with alliance related to other teams
+  - units can store a team id
+  - when a unit in incapacitated then check if any in that team are incapacitated or not
+    - so incapacitated PU function has to return a value for if a new check is needed. then do the check in US
+    - or can be a notification that is caught
+  - unit service needs to throw a notification or a bool if a team is incapacitated. can then trigger a victory condition or not
+    - or could have the victory condition check be done at different points in the game loop. kind of like this
+    - look into how the notification system and listeners would work and how to do that. leaning towards passing the victory condition
+    - class around or making it a subset of CombatEngine / CombatObject
+- have to be able to move, act (attack only), wait, and set direction
+- game lop streamlined of course
+- spells, stats and items can wait. maybe do one spell for act
+- sub out the dmg calc for now. make it simple
+- minimal file to load map and units from. thinking a json
+
+
 
 
 To do

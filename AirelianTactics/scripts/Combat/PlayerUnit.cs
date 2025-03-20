@@ -8,11 +8,16 @@ public class PlayerUnit {
     private int StatTotalMove { get; set; }
     private int StatTotalJump { get; set; }
 
+    /// <summary>
+    /// Units unique identifier. Lower number goes first in case of turn order and
+    /// other tiebreakers.
+    /// </summary>
     private int UnitId { get; set; }
 
     // if all units on a team are incapacitated, the team is defeated
     private bool IsIncapacitated { get; set; }
 
+    private bool IsMidActiveTurn { get; set; }
     public PlayerUnit(int ct, int speed, int pa, int hp, int move, int jump, int unitId) {
         this.StatTotalCT = ct;
         this.StatTotalSpeed = speed;
@@ -23,6 +28,7 @@ public class PlayerUnit {
 
         this.UnitId = unitId;
         this.IsIncapacitated = false;
+        this.IsMidActiveTurn = false;
     }
 
     public bool IsEligibleForActiveTurn() {
