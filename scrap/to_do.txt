@@ -73,6 +73,13 @@ TEST minimal unit service
   - DONE CT, speed, PA, HP, move, jump
 
 other minimal stuff to do
+- thinking up next: check victory condition before the increment CT check
+  - update team status by passing UnitService and CombatTeammanager to VictoryCondition
+  - then if last team standing do the various checks. return true or not and handle in combatengine. lot of ways to speed this up if want to do that later
+- muddling my way through it. need a function in UnitService that given a CombatTeam sees if it is defeated or not
+  - kind of messy, have to actively check for it. would be better with a listener that updates when a unit is defeated
+  - or maybe the combat team manager is stored in UnitService and can be updated. but that is kind of messy as well
+  - maybe just check at a spot in the game loop, then combatmanager checks victory conditions
 - do team and victory as classes and pass around for now. can add listeners later
 - want to store team information and alliance in a class
   - unitservice just sets the values on the units and checks the data from the class
@@ -120,12 +127,14 @@ To do
     that can be pulled and added to at various spots. and sometimes a toggle to let a unit go first or not
 
 backlog
+  team alive check and victory conditions could be better done with listeners
   the state logic and transitions are abstracted way ibut in program.cs and not a logical place
   how am I going to do NameAll like thing but better?
   debugging and running C# in cursor is a pain as of 3/3/25. Research indicates need to use visual studio
     or something else side by side.
   refreshing the turns list and other UI stuff will need some sort of listener
   service files have a bunch of placeholders
+  organize the namespaces
 
 Things to try in Cursor
   - different models
