@@ -73,20 +73,15 @@ TEST minimal unit service
   - DONE CT, speed, PA, HP, move, jump
 
 other minimal stuff to do
-- thinking up next: check victory condition before the increment CT check
-  - update team status by passing UnitService and CombatTeammanager to VictoryCondition
-  - then if last team standing do the various checks. return true or not and handle in combatengine. lot of ways to speed this up if want to do that later
-- muddling my way through it. need a function in UnitService that given a CombatTeam sees if it is defeated or not
-  - kind of messy, have to actively check for it. would be better with a listener that updates when a unit is defeated
-  - or maybe the combat team manager is stored in UnitService and can be updated. but that is kind of messy as well
-  - maybe just check at a spot in the game loop, then combatmanager checks victory conditions
-- do team and victory as classes and pass around for now. can add listeners later
-- want to store team information and alliance in a class
-  - unitservice just sets the values on the units and checks the data from the class
-  - can be a listener or passed to player unit and updated if a unit is incapacitated
-- need a victory condition
-  - one team incapacitated or not
-  - can be a listener or uses team class object to tell
+- VictoryCondition
+  - DONE plan it out
+  - DONE update unitSErvice, PlayerUnit and CombatTeamManager to handle the logic
+  - logic for putting teams in CombatTeamManager
+  - logic for checking if in combatengine if victory condition is met
+  - logic in combatengine for doing something with the victory condition
+    - pass something back to the state that owns its
+
+
 
 - need a game board. would like to be able to render it
   - want tiles as well
@@ -153,3 +148,19 @@ Done
   -MODULARIZE AS MUCH AS POSSIBLE, CAN RECONSTRUCT FROM THE COMPONENTS
   - entering and exiting
   - how to send things to UI and rendering
+
+- DONE misc thoughts on victory condition
+  - thinking up next: check victory condition before the increment CT check
+    - update team status by passing UnitService and CombatTeammanager to VictoryCondition
+    - then if last team standing do the various checks. return true or not and handle in combatengine. lot of ways to speed this up if want to do that later
+  - muddling my way through it. need a function in UnitService that given a CombatTeam sees if it is defeated or not
+    - kind of messy, have to actively check for it. would be better with a listener that updates when a unit is defeated
+    - or maybe the combat team manager is stored in UnitService and can be updated. but that is kind of messy as well
+    - maybe just check at a spot in the game loop, then combatmanager checks victory conditions
+  - do team and victory as classes and pass around for now. can add listeners later
+  - want to store team information and alliance in a class
+    - unitservice just sets the values on the units and checks the data from the class
+    - can be a listener or passed to player unit and updated if a unit is incapacitated
+  - need a victory condition
+    - one team incapacitated or not
+    - can be a listener or uses team class object to tell

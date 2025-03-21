@@ -100,5 +100,14 @@ namespace AirelianTactics.Services
         void SetUnitMidActiveTurn(PlayerUnit unit){
             unit.IsMidActiveTurn = true;
         }
+
+        bool IsTeamDefeated(int teamId){
+            foreach (var unit in _playerUnits) {
+                if (unit.TeamId == teamId && !unit.IsIncapacitated) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 } 

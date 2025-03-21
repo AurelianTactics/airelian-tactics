@@ -14,11 +14,13 @@ public class PlayerUnit {
     /// </summary>
     private int UnitId { get; set; }
 
+    private int TeamId { get; set; }
+    
     // if all units on a team are incapacitated, the team is defeated
     private bool IsIncapacitated { get; set; }
 
     private bool IsMidActiveTurn { get; set; }
-    public PlayerUnit(int ct, int speed, int pa, int hp, int move, int jump, int unitId) {
+    public PlayerUnit(int ct, int speed, int pa, int hp, int move, int jump, int unitId, int teamId) {
         this.StatTotalCT = ct;
         this.StatTotalSpeed = speed;
         this.StatTotalPA = pa;
@@ -29,6 +31,7 @@ public class PlayerUnit {
         this.UnitId = unitId;
         this.IsIncapacitated = false;
         this.IsMidActiveTurn = false;
+        this.TeamId = teamId;
     }
 
     public bool IsEligibleForActiveTurn() {

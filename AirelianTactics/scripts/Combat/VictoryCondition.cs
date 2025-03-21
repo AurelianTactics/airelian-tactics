@@ -9,12 +9,16 @@ public class VictoryCondition {
         this.victoryType = VictoryType.LastTeamStanding;
     }
 
-    public bool IsVictoryConditionMet(CombatTeamManager combatTeamManager) {
+    public bool IsVictoryConditionMet(CombatTeamManager combatTeamManager, UnitService unitService) {
         bool isVictoryConditionMet = false;
 
         if (this.victoryType == VictoryType.LastTeamStanding) {
+
+            // update team status of incapaciated or not from unitService
+            combatTeamManager.UpdateTeamStatus(unitService);
+
             int teamCount = combatTeamManager.GetTeamCount();
-            
+
             foreach (CombatTeam team in combatTeamManager.GetTeams()) {
                 if (team.IsDefeated) {
                     teamCount--;

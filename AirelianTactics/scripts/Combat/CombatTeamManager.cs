@@ -17,6 +17,12 @@ public class CombatTeamManager {
         return this.combatTeams.Count;
     }
 
+    public void UpdateTeamStatus(UnitService unitService) {
+        foreach (CombatTeam combatTeam in this.combatTeams) {
+            combatTeam.SetDefeated(unitService.IsTeamDefeated(combatTeam.GetTeamId()));
+        }
+    }
+
 }
 
 
