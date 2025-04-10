@@ -32,5 +32,7 @@ public class VictoryCondition {
         return isVictoryConditionMet;
     }
 
+    
+
 }
 

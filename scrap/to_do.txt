@@ -77,6 +77,19 @@ other minimal stuff to do
   - DONE plan it out
   - DONE update unitSErvice, PlayerUnit and CombatTeamManager to handle the logic
   - logic for putting teams in CombatTeamManager
+    - DONE research this
+      - some options: config files, API, database, unity approach, scriptable mod, resource manager, Data-Driven ECS (Entity Component System)
+      - thinking JSON config files for now and maybe ECS
+      - would prefer like a JSON thing that can be passed. not sure how it would work with compiled code without an API
+        - maybe see if can read from a shared API json thing. if so then just write/read there until later
+        - can always hook up the API at some point if that is how it can work with compiled
+          - so reasearch if that works too
+        - then reserach in general what recommendations are
+    - next steps
+      - logic for loading a json team object
+      - schema / logic for the team
+        - will need a team, unit and basic unit components
+        - guess do the map do. something simple for now. can formalize schema later
   - logic for checking if in combatengine if victory condition is met
   - logic in combatengine for doing something with the victory condition
     - pass something back to the state that owns its
