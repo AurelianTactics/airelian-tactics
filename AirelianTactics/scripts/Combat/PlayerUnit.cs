@@ -20,6 +20,7 @@ public class PlayerUnit {
     private bool IsIncapacitated { get; set; }
 
     private bool IsMidActiveTurn { get; set; }
+    
     public PlayerUnit(int ct, int speed, int pa, int hp, int move, int jump, int unitId, int teamId) {
         this.StatTotalCT = ct;
         this.StatTotalSpeed = speed;

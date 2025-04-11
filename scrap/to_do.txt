@@ -86,13 +86,20 @@ other minimal stuff to do
           - so reasearch if that works too
         - then reserach in general what recommendations are
     - next steps
-      - logic for loading a json team object
-      - schema / logic for the team
+      - DONE logic for loading a json team object
+      - DONE schema / logic for the team
         - will need a team, unit and basic unit components
-        - guess do the map do. something simple for now. can formalize schema later
+  - now have loaded config option.
+    - need something to hold it in. some sort of game context that can be used in statemanager in all states
+    - then in combat state init do the loading and populating of the game context
+    - load it there
+  
   - logic for checking if in combatengine if victory condition is met
   - logic in combatengine for doing something with the victory condition
     - pass something back to the state that owns its
+
+set up the map
+  - think through how you want to approach this
 
 
 
@@ -120,6 +127,22 @@ other minimal stuff to do
 
 
 To do
+- outline the MVP at a high level and the process
+  - launching script
+  - kicks off state manager
+  - combat init state
+    - loads JSON
+      - teams
+      - map
+      - other configs
+    - passes objects or assigns objects from the loaded json
+      - leaning more towards an object that is stored in state manager and exists in any state
+    - launches combat state
+  - combat state
+    - combatengine
+    - combatobjects
+    - combatteams
+    - mapping from the configs to the combat objects. or can I just map directly
 
 - when / how to go from different states. particulary in combatengine going to a unit takes the next state
 - decide what parts of base combatstate you want
