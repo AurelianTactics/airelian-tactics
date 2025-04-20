@@ -22,6 +22,9 @@ DONE so next steps
     once sure state manager works for this get my understanding up on it
     make sure can do minimal of what i need
 
+try different approach in agent_instructions
+  maybe add some more geenral notes from the podcast or courses from week of 4/13/25
+
 move the combatengine into combatstate and improve the main loop
   abstract the quick/mime/slow into something that makes more sense
   general purpose queue that stores the type of it and has an insert on it
@@ -73,6 +76,17 @@ TEST minimal unit service
   - DONE CT, speed, PA, HP, move, jump
 
 other minimal stuff to do
+- init combatstate will load the configs
+  - team
+  - units
+  - map (later)
+  - will want this in an object in statemanager that is passed to next state
+  - so set up init combat state, load the configs, populate the statemanager
+  - then in the combat start state work through how all this is going to work
+    - turn statemanager objec into teams
+    - turn statemanager object into units
+    - turn statemanager object into victory conditions
+
 - VictoryCondition
   - DONE plan it out
   - DONE update unitSErvice, PlayerUnit and CombatTeamManager to handle the logic

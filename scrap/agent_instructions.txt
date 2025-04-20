@@ -1,0 +1,66 @@
+Be Precise
+- one task at a time
+- break down complexity into small tasks
+- make prompts specified and detailed
+
+Be Organized
+- tidy projects
+    - add features step by step
+    - test features after each addition
+- start fresh chat each new features
+- be willing to roll back to prior commits
+
+Be patient
+- build an understanding
+- review code before accepting
+- debugging is time consuming: with or without an agent
+
+Main skills: thinking, framework, checkpoints, debugging, context
+    feature -> test -> error -> debug -> checkpoint -> feature
+
+
+1. Run the program
+
+2. Run with statemanager, go between 3 states
+- add test cases
+    - can do empty calls to and from each state
+- add documentation on statemanager and supporting components
+    - high level how it works
+    - examples for how to add new states
+
+3. StateManager with state init
+    - reads JSON on the teams
+    - passes to object
+    - goes to next state with that object
+    - next state uses that objec to make the teams
+    - test cases:
+        - tbd
+    - documentation
+
+4. Add other components to state init for the json
+    - player units
+    - map
+    - reads and passes to the next state with that object
+    - test cases
+    - documentation
+
+5. sets up teams, units, victory conditions
+    - test cases
+    - documentation
+
+6. integrates the core game engine and loop parts
+    - combat engine, main loop
+    - test cases
+    - documentation
+
+7. set up map with main functionality
+    - map, tiles,e tc and what is needed
+    - test cases
+    - documentation
+
+8. what else is needed for MVP
+
+9. minimal version of "UI" for testing with player interaction
+
+10. what is needed for logging and analysis
+    - minimal version

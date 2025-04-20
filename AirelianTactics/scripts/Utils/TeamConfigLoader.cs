@@ -31,6 +31,10 @@ public class TeamConfigLoader
                 ReadCommentHandling = JsonCommentHandling.Skip
             };
             
+            // This line deserializes (converts) the JSON string into a TeamConfig object
+            // JsonSerializer.Deserialize<T> is a method that takes a JSON string and converts it to an object of type T
+            // In this case, we're converting the JSON string to a TeamConfig object
+            // The options parameter configures how the deserialization works (case insensitivity, etc.)
             return JsonSerializer.Deserialize<TeamConfig>(jsonString, options);
         }
         catch (JsonException ex)

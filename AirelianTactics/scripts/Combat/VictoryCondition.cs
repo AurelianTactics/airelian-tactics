@@ -1,3 +1,6 @@
+using AirelianTactics.Services;
+using System.Collections.Generic;
+
 public class VictoryCondition {
 
     private VictoryType victoryType;

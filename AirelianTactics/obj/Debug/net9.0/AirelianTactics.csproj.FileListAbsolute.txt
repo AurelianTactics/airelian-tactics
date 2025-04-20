@@ -1,0 +1,5 @@
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\net9.0\AirelianTactics.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\net9.0\AirelianTactics.AssemblyInfoInputs.cache
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\net9.0\AirelianTactics.AssemblyInfo.cs
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\net9.0\AirelianTactics.csproj.CoreCompileInputs.cache
+C:\Users\james\github_repos\airelian-tactics\AirelianTactics\obj\Debug\net9.0\AirelianTactics.sourcelink.json

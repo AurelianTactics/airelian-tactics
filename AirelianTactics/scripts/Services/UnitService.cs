@@ -12,7 +12,7 @@ namespace AirelianTactics.Services
     /// </summary>
     public class UnitService : IUnitService
     {
-         private List<PlayerUnit> _playerUnits = new();
+        private List<PlayerUnit> _playerUnits = new List<PlayerUnit>();
         
         public List<PlayerUnit> PlayerUnits => _playerUnits;
         
@@ -29,17 +29,20 @@ namespace AirelianTactics.Services
         }
 
         
-        void IncrementCTAll(){
+        public void IncrementCTAll()
+        {
             foreach (var unit in _playerUnits) {
                 unit.AddCT();
             }
         }
 
-        void AlterHP(PlayerUnit unit, int hp){
+        public void AlterHP(PlayerUnit unit, int hp)
+        {
             unit.AlterHP(hp);
         }
 
-        void SetEligibleForActiveTurn(){
+        public void SetEligibleForActiveTurn()
+        {
             foreach (var unit in _playerUnits) {
                 unit.SetEligibleForActiveTurn();
             }
@@ -52,7 +55,8 @@ namespace AirelianTactics.Services
         /// May want a list version of this
         /// </summary>
         /// <returns></returns>
-        PlayerUnit GetNextActiveTurnPlayerUnit(){
+        public PlayerUnit GetNextActiveTurnPlayerUnit()
+        {
             PlayerUnit nextUnit = null;
 
             foreach (var unit in _playerUnits) {
@@ -87,7 +91,8 @@ namespace AirelianTactics.Services
             return nextUnit;
         }
 
-        bool IsAnyUnitMidActiveTurn(){
+        public bool IsAnyUnitMidActiveTurn()
+        {
             foreach (var unit in _playerUnits) {
                 if (unit.IsMidActiveTurn) {
                     return true;
@@ -97,7 +102,8 @@ namespace AirelianTactics.Services
         }
 
         // not sure if going to use this or direct PlayerUnit. Not sure what arg will be ifused
-        void SetUnitMidActiveTurn(PlayerUnit unit){
+        public void SetUnitMidActiveTurn(PlayerUnit unit)
+        {
             unit.IsMidActiveTurn = true;
         }
 
