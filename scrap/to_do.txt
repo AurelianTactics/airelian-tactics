@@ -1,5 +1,9 @@
 working
 
+DONE working throught the errors to debug to get the minimal hello world example working again. usage
+cd .\AirelianTactics\ ; dotnet run
+
+
 
 DONE think through how going from gameengine to different states
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// </summary>
 public class CombatTeamManager {
 
-    private List<CombatTeam> combatTeams;
+    public List<CombatTeam> combatTeams;
 
     public CombatTeamManager() {
         this.combatTeams = new List<CombatTeam>();
@@ -22,7 +22,7 @@ public class CombatTeamManager {
 
     public void UpdateTeamStatus(UnitService unitService) {
         foreach (CombatTeam combatTeam in this.combatTeams) {
-            combatTeam.SetDefeated(unitService.IsTeamDefeated(combatTeam.GetTeamId()));
+            combatTeam.SetDefeated(unitService.IsTeamDefeated(combatTeam.TeamId));
         }
     }
 

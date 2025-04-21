@@ -2,9 +2,9 @@
 /// Stores team related information and alliances with other teams
 /// </summary>
 public class CombatTeam {
-    private int TeamId { get; set; }
+    public int TeamId { get; set; }
 
-    private bool IsDefeated { get; set; }
+    public bool IsDefeated { get; set; }
 
     public CombatTeam(int teamId) {
         this.TeamId = teamId;

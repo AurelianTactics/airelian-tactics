@@ -22,7 +22,7 @@ public class VictoryCondition {
 
             int teamCount = combatTeamManager.GetTeamCount();
 
-            foreach (CombatTeam team in combatTeamManager.GetTeams()) {
+            foreach (CombatTeam team in combatTeamManager.combatTeams) {
                 if (team.IsDefeated) {
                     teamCount--;
                 }

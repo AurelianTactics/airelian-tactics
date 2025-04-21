@@ -78,8 +78,8 @@ namespace AirelianTactics.Services
                         continue;
                     }
                     else {
-                        if (unit.IsEligibleForActiveTurn) {
-                            if (unit.UnitId < nextUnit.UnitId) {
+                        if (unit.IsEligibleForActiveTurn()) {
+                            if (nextUnit == null || unit.UnitId < nextUnit.UnitId) {
                                 nextUnit = unit;
                             }
                         }
@@ -107,7 +107,7 @@ namespace AirelianTactics.Services
             unit.IsMidActiveTurn = true;
         }
 
-        bool IsTeamDefeated(int teamId){
+        public bool IsTeamDefeated(int teamId){
             foreach (var unit in _playerUnits) {
                 if (unit.TeamId == teamId && !unit.IsIncapacitated) {
                     return false;

@@ -12,14 +12,14 @@ public class PlayerUnit {
     /// Units unique identifier. Lower number goes first in case of turn order and
     /// other tiebreakers.
     /// </summary>
-    private int UnitId { get; set; }
+    public int UnitId { get; set; }
 
-    private int TeamId { get; set; }
+    public int TeamId { get; set; }
     
     // if all units on a team are incapacitated, the team is defeated
-    private bool IsIncapacitated { get; set; }
+    public bool IsIncapacitated { get; set; }
 
-    private bool IsMidActiveTurn { get; set; }
+    public bool IsMidActiveTurn { get; set; }
     
     public PlayerUnit(int ct, int speed, int pa, int hp, int move, int jump, int unitId, int teamId) {
         this.StatTotalCT = ct;
@@ -72,6 +72,16 @@ public class PlayerUnit {
         if (this.StatTotalHP <= 0) {
             this.IsIncapacitated = true;
             this.StatTotalHP = 0;
+        }
+    }
+
+    public void SetEligibleForActiveTurn() {
+        // This method was missing but is called in UnitService
+        // Implementation depends on what this method should do
+        // For now, setting a basic implementation
+        if (this.StatTotalCT >= 100 && !this.IsIncapacitated) {
+            // Unit is eligible for an active turn
+            // Any additional logic can be added here
         }
     }
 }

@@ -20,13 +20,14 @@ Main skills: thinking, framework, checkpoints, debugging, context
 
 
 1. Run the program
+    - Completed
 
 2. Run with statemanager, go between 3 states
-- add test cases
-    - can do empty calls to and from each state
-- add documentation on statemanager and supporting components
-    - high level how it works
-    - examples for how to add new states
+    - add test cases
+        - can do empty calls to and from each state
+    - add documentation on statemanager and supporting components
+        - high level how it works
+        - examples for how to add new states
 
 3. StateManager with state init
     - reads JSON on the teams
