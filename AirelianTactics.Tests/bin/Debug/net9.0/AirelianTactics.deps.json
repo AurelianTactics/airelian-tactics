@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "AirelianTactics/1.0.0": {
+        "runtime": {
+          "AirelianTactics.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AirelianTactics/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

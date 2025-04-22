@@ -20,16 +20,27 @@ Main skills: thinking, framework, checkpoints, debugging, context
 
 
 1. Run the program
-    - Completed
+    - COMPLETED
 
 2. Run with statemanager, go between 3 states
     - add test cases
         - can do empty calls to and from each state
+        - COMPLETED
     - add documentation on statemanager and supporting components
         - high level how it works
         - examples for how to add new states
+        - COMPLETED
 
 3. StateManager with state init
+    - Prompt:
+        In GameInitState I want to load @team_sample.json . I want to take this JSON parse it to a C# object
+        and store that object in an object that all States have access to. I want this object to then be accessible
+        in the next state transition MapSetupState. Your steps:
+            - Add code in GameInitState that loads the @team_sample.json
+            - Use @TeamConfigLoader.cs to create the object
+            - STOPPED EHRE object part of the state
+            - transition to the next state
+            - some sort of prints tatement in the next state
     - reads JSON on the teams
     - passes to object
     - goes to next state with that object
