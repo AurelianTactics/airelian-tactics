@@ -1,0 +1,18 @@
+{
+  "general": {
+    "victoryCondition": "LastTeamStanding",
+    "alliances": [
+      {
+        "0": {"1":"Enemy"},
+        "1": {"0":"Enemy"}
+      }
+    ]
+  },
+  "teams": [
+    "AirelianTactics/Configs/TeamConfigDirectory/team_sample.json",
+    "AirelianTactics/Configs/TeamConfigDirectory/team_sample_2.json"
+  ],
+  "map": {
+    "mapFile": "AirelianTactics/Configs/maps/default_map.json"
+  }
+} 

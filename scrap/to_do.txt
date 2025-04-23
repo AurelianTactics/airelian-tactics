@@ -29,6 +29,9 @@ DONE so next steps
 try different approach in agent_instructions
   maybe add some more geenral notes from the podcast or courses from week of 4/13/25
 
+work through how I am going to represent this visually / sound / AI usage
+  how I am going to modularize this part of it
+
 move the combatengine into combatstate and improve the main loop
   abstract the quick/mime/slow into something that makes more sense
   general purpose queue that stores the type of it and has an insert on it

@@ -5,6 +5,7 @@ Airelian Tactics is a turn-based tactics game, repurposed from OpenTactics/Aurel
 
 ## Table of Contents
 - [State Management System](StateManagement.md)
+- [Game Data and Configuration](GameDataAndConfiguration.md)
 
 The application executes from `Program.cs` in the AirelianTactics directory, which serves as the entry point for the game.
 

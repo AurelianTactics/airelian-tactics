@@ -119,6 +119,9 @@ namespace AirelianTactics.Tests.GameStates
             public Action? OnEnter { get; set; }
             public Action? OnExit { get; set; }
             public Action? OnUpdate { get; set; }
+            
+            // Implement the GameContext property
+            public GameContext GameContext { get; set; } = new GameContext();
 
             public void Enter() => OnEnter?.Invoke();
             public void Exit() => OnExit?.Invoke();
@@ -130,6 +133,9 @@ namespace AirelianTactics.Tests.GameStates
             public Action? OnEnter { get; set; }
             public Action? OnExit { get; set; }
             public Action? OnUpdate { get; set; }
+            
+            // Implement the GameContext property
+            public GameContext GameContext { get; set; } = new GameContext();
 
             public void Enter() => OnEnter?.Invoke();
             public void Exit() => OnExit?.Invoke();

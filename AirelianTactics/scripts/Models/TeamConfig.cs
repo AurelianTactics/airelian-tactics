@@ -8,7 +8,7 @@ public class TeamConfig
     /// <summary>
     /// The unique identifier for the team.
     /// </summary>
-    public int TeamId { get; set; }
+    public string TeamId { get; set; }
 
     /// <summary>
     /// The name of the team.

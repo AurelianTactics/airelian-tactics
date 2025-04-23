@@ -75,7 +75,7 @@ public class TeamConfigLoader
     {
         return new TeamConfig
         {
-            TeamId = 1,
+            TeamId = "1",
             TeamName = "Player Team",
             Units = new System.Collections.Generic.List<UnitConfig>
             {

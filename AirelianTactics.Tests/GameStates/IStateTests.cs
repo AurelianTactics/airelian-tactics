@@ -58,6 +58,9 @@ namespace AirelianTactics.Tests.GameStates
             public System.Action? OnExit { get; set; }
             public System.Action? OnUpdate { get; set; }
             
+            // Implement the GameContext property
+            public GameContext GameContext { get; set; } = new GameContext();
+            
             public void Enter() => OnEnter?.Invoke();
             public void Exit() => OnExit?.Invoke();
             public void Update() => OnUpdate?.Invoke();

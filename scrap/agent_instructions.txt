@@ -38,21 +38,49 @@ Main skills: thinking, framework, checkpoints, debugging, context
         in the next state transition MapSetupState. Your steps:
             - Add code in GameInitState that loads the @team_sample.json
             - Use @TeamConfigLoader.cs to create the object
-            - STOPPED EHRE object part of the state
-            - transition to the next state
-            - some sort of prints tatement in the next state
-    - reads JSON on the teams
-    - passes to object
-    - goes to next state with that object
-    - next state uses that objec to make the teams
+            - All versions of @State.cs should be able to hold this object
+            - @IState.cs may need to be modified as well
+        - reads JSON on the teams
+        - passes to object
+        - goes to next state with that object
+        - next state uses that objec to make the teams
+        - COMPLETED
     - test cases:
         - tbd
     - documentation
+        - COMPLETED
 
 4. Add other components to state init for the json
-    - player units
+    - Planning:
+        - I want a master config file.
+            - rules for the combat
+                - victory condition
+                - alliance between teams
+            - This will have the teams to load
+                - for now player units are in teams in future can be written out
+            - the map to load
+                - config settings on the map
+                - for now: unique id, x, y, z, traversable, terrain, can a player unit start there
+    - Prompt
+        Expand @GameContext.cs to hold a game config json file. This will require:
+            - A game_config.json file in the Configs directory.
+                - This file will have:
+                    - A section for general that has a key "victory_condition":"last_team_standing" and "alliances" which is list
+                    - A section for teams to load, which will be a list of teams to load.
+                    This list should be populated with team_sample.json and team_sample_2.json
+                    - A section for the map to load. This will be a key value pairing with a TBD map to load
+            - Something similar to @TeamConfigLoader.cs will have to be added to Utils to load the config
+            - @GameContext will have to be expanded to hold the game config, multiple teams, and map
+            - This config will be loaded in @GameInitState.cs
+            - @GameInitState.cs will now load all teams listed in the game config and not a single, hardcoded team
+        - COMPLETED
     - map
+        - Planning: json file. STOPPED here
+            - review what was in old version
+
     - reads and passes to the next state with that object
+        - COMPLETED general and teams
+        - map
     - test cases
     - documentation
 

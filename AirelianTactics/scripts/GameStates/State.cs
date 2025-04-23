@@ -18,6 +18,11 @@ public abstract class State : IState
     public bool IsCompleted { get; protected set; }
 
     /// <summary>
+    /// Gets or sets the shared game context containing data across all states.
+    /// </summary>
+    public GameContext GameContext { get; set; }
+
+    /// <summary>
     /// Constructor that takes a state manager.
     /// </summary>
     /// <param name="stateManager">The state manager that will manage this state.</param>

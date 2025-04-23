@@ -25,6 +25,11 @@ public class StateManager
     private Dictionary<Type, Type> stateFlow = new Dictionary<Type, Type>();
 
     /// <summary>
+    /// The shared game context that is passed between states.
+    /// </summary>
+    private GameContext gameContext;
+
+    /// <summary>
     /// Event triggered when a state transition occurs.
     /// Provides the previous state and the new state.
     /// </summary>
@@ -36,12 +41,23 @@ public class StateManager
     private bool currentStateCompleted = false;
 
     /// <summary>
+    /// Constructor initializes a new StateManager with a new GameContext.
+    /// </summary>
+    public StateManager()
+    {
+        gameContext = new GameContext();
+    }
+
+    /// <summary>
     /// Registers a state with the state manager.
     /// </summary>
     /// <param name="state">The state to register.</param>
     public void RegisterState(IState state)
     {
         Type stateType = state.GetType();
+        
+        // Assign the shared game context to the state
+        state.GameContext = gameContext;
         
         if (states.ContainsKey(stateType))
         {
@@ -126,6 +142,10 @@ public class StateManager
 
         // Set and enter the new state
         currentState = newState;
+        
+        // Ensure the new state has access to the shared game context
+        currentState.GameContext = gameContext;
+        
         currentStateCompleted = false;
         currentState.Enter();
 
@@ -185,6 +205,15 @@ public class StateManager
         }
 
         return (T)states[stateType];
+    }
+
+    /// <summary>
+    /// Gets the shared game context.
+    /// </summary>
+    /// <returns>The game context.</returns>
+    public GameContext GetGameContext()
+    {
+        return gameContext;
     }
 
     /// <summary>

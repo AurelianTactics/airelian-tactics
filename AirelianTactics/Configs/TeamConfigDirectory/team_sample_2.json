@@ -1,0 +1,26 @@
+{
+  "teamId": "1",
+  "teamName": "AI Team",
+  "units": [
+    {
+      "unitId": 1,
+      "name": "Sam",
+      "hp": 100,
+      "speed": 10,
+      "pa": 5,
+      "move": 4,
+      "jump": 2,
+      "initialCT": 0
+    },
+    {
+      "unitId": 2,
+      "name": "Stan",
+      "hp": 80,
+      "speed": 12,
+      "pa": 4,
+      "move": 3,
+      "jump": 1,
+      "initialCT": 0
+    }
+  ]
+} 

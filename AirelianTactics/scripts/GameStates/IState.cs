@@ -9,6 +9,11 @@ using System.Collections.Generic;
 public interface IState
 {
     /// <summary>
+    /// Gets or sets the shared game context containing data across all states.
+    /// </summary>
+    GameContext GameContext { get; set; }
+
+    /// <summary>
     /// Called when the state is entered.
     /// Use this for initialization logic.
     /// </summary>
