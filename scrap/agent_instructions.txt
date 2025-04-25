@@ -75,12 +75,15 @@ Main skills: thinking, framework, checkpoints, debugging, context
             - @GameInitState.cs will now load all teams listed in the game config and not a single, hardcoded team
         - COMPLETED
     - map
-        - Planning: json file. STOPPED here
+        - COMPLETED Planning: json file.
             - review what was in old version
-
+        - TEST Prompt
+            In the Utils directory make a MapConfigLoader.cs file similar to @GameConfigLoader.cs .
+            In @GameInitState.cs load the map. Pass the map to to @GameContext.cs.
+            
     - reads and passes to the next state with that object
         - COMPLETED general and teams
-        - map
+        - TEST map
     - test cases
     - documentation
 

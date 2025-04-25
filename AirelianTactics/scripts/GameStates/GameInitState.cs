@@ -46,6 +46,10 @@ public class GameInitState : State
             LoadAllTeamConfigurations();
             Console.WriteLine("Team configurations loaded successfully.");
             
+            // Load the map configuration
+            LoadMapConfiguration();
+            Console.WriteLine("Map configuration loaded successfully.");
+            
             Console.WriteLine("Game initialization complete!");
             // Mark this state as completed
             CompleteState();
@@ -137,6 +141,52 @@ public class GameInitState : State
         }
         
         Console.WriteLine($"Loaded {GameContext.Teams.Count} teams in total.");
+    }
+    
+    /// <summary>
+    /// Loads the map configuration from the file specified in the game config.
+    /// </summary>
+    protected virtual void LoadMapConfiguration()
+    {
+        // Check if we have a game config loaded
+        if (GameContext.GameConfig == null || GameContext.GameConfig.Map == null)
+        {
+            throw new InvalidOperationException("Game configuration must be loaded before loading map.");
+        }
+
+        string mapFilePath = GameContext.GameConfig.Map.MapFile;
+        
+        // Check if the map file exists
+        if (string.IsNullOrEmpty(mapFilePath))
+        {
+            Console.WriteLine("Warning: No map file specified in game config.");
+            return;
+        }
+        
+        if (!File.Exists(mapFilePath))
+        {
+            string workingDir = Environment.CurrentDirectory;
+            Console.WriteLine($"Warning: Map configuration file not found at path: {mapFilePath}. " +
+                             $"Current working directory: {workingDir}");
+            return;
+        }
+        
+        Console.WriteLine($"Loading map configuration from: {mapFilePath}");
+        
+        try
+        {
+            // Use the MapConfigLoader to load the map configuration
+            MapConfig mapConfig = MapConfigLoader.LoadMapConfig(mapFilePath);
+            
+            // Update the map configuration in the GameContext
+            GameContext.GameConfig.Map = mapConfig;
+            
+            Console.WriteLine($"Loaded map: {mapConfig.MapFile}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading map configuration from {mapFilePath}: {ex.Message}");
+        }
     }
     
     /// <summary>

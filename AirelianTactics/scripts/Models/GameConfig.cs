@@ -47,14 +47,3 @@ public class TeamAlliance
     /// </summary>
     public List<int> TeamIds { get; set; } = new List<int>();
 }
-
-/// <summary>
-/// Map configuration.
-/// </summary>
-public class MapConfig
-{
-    /// <summary>
-    /// The path to the map file.
-    /// </summary>
-    public string MapFile { get; set; } = string.Empty;
-} 
