@@ -108,6 +108,7 @@ Main skills: thinking, framework, checkpoints, debugging, context
     - me: maybe plan out the game loop a bit better with my queue ideas
     So the abstraction is three fold
         1.: bunch of waiting stuff like for RL, WA, MP that not dealing with here
+            Standby, Prephase, WaitTick, NonCombat, RLWait
         2.: is the time flow that is like being in the game world:
             Tick increment, CT increment, status decrement, slow action decrement
                 me: TO DO add a tickincrement and tick variable to increment
@@ -115,28 +116,21 @@ Main skills: thinking, framework, checkpoints, debugging, context
                 StatusTick
                 SlowActionTick
                 CTIncrement
+                to add: Process game flow stuff
+
         3.: Game Flow stuff that needs to be ordered and unfolded per logic
+            FastAction (to add)
             SlowAction
             ActiveTurn
             EndActiveTurn
             Mime
-                   
+            Reaction
+            Quick
 
-
-                case :
-                    ProcessEndActiveTurn();
-                    break;
-                case Phases.Mime:
-                    ProcessMime();
-                    break;
-                case Phases.Reaction:
-                    ProcessReaction();
-                    break;
-                case Phases.Quick:
-                    ProcessQuick();
-                    break;
-
-        second is the 
+            then in game flow stuff want one or multiple queue's where I see the priority on these
+            then I can be more flexible in the future and kind of mess with new abilities and new priorities
+            
+  
     - combat engine, main loop
     - test cases
     - documentation
