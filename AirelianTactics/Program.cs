@@ -16,7 +16,7 @@ namespace AirelianTactics
             // Subscribe to state change events
             stateManager.OnStateChanged += (previousState, newState) => 
             {
-                Console.WriteLine($"State changed from {(previousState != null ? previousState.GetType().Name : "null")} to {newState.GetType().Name}");
+                Console.WriteLine($"---State changed from {(previousState != null ? previousState.GetType().Name : "null")} to {newState.GetType().Name}");
             };
             
             // Create and register all game states

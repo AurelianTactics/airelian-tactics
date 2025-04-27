@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AirelianTactics")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78f8e6acc7f0dc1d29ade227215bc39ab94ac061")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b13e54ffc52666430a1ba4210d58220d08076963")]
 [assembly: System.Reflection.AssemblyProductAttribute("AirelianTactics")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AirelianTactics")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

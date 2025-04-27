@@ -107,31 +107,23 @@ Main skills: thinking, framework, checkpoints, debugging, context
 6. integrates the core game engine and loop parts
     - me: maybe plan out the game loop a bit better with my queue ideas
     So the abstraction is three fold
-        one: bunch of waiting stuff like for RL, WA, MP that not dealing with here
-        one is the time flow that is like being in the game world:
+        1.: bunch of waiting stuff like for RL, WA, MP that not dealing with here
+        2.: is the time flow that is like being in the game world:
             Tick increment, CT increment, status decrement, slow action decrement
-                Phases.StatusTick:
-                Phases.SlowActionTick:
-                Phases.CTIncrement:
+                me: TO DO add a tickincrement and tick variable to increment
+                    needs to mod over at some point and a back up variable for it
+                StatusTick
+                SlowActionTick
+                CTIncrement
+        3.: Game Flow stuff that needs to be ordered and unfolded per logic
+            SlowAction
+            ActiveTurn
+            EndActiveTurn
+            Mime
+                   
 
-            me: maybe keep a tick variable as well
 
-case 
-                    ProcessStatusTick();
-                    break;
-                case 
-                    ProcessSlowActionTick();
-                    break;
-                case Phases.SlowAction:
-                    ProcessSlowAction();
-                    break;  
-                case 
-                    ProcessCTIncrement();
-                    break;
-                case Phases.ActiveTurn:
-                    ProcessActiveTurn();
-                    break;      
-                case Phases.EndActiveTurn:
+                case :
                     ProcessEndActiveTurn();
                     break;
                 case Phases.Mime:
