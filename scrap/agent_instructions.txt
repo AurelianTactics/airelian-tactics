@@ -19,10 +19,10 @@ Main skills: thinking, framework, checkpoints, debugging, context
     feature -> test -> error -> debug -> checkpoint -> feature
 
 
-1. Run the program
+1. COMPLETED Run the program
     - COMPLETED
 
-2. Run with statemanager, go between 3 states
+2. DONE Run with statemanager, go between 3 states
     - add test cases
         - can do empty calls to and from each state
         - COMPLETED
@@ -31,7 +31,7 @@ Main skills: thinking, framework, checkpoints, debugging, context
         - examples for how to add new states
         - COMPLETED
 
-3. StateManager with state init
+3. DONE StateManager with state init
     - Prompt:
         In GameInitState I want to load @team_sample.json . I want to take this JSON parse it to a C# object
         and store that object in an object that all States have access to. I want this object to then be accessible
@@ -77,27 +77,81 @@ Main skills: thinking, framework, checkpoints, debugging, context
     - map
         - COMPLETED Planning: json file.
             - review what was in old version
-        - TEST Prompt
+        -COMPLETED Prompt
             In the Utils directory make a MapConfigLoader.cs file similar to @GameConfigLoader.cs .
             In @GameInitState.cs load the map. Pass the map to to @GameContext.cs.
             
-    - reads and passes to the next state with that object
+    - COMPLETED reads and passes to the next state with that object
         - COMPLETED general and teams
-        - TEST map
+        - map
     - test cases
     - documentation
+        Prompt:
+        Write documentation in docs directory on creating a new map, loading a map, and how it is used.
+        At the top of the new file have a checklist for when creating a new map.
+        Add the file to docs/README.MD .
 
 5. sets up teams, units, victory conditions
+    Prompt:
+    You are now in CombatState.cs . You have a GameContext.cs object passed in from earlier files.
+    In that GameContext.cs file you have a GameConfig class. Use that GameConfig class to populate values
+    in XXX needed for victory conditions and other game config related information.
+    
+    Populate in @CombatTeamManager.cs XXX the teams and alliances from
+    Populate in @victoryXXX the victory conditions from
+    Populate the units in @XXX from XXX
+
     - test cases
     - documentation
 
 6. integrates the core game engine and loop parts
+    - me: maybe plan out the game loop a bit better with my queue ideas
+    So the abstraction is three fold
+        one: bunch of waiting stuff like for RL, WA, MP that not dealing with here
+        one is the time flow that is like being in the game world:
+            Tick increment, CT increment, status decrement, slow action decrement
+                Phases.StatusTick:
+                Phases.SlowActionTick:
+                Phases.CTIncrement:
+
+            me: maybe keep a tick variable as well
+
+case 
+                    ProcessStatusTick();
+                    break;
+                case 
+                    ProcessSlowActionTick();
+                    break;
+                case Phases.SlowAction:
+                    ProcessSlowAction();
+                    break;  
+                case 
+                    ProcessCTIncrement();
+                    break;
+                case Phases.ActiveTurn:
+                    ProcessActiveTurn();
+                    break;      
+                case Phases.EndActiveTurn:
+                    ProcessEndActiveTurn();
+                    break;
+                case Phases.Mime:
+                    ProcessMime();
+                    break;
+                case Phases.Reaction:
+                    ProcessReaction();
+                    break;
+                case Phases.Quick:
+                    ProcessQuick();
+                    break;
+
+        second is the 
     - combat engine, main loop
     - test cases
     - documentation
 
 7. set up map with main functionality
-    - map, tiles,e tc and what is needed
+    - map, tiles, etc. and what is needed
+    - maybe delete mapinit state if not being used here. Idk, maybe keep it for rendering down the line?
     - test cases
     - documentation
 

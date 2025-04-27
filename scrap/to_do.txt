@@ -1,30 +1,8 @@
-working
 
-DONE working throught the errors to debug to get the minimal hello world example working again. usage
-cd .\AirelianTactics\ ; dotnet run
+## Usage
+dotnet run --project AirelianTactics
 
-
-
-DONE think through how going from gameengine to different states
-
-DONE want to outline
-  core game loop that runs
-  state manager that smartly manages states
-    need the interface
-    sub states that inherit from a base interface
-      init game, set up board, start combat, unit input,
-      my game engine state needs to kick out more often: ie for slow actions needs to kick out so
-        stuff can resolve
-  ask agent to write it first and then go from there
-
-DONE so next steps
-  DONE can run a C# program. compile it and do hello world
-  then do the really basic state stuff. abstract out user input
-    gameinit state
-    combat init state
-    then game loop.
-    once sure state manager works for this get my understanding up on it
-    make sure can do minimal of what i need
+## working
 
 try different approach in agent_instructions
   maybe add some more geenral notes from the podcast or courses from week of 4/13/25
