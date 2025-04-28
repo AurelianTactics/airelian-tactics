@@ -129,8 +129,32 @@ Main skills: thinking, framework, checkpoints, debugging, context
 
             then in game flow stuff want one or multiple queue's where I see the priority on these
             then I can be more flexible in the future and kind of mess with new abilities and new priorities
-            
-  
+
+        ideas:
+            different spots for differeng game flow stuff
+            two queues: time stuff and game flow stuff
+                hardcode the time stuff, can adjust it later if you want
+                abstract the time stuff so other things can come later
+                    maybe like a list of iterations that loops through
+            many quees in game flow stuff
+                or just one and then can abstract and do it that way
+
+    More ideas:
+        World time
+        Add tick increment at end, same order as current but in between each check game time queue
+
+        Game time queue
+        Hard coded list of enums
+        Each enum is key in dict
+        Dict has list of queues
+        Check each queue and if action pop from queue and go
+        For each queue get first one that is ready with tiebreaker being unit id then queue id. Lowest wins
+        At queue order is faster than fast, reaction, mime, mid turn, quick turn, slow action, unit turn
+
+        EndActiveTurn is tricky. tied to the unit ending its turn and triggered on end turn
+            so special logic. at end of turn checks if this queue has anything, and this queue only, and empties it
+            statuses that trigger it need to be added during this check
+
     - combat engine, main loop
     - test cases
     - documentation

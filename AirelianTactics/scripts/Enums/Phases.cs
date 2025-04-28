@@ -1,10 +1,7 @@
-﻿
-
-/// <summary>
-/// Phases GameLoop.cs can be in
-/// </summary>
-public enum Phases
+﻿public enum Phases
 {
+    #region World Time
+
     /// <summary>
     /// Each status that is active and has a counter has a tick decremented from it. Statuses fall off and end at 0.
     /// </summary>
@@ -16,24 +13,31 @@ public enum Phases
     SlowActionTick,
 
     /// <summary>
-    /// Actions that don't resolve on the current turn
-    /// </summary>
-    SlowAction,
-
-    /// <summary>
-    /// Each PU has speed added to their CT stat
+    /// Each Unit
     /// </summary>
     CTIncrement,
 
     /// <summary>
-    /// PU is selecting thier turn
+    /// Increment the tick variable by 1
     /// </summary>
-    ActiveTurn,
+    TickIncrement,
+
+    #endregion
+
+    #region Game Time
+
+    // phases that are related to the order and resolution of game time related variables
 
     /// <summary>
-    /// Turn has ended but some statuses can occur like poison and regen
+    /// Faster than fast
+    /// resolve these first
     /// </summary>
-    EndActiveTurn,
+    FasterThanFastAction,
+
+    /// <summary>
+    /// reacts to many actions
+    /// </summary>
+    Reaction,
 
     /// <summary>
     /// occurs after slowaction or activeturn
@@ -41,14 +45,29 @@ public enum Phases
     Mime,
 
     /// <summary>
-    /// occurs after slowaction or activeturn and before mime
+    /// return to a turn that was started but not completed
     /// </summary>
-    Reaction,
+    MidTurn,
 
     /// <summary>
     /// Quick flag causes unit to jump into next ActiveTurn
     /// </summary>
-    Quick,
+    QuickTurn,
+
+    /// <summary>
+    /// Unit is selecting thier turn
+    /// </summary>
+    ActiveTurn,
+
+    /// <summary>
+    /// Turn has ended but some statuses or other queued events can occur
+    /// </summary>
+    EndOfActiveTurn,
+
+    #endregion
+
+    #region Other
+    // specialty phases mainly due to waiting
 
     /// <summary>
     /// used in MP, in GameLoopState waiting for opponent
@@ -74,5 +93,10 @@ public enum Phases
     /// sent notification to RL, waiting to receive input options back
     /// </summary>
     RLWait
+
+    #endregion
+
+    
+
 }
 
