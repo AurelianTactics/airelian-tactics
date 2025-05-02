@@ -29,4 +29,9 @@ public enum Alliances
     /// units on your side but not under your control
     /// </summary>
     Allied = 1 << 3
+
+    /// <summary>
+    /// always allied with self
+    /// </summary>
+    Self = 1 << 4
 }

@@ -12,6 +12,19 @@ public class VictoryCondition {
         this.victoryType = VictoryType.LastTeamStanding;
     }
 
+    /// <summary>
+    /// Constructor that takes a victory condition string and sets the appropriate VictoryType.
+    /// </summary>
+    /// <param name="victoryConditionString">String representation of the victory condition.</param>
+    public VictoryCondition(string victoryConditionString) {
+        if (victoryConditionString.ToLower() == "lastteamstanding") {
+            this.victoryType = VictoryType.LastTeamStanding;
+        } else {
+            // Default to LastTeamStanding if the string doesn't match any known type
+            this.victoryType = VictoryType.LastTeamStanding;
+        }
+    }
+
     public bool IsVictoryConditionMet(CombatTeamManager combatTeamManager, UnitService unitService) {
         bool isVictoryConditionMet = false;
 

@@ -34,7 +34,7 @@ public class GeneralConfig
     /// <summary>
     /// Team alliances.
     /// </summary>
-    public List<TeamAlliance> Alliances { get; set; } = new List<TeamAlliance>();
+    public List<Dictionary<string, Dictionary<string, string>>> Alliances { get; set; } = new List<Dictionary<string, Dictionary<string, string>>>();
 }
 
 /// <summary>

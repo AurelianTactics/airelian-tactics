@@ -50,7 +50,7 @@ Main skills: thinking, framework, checkpoints, debugging, context
     - documentation
         - COMPLETED
 
-4. Add other components to state init for the json
+4. COMPLETED Add other components to state init for the json
     - Planning:
         - I want a master config file.
             - rules for the combat
@@ -93,14 +93,26 @@ Main skills: thinking, framework, checkpoints, debugging, context
 
 5. sets up teams, units, victory conditions
     Prompt:
-    You are now in CombatState.cs . You have a GameContext.cs object passed in from earlier files.
+    You are now in @CombatState.cs . You have a GameContext.cs object passed in from earlier states.
     In that GameContext.cs file you have a GameConfig class. Use that GameConfig class to populate values
-    in XXX needed for victory conditions and other game config related information.
-    
-    Populate in @CombatTeamManager.cs XXX the teams and alliances from
-    Populate in @victoryXXX the victory conditions from
-    Populate the units in @XXX from XXX
 
+    COMPLETE Create a file with a class for holding alliance object from the GameContext object. Populate the alliance object.
+        DONE need an enum for the alliances
+        for each team combination need to default to neutral
+            then go through the alliances from the game context and populate accordingly
+    COMPLETE Instantiate a victorycondition from @VictoryCondition.cs and set the victory condition from the GameContext object in the state
+   
+    Populate in @CombatTeamManager.cs the teams from the GameContext Object
+        STOPPED HERE. NEED TO REVIEW THIS CODE
+    
+
+    Think this through:
+        Populate the units in @UnitService.cs from the GameContext object.
+        maybe each team has its own list? or do all units in the object and can then access it with the unit id?
+        and if you need to iterate over can iterate over it. 
+            I'm leaning towards all units in a dict, unique unit id
+        will need to assign units intelligently to unit id so it is fair as unit id is a tie breaker
+        so need to store next unit id for when adding more new units
     - test cases
     - documentation
 
