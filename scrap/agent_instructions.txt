@@ -102,17 +102,32 @@ Main skills: thinking, framework, checkpoints, debugging, context
             then go through the alliances from the game context and populate accordingly
     COMPLETE Instantiate a victorycondition from @VictoryCondition.cs and set the victory condition from the GameContext object in the state
    
-    Populate in @CombatTeamManager.cs the teams from the GameContext Object
-        STOPPED HERE. NEED TO REVIEW THIS CODE
-    
+    COMPLETE Populate in @CombatTeamManager.cs the teams from the GameContext Object
+        
+    populate the unit id
+        read in from the GameContext
+        output is a dict in unit service, key is the unit id
+            need to assign in a fair, snake draft like way
 
-    Think this through:
-        Populate the units in @UnitService.cs from the GameContext object.
-        maybe each team has its own list? or do all units in the object and can then access it with the unit id?
-        and if you need to iterate over can iterate over it. 
-            I'm leaning towards all units in a dict, unique unit id
-        will need to assign units intelligently to unit id so it is fair as unit id is a tie breaker
-        so need to store next unit id for when adding more new units
+        DONE need to update iunitservice and unitservice to use a dict rather than a list
+
+        DONE Think this through:
+            Populate the units in @UnitService.cs from the GameContext object.
+            maybe each team has its own list? or do all units in the object and can then access it with the unit id?
+            and if you need to iterate over can iterate over it. 
+                I'm leaning towards all units in a dict, unique unit id
+            will need to assign units intelligently to unit id so it is fair as unit id is a tie breaker
+            so need to store next unit id for when adding more new units
+
+    Prompt:
+
+    In @CombatState.cs populate the UnitService unitDict with @PlayerUnit object. Each unit from the GameContext should
+    be instantiated as PlayerUnit and added to the unitDict. The key for the unitDict will be a newly assigned unitId.
+    Lower unitIds are better and start at zero. In order to be fair to each team, assign the unitId in a snake draft manner
+    where one unitId is assigned per each team in one order and then the next round of unit Ids are assigned in the opposite order
+    until no more unit ids remain to be assigned.
+
+
     - test cases
     - documentation
 
@@ -168,6 +183,7 @@ Main skills: thinking, framework, checkpoints, debugging, context
             statuses that trigger it need to be added during this check
 
     - combat engine, main loop
+        - need to set up the player unit and mid turn active turn etc logic correctly
     - test cases
     - documentation
 
@@ -178,6 +194,7 @@ Main skills: thinking, framework, checkpoints, debugging, context
     - documentation
 
 8. what else is needed for MVP
+
 
 9. minimal version of "UI" for testing with player interaction
 

@@ -12,26 +12,29 @@ namespace AirelianTactics.Services
     /// </summary>
     public class UnitService : IUnitService
     {
-        private List<PlayerUnit> _playerUnits = new List<PlayerUnit>();
         
-        public List<PlayerUnit> PlayerUnits => _playerUnits;
-        
+
+        private Dictionary<int, PlayerUnit> _unitDict = new Dictionary<int, PlayerUnit>();
+
+        private int _nextUnitId = 0;
+
+        public Dictionary<int, PlayerUnit> unitDict => _unitDict;
+
         public void AddUnit(PlayerUnit unit)
         {
-            // Implementation logic here
-            _playerUnits.Add(unit);
+            _unitDict.Add(_nextUnitId, unit);
+            _nextUnitId++;
         }
         
         public void RemoveUnit(PlayerUnit unit)
         {
-            // Implementation logic here
-            _playerUnits.Remove(unit);
+            _unitDict.Remove(unit.UnitId);
         }
 
         
         public void IncrementCTAll()
         {
-            foreach (var unit in _playerUnits) {
+            foreach (var unit in _unitDict.Values) {
                 unit.AddCT();
             }
         }
@@ -43,7 +46,7 @@ namespace AirelianTactics.Services
 
         public void SetEligibleForActiveTurn()
         {
-            foreach (var unit in _playerUnits) {
+            foreach (var unit in _unitDict.Values) {
                 unit.SetEligibleForActiveTurn();
             }
         }
@@ -59,7 +62,7 @@ namespace AirelianTactics.Services
         {
             PlayerUnit nextUnit = null;
 
-            foreach (var unit in _playerUnits) {
+            foreach (var unit in _unitDict.Values) {
                 // mid active turn units are prioritized
                 if (unit.IsMidActiveTurn) {
                     if (nextUnit == null) {
@@ -93,7 +96,7 @@ namespace AirelianTactics.Services
 
         public bool IsAnyUnitMidActiveTurn()
         {
-            foreach (var unit in _playerUnits) {
+            foreach (var unit in _unitDict.Values) {
                 if (unit.IsMidActiveTurn) {
                     return true;
                 }
@@ -108,7 +111,7 @@ namespace AirelianTactics.Services
         }
 
         public bool IsTeamDefeated(int teamId){
-            foreach (var unit in _playerUnits) {
+            foreach (var unit in _unitDict.Values) {
                 if (unit.TeamId == teamId && !unit.IsIncapacitated) {
                     return false;
                 }

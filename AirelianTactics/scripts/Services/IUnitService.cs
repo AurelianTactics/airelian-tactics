@@ -12,8 +12,12 @@ namespace AirelianTactics.Services
     public interface IUnitService
     {
         // Unit Management
-        List<PlayerUnit> PlayerUnits { get; }
+        Dictionary<int, PlayerUnit> unitDict { get; };
+
+        int nextUnitId { get; };
+
         void AddUnit(PlayerUnit unit);
+        
         void RemoveUnit(PlayerUnit unit);
         
         void IncrementCTAll();
