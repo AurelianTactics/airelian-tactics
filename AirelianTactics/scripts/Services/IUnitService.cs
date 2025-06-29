@@ -12,9 +12,9 @@ namespace AirelianTactics.Services
     public interface IUnitService
     {
         // Unit Management
-        Dictionary<int, PlayerUnit> unitDict { get; };
+        Dictionary<int, PlayerUnit> unitDict { get; }
 
-        int nextUnitId { get; };
+        int nextUnitId { get; }
 
         void AddUnit(PlayerUnit unit);
         
@@ -37,7 +37,7 @@ namespace AirelianTactics.Services
 
         bool IsAnyUnitMidActiveTurn();
 
-        // not sure if going to use this or direct PlayerUnit. Not sure what arg will be ifused
+        // not sure if going to use this or direct PlayerUnit. Not sure what arg will be if used
         void SetUnitMidActiveTurn(PlayerUnit unit);
     }
 

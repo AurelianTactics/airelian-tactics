@@ -121,11 +121,14 @@ Main skills: thinking, framework, checkpoints, debugging, context
 
     Prompt:
 
-    In @CombatState.cs populate the UnitService unitDict with @PlayerUnit object. Each unit from the GameContext should
-    be instantiated as PlayerUnit and added to the unitDict. The key for the unitDict will be a newly assigned unitId.
-    Lower unitIds are better and start at zero. In order to be fair to each team, assign the unitId in a snake draft manner
+    In @CombatState.cs populate the UnitService unitDict with @PlayerUnit object in the function InitializeUnitsForTeam.
+    Each unit from the GameContext should be instantiated as PlayerUnit and added to the unitDict.
+    The key for the unitDict will be a newly assigned unitId.
+    Lower unitIds are better and start at zero.
+    In order to be fair to each team, assign the unitId in a snake draft manner
     where one unitId is assigned per each team in one order and then the next round of unit Ids are assigned in the opposite order
     until no more unit ids remain to be assigned.
+    The function for assigning unitId's should be flexible to work with any number of teams from 1 team to 2 or more teams.
 
 
     - test cases

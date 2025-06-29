@@ -13,6 +13,11 @@
     SlowActionTick,
 
     /// <summary>
+    /// Slow actions that are ready to resolve
+    /// </summary>
+    SlowAction,
+
+    /// <summary>
     /// Each Unit
     /// </summary>
     CTIncrement,

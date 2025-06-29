@@ -156,6 +156,11 @@ To do
     this must have been how it was done. unlikely made this complicated initially. it's probably like a queue
     that can be pulled and added to at various spots. and sometimes a toggle to let a unit go first or not
 
+Takeaways for next project
+  how do I improve the workflow? way to use AI toa ssist in writing hte prompts and modular parts?
+  way to parallelize more of it so the AI works on one stream while I work on another (coding, prompting etc)
+  I probably need to be more modular
+
 backlog
   team alive check and victory conditions could be better done with listeners
   the state logic and transitions are abstracted way ibut in program.cs and not a logical place

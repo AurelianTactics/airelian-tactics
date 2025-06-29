@@ -45,7 +45,7 @@ namespace AirelianTactics.Core.Logic
                 case Phases.ActiveTurn:
                     ProcessActiveTurn();
                     break;      
-                case Phases.EndActiveTurn:
+                case Phases.EndOfActiveTurn:
                     ProcessEndActiveTurn();
                     break;
                 case Phases.Mime:
@@ -54,7 +54,7 @@ namespace AirelianTactics.Core.Logic
                 case Phases.Reaction:
                     ProcessReaction();
                     break;
-                case Phases.Quick:
+                case Phases.QuickTurn:
                     ProcessQuick();
                     break;
                 // to do: multiplayer, RL, WA phases

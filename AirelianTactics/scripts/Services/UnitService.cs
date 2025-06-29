@@ -20,10 +20,27 @@ namespace AirelianTactics.Services
 
         public Dictionary<int, PlayerUnit> unitDict => _unitDict;
 
+        public int nextUnitId => _nextUnitId;
+
         public void AddUnit(PlayerUnit unit)
         {
             _unitDict.Add(_nextUnitId, unit);
             _nextUnitId++;
+        }
+
+        /// <summary>
+        /// Add a unit to the dictionary with a specific ID
+        /// </summary>
+        /// <param name="unit">The unit to add</param>
+        /// <param name="unitId">The specific ID to use as the dictionary key</param>
+        public void AddUnitWithId(PlayerUnit unit, int unitId)
+        {
+            _unitDict.Add(unitId, unit);
+            // Update _nextUnitId to ensure it's always higher than any manually assigned ID
+            if (unitId >= _nextUnitId)
+            {
+                _nextUnitId = unitId + 1;
+            }
         }
         
         public void RemoveUnit(PlayerUnit unit)

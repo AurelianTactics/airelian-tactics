@@ -38,12 +38,8 @@ public class MapSetupState : State
                 for (int i = 0; i < config.General.Alliances.Count; i++)
                 {
                     var alliance = config.General.Alliances[i];
-                    Console.Write($"Alliance {i+1} includes teams: ");
-                    foreach (var teamId in alliance.TeamIds)
-                    {
-                        Console.Write($"{teamId} ");
-                    }
-                    Console.WriteLine();
+                    Console.WriteLine($"Alliance {i+1}: {alliance.Count} entries");
+                    // TODO: Fix alliance structure access - currently Dictionary<string, Dictionary<string, string>>
                 }
             }
         }

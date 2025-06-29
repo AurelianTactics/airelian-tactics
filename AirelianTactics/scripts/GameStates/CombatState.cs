@@ -1,5 +1,7 @@
 using System;
 using AirelianTactics.Services;
+using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// Combat state.
@@ -104,19 +106,18 @@ public class CombatState : State
         {
             Console.WriteLine($"Initializing {GameContext.Teams.Count} teams for combat");
             
-            // Create combat teams
+            // Create combat teams first
             int teamId = 0;
             foreach (var teamConfig in GameContext.Teams)
             {
                 CombatTeam combatTeam = new CombatTeam(teamId);
                 combatTeamManager.AddTeam(combatTeam);
-                
-                // Create units for this team
-                InitializeUnitsForTeam(teamConfig, teamId);
-                
                 Console.WriteLine($"Created team {teamId}");
                 teamId++;
             }
+
+            // Initialize all units using snake draft for fair unit ID assignment
+            InitializeAllUnitsWithSnakeDraft();
         }
         else
         {
@@ -125,34 +126,110 @@ public class CombatState : State
     }
 
     /// <summary>
-    /// Initialize units for a specific team
+    /// Initialize all units from all teams using snake draft for fair unit ID assignment
+    /// Lower unit IDs are better and are distributed fairly across teams
+    /// Snake draft order: Team0, Team1, Team2... then Team2, Team1, Team0... and so on
     /// </summary>
-    /// <param name="teamConfig">The team configuration</param>
-    /// <param name="teamId">The team identifier</param>
-    private void InitializeUnitsForTeam(TeamConfig teamConfig, int teamId)
+    private void InitializeAllUnitsWithSnakeDraft()
     {
-        if (teamConfig != null && teamConfig.Units != null)
+        // First, collect all unit configs with their team information
+        var allUnitData = new List<(UnitConfig unitConfig, int teamId)>();
+        
+        for (int teamId = 0; teamId < GameContext.Teams.Count; teamId++)
         {
-            foreach (var unitConfig in teamConfig.Units)
+            var teamConfig = GameContext.Teams[teamId];
+            if (teamConfig != null && teamConfig.Units != null)
             {
-                // Create player unit from unit config
-                PlayerUnit playerUnit = new PlayerUnit(
-                    unitConfig.InitialCT,
-                    unitConfig.Speed,
-                    unitConfig.PA,
-                    unitConfig.HP,
-                    unitConfig.Move,
-                    unitConfig.Jump,
-                    unitConfig.UnitId,
-                    teamId
-                );
-                
-                // Add the unit to the unit service
-                unitService.AddUnit(playerUnit);
-                
-                Console.WriteLine($"Created unit {unitConfig.UnitId} for team {teamId}");
+                foreach (var unitConfig in teamConfig.Units)
+                {
+                    allUnitData.Add((unitConfig, teamId));
+                }
             }
         }
+
+        if (allUnitData.Count == 0)
+        {
+            Console.WriteLine("No units found to initialize");
+            return;
+        }
+
+        // Group units by team to handle snake draft
+        var unitsByTeam = new List<List<(UnitConfig unitConfig, int teamId)>>();
+        for (int teamId = 0; teamId < GameContext.Teams.Count; teamId++)
+        {
+            unitsByTeam.Add(new List<(UnitConfig unitConfig, int teamId)>());
+        }
+
+        foreach (var (unitConfig, teamId) in allUnitData)
+        {
+            unitsByTeam[teamId].Add((unitConfig, teamId));
+        }
+
+        // Find the maximum number of units any team has
+        int maxUnitsPerTeam = unitsByTeam.Max(teamUnits => teamUnits.Count);
+
+        // Assign unit IDs using snake draft
+        int currentUnitId = 0;
+        
+        for (int round = 0; round < maxUnitsPerTeam; round++)
+        {
+            bool isEvenRound = (round % 2) == 0;
+            
+            if (isEvenRound)
+            {
+                // Forward order: Team 0, 1, 2, ...
+                for (int teamId = 0; teamId < GameContext.Teams.Count; teamId++)
+                {
+                    if (round < unitsByTeam[teamId].Count)
+                    {
+                        var (unitConfig, actualTeamId) = unitsByTeam[teamId][round];
+                        CreateAndAddPlayerUnit(unitConfig, actualTeamId, currentUnitId);
+                        currentUnitId++;
+                    }
+                }
+            }
+            else
+            {
+                // Reverse order: Team ..., 2, 1, 0
+                for (int teamId = GameContext.Teams.Count - 1; teamId >= 0; teamId--)
+                {
+                    if (round < unitsByTeam[teamId].Count)
+                    {
+                        var (unitConfig, actualTeamId) = unitsByTeam[teamId][round];
+                        CreateAndAddPlayerUnit(unitConfig, actualTeamId, currentUnitId);
+                        currentUnitId++;
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine($"Snake draft completed. Assigned {currentUnitId} unit IDs across {GameContext.Teams.Count} teams");
+    }
+
+    /// <summary>
+    /// Create a PlayerUnit and add it to the unit service with the specified unit ID
+    /// </summary>
+    /// <param name="unitConfig">The unit configuration</param>
+    /// <param name="teamId">The team identifier</param>
+    /// <param name="assignedUnitId">The unit ID assigned by snake draft</param>
+    private void CreateAndAddPlayerUnit(UnitConfig unitConfig, int teamId, int assignedUnitId)
+    {
+        // Create player unit from unit config with the assigned unit ID
+        PlayerUnit playerUnit = new PlayerUnit(
+            unitConfig.InitialCT,
+            unitConfig.Speed,
+            unitConfig.PA,
+            unitConfig.HP,
+            unitConfig.Move,
+            unitConfig.Jump,
+            assignedUnitId,  // Use the snake draft assigned ID
+            teamId
+        );
+        
+        // Add the unit to the unit service with the specific ID
+        unitService.AddUnitWithId(playerUnit, assignedUnitId);
+        
+        Console.WriteLine($"Created unit with snake draft ID {assignedUnitId} (original ID: {unitConfig.UnitId}) for team {teamId}");
     }
 
     /// <summary>
