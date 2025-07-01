@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class GameInitState : State
 {
     // Path to the game configuration file
-    private const string GAME_CONFIG_PATH = "AirelianTactics/Configs/GameConfigDirectory/game_config.json";
+    private const string GAME_CONFIG_PATH = "Configs/GameConfigDirectory/game_config.json";
 
     /// <summary>
     /// Constructor that takes a state manager.

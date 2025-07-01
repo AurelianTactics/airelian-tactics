@@ -163,6 +163,9 @@ Takeaways for next project
   I probably need to be more modular
 
 backlog
+  hexagon tiles
+  allowing the movement properly with different movement stats
+    idea: stat for allowing for more / less movement in high congestion areas?
   team alive check and victory conditions could be better done with listeners
   the state logic and transitions are abstracted way ibut in program.cs and not a logical place
   how am I going to do NameAll like thing but better?

@@ -91,7 +91,7 @@ Main skills: thinking, framework, checkpoints, debugging, context
         At the top of the new file have a checklist for when creating a new map.
         Add the file to docs/README.MD .
 
-5. sets up teams, units, victory conditions
+5. DONE sets up teams, units, victory conditions
     Prompt:
     You are now in @CombatState.cs . You have a GameContext.cs object passed in from earlier states.
     In that GameContext.cs file you have a GameConfig class. Use that GameConfig class to populate values
@@ -132,14 +132,29 @@ Main skills: thinking, framework, checkpoints, debugging, context
 
      
 
-    - test cases
+    - DONE SIMPLE TEST CASE test cases
         FAILED PROMPT Prompt  The AI agent, which often makes mistakes, has added code covering the cases highlighted in the context provided. 
         Now write test cases in teh AirelianTactics.Tests directory. Start out with test cases that can be run seperately from the 
         overall test cases. Later I will ask you to include these tests with the overall tests.
 
         STOPPED HERE. start over with the tests. Be more modular. THink through what should be tested.
 
-    - documentation
+        Note to self: I think asking it to design tests first then write helps. The straight to write
+        tests are often bad and kind of nonsense stuff
+
+        Design test cases in the AirelianTactics.Tests directory for
+        @CombatState.cs
+        * Before writing the tests, decide what tests should be run and submit to me for approval.
+        * Start out with test cases that can be run seperately from the overall test cases.
+        * Later I will ask you to include these tests with the overall tests.
+
+        Follow up
+
+        dotnet test --filter "FullyQualifiedName~StateManagerTests"
+
+        did one test case, can do more later
+
+    - DONE documentation
 
         Prompt:
         Add documentation to the docs directory covering code added in @agent_instructs.txt lines 94-133.
@@ -160,10 +175,28 @@ Main skills: thinking, framework, checkpoints, debugging, context
         to that documentation if it exists.
 
 
-BEFORE STARTING THIS MAKE SURE GAME COMPILES
+DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
     then work out on fleshing it out
 
-6. integrates the core game engine and loop parts
+6. set up map with main functionality
+    - map, tiles, etc. and what is needed
+    - maybe delete mapinit state if not being used here. Idk, maybe keep it for rendering down the line?
+    - test cases
+    - documentation
+
+    setting up the map...
+        for now squares, will want hexagons later
+        prior version had Board, tiles, points
+
+    So i'm thinking do minimal point, tile, and then board
+	    then set up with current initiating
+        point: x and y
+        tile: x, y, height, unit ID
+        board: holding the tiles, initiating the tiles, changing unit id
+            search
+            backlog: expand serach walk and expand search base (ie using other filters to see what tiles in range)
+
+7. integrates the core game engine and loop parts
     - me: maybe plan out the game loop a bit better with my queue ideas
     So the abstraction is three fold
         1.: bunch of waiting stuff like for RL, WA, MP that not dealing with here
@@ -219,11 +252,7 @@ BEFORE STARTING THIS MAKE SURE GAME COMPILES
     - test cases
     - documentation
 
-7. set up map with main functionality
-    - map, tiles, etc. and what is needed
-    - maybe delete mapinit state if not being used here. Idk, maybe keep it for rendering down the line?
-    - test cases
-    - documentation
+
 
 8. what else is needed for MVP
 
