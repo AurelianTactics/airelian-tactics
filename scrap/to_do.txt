@@ -158,6 +158,7 @@ To do
 
 Takeaways for next project
   how do I improve the workflow? way to use AI toa ssist in writing hte prompts and modular parts?
+  how do I write the prompts faster and with the markup built in so I don' thave to manually add the mark up
   way to parallelize more of it so the AI works on one stream while I work on another (coding, prompting etc)
   I probably need to be more modular
 

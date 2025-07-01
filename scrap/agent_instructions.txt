@@ -104,7 +104,7 @@ Main skills: thinking, framework, checkpoints, debugging, context
    
     COMPLETE Populate in @CombatTeamManager.cs the teams from the GameContext Object
         
-    populate the unit id
+    COMPLETE populate the unit id
         read in from the GameContext
         output is a dict in unit service, key is the unit id
             need to assign in a fair, snake draft like way
@@ -119,20 +119,49 @@ Main skills: thinking, framework, checkpoints, debugging, context
             will need to assign units intelligently to unit id so it is fair as unit id is a tie breaker
             so need to store next unit id for when adding more new units
 
-    Prompt:
+        Prompt:
 
-    In @CombatState.cs populate the UnitService unitDict with @PlayerUnit object in the function InitializeUnitsForTeam.
-    Each unit from the GameContext should be instantiated as PlayerUnit and added to the unitDict.
-    The key for the unitDict will be a newly assigned unitId.
-    Lower unitIds are better and start at zero.
-    In order to be fair to each team, assign the unitId in a snake draft manner
-    where one unitId is assigned per each team in one order and then the next round of unit Ids are assigned in the opposite order
-    until no more unit ids remain to be assigned.
-    The function for assigning unitId's should be flexible to work with any number of teams from 1 team to 2 or more teams.
+        In @CombatState.cs populate the UnitService unitDict with @PlayerUnit object in the function InitializeUnitsForTeam.
+        Each unit from the GameContext should be instantiated as PlayerUnit and added to the unitDict.
+        The key for the unitDict will be a newly assigned unitId.
+        Lower unitIds are better and start at zero.
+        In order to be fair to each team, assign the unitId in a snake draft manner
+        where one unitId is assigned per each team in one order and then the next round of unit Ids are assigned in the opposite order
+        until no more unit ids remain to be assigned.
+        The function for assigning unitId's should be flexible to work with any number of teams from 1 team to 2 or more teams.
 
+     
 
     - test cases
+        FAILED PROMPT Prompt  The AI agent, which often makes mistakes, has added code covering the cases highlighted in the context provided. 
+        Now write test cases in teh AirelianTactics.Tests directory. Start out with test cases that can be run seperately from the 
+        overall test cases. Later I will ask you to include these tests with the overall tests.
+
+        STOPPED HERE. start over with the tests. Be more modular. THink through what should be tested.
+
     - documentation
+
+        Prompt:
+        Add documentation to the docs directory covering code added in @agent_instructs.txt lines 94-133.
+        Document how alliances are done in CombatState and related code. 
+        Search the docs for any prior documentation and either modify or add
+        to that documentation if it exists.
+
+        Document how VictoryCondition are are done in CombatState and related code. 
+        Search the docs for any prior documentation and either modify or add
+        to that documentation if it exists.
+
+        Document how Team Instantiation in CombatState and related code.
+        Search the docs for any prior documentation and either modify or add
+        to that documentation if it exists.
+
+        Document how PlayerUnits are populate into unitDict in Cin CombatState and related code.
+        Search the docs for any prior documentation and either modify or add
+        to that documentation if it exists.
+
+
+BEFORE STARTING THIS MAKE SURE GAME COMPILES
+    then work out on fleshing it out
 
 6. integrates the core game engine and loop parts
     - me: maybe plan out the game loop a bit better with my queue ideas

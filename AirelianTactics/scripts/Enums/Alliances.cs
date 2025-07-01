@@ -33,5 +33,5 @@ public enum Alliances
     /// <summary>
     /// always allied with self
     /// </summary>
-    Self = 1 << 4
+    Self = 1 << 4,
 }
