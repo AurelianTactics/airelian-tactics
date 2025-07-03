@@ -1,6 +1,7 @@
 using System;
 
 /// <summary>
+/// NOT USING FOR NOW. COULD IMPLEMENT LATER.
 /// Map setup state.
 /// Handles the setup of the game map.
 /// </summary>

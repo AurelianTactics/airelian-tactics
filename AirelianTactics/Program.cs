@@ -16,23 +16,25 @@ namespace AirelianTactics
             // Subscribe to state change events
             stateManager.OnStateChanged += (previousState, newState) => 
             {
+                // this ocures after the enter and initialization so the timing might be weird in the terminal
                 Console.WriteLine($"---State changed from {(previousState != null ? previousState.GetType().Name : "null")} to {newState.GetType().Name}");
             };
             
             // Create and register all game states
             GameInitState initState = new GameInitState(stateManager);
-            MapSetupState mapSetupState = new MapSetupState(stateManager);
+            //MapSetupState mapSetupState = new MapSetupState(stateManager);
             CombatState combatState = new CombatState(stateManager);
             GameEndState endState = new GameEndState(stateManager);
             
             stateManager.RegisterState(initState);
-            stateManager.RegisterState(mapSetupState);
+            //stateManager.RegisterState(mapSetupState);
             stateManager.RegisterState(combatState);
             stateManager.RegisterState(endState);
             
             // Define the state flow
-            stateManager.DefineStateFlow<GameInitState, MapSetupState>();
-            stateManager.DefineStateFlow<MapSetupState, CombatState>();
+            stateManager.DefineStateFlow<GameInitState, CombatState>();
+            //stateManager.DefineStateFlow<GameInitState, MapSetupState>();
+            //stateManager.DefineStateFlow<MapSetupState, CombatState>();
             stateManager.DefineStateFlow<CombatState, GameEndState>();
             
             // Start with the game initialization state

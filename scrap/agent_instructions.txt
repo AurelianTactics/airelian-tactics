@@ -227,7 +227,10 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
         prompts
         Place units from unitService in @CombatState.cs into the board object in @CombatState.cs. Do a simple placement that deterministically places each unit, starting from the lowest unitId, into the first board tiles that are iterated through in the tiles dictionary.
 
-    test code then commit, can move on to next step
+    DONE test code then commit, can move on to next step
+        don't need mapsetupstate anymore
+        getting weird message of going from mapsetupstate to combat state at weird time
+            made not. just a print statement and nothing serious
 
 
 7. integrates the core game engine and loop parts
