@@ -188,13 +188,47 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
         for now squares, will want hexagons later
         prior version had Board, tiles, points
 
-    So i'm thinking do minimal point, tile, and then board
+    DONE So i'm thinking do minimal point, tile, and then board
 	    then set up with current initiating
-        point: x and y
-        tile: x, y, height, unit ID
-        board: holding the tiles, initiating the tiles, changing unit id
+        DONE point: x and y
+        DONE tile: x, y, height, unit ID
+        DONE board: holding the tiles, initiating the tiles, changing unit id
             search
             backlog: expand serach walk and expand search base (ie using other filters to see what tiles in range)
+
+    DONE then ask the agent
+        how would they do it?
+            Prompt:
+            This turn based strategy game will take place on a chess board like grid. What design would you recommend for
+        the board?
+            aw man, it automatically read the bBoard, point and tile
+            Some good ideas for backlog if this gets more complex:
+                seperate pathfinding from board storage
+                seperate mutable and immutable parts of tile (idk, maybe game makes those mutalbe)
+                clean API for common board operations (getting points and tiles)
+                caching
+
+        # add board, point, tile context
+        Am I missing anything? what do they think of the design?
+
+    Code to write:
+        Board or something has to instantiate itself from the map config
+
+        TIMED OUT AFTER TWO MINUTES Prompt:
+        So based on your feedback @Board.cs, @Tile.cs, and @Point.cs are largely fine for an early prototype.
+        I need code that instantiates the tiles Dictionary in board.
+        Use the @MapConfig.cs and instantiate it in @CombatState.cs like done for PlayerUnits and teams.
+
+    DONE 
+        prompt
+            
+        Add code that instantates a Board object in @CombatState.cs. The Board object should be created from the data in @GameContext.cs.
+
+        prompts
+        Place units from unitService in @CombatState.cs into the board object in @CombatState.cs. Do a simple placement that deterministically places each unit, starting from the lowest unitId, into the first board tiles that are iterated through in the tiles dictionary.
+
+    test code then commit, can move on to next step
+
 
 7. integrates the core game engine and loop parts
     - me: maybe plan out the game loop a bit better with my queue ideas
@@ -255,7 +289,9 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
 
 
 8. what else is needed for MVP
-
+    movement works
+    waiting works
+    attack works
 
 9. minimal version of "UI" for testing with player interaction
 

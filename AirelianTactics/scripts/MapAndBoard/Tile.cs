@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 
@@ -59,12 +58,12 @@ public class Tile
 	/// </summary>
 	public Dictionary<int, int> distanceDict = new Dictionary<int, int>();
 
-	private int unitId = -19;
+	private int? unitId = null;
 
 	/// <summary>
-	/// added to easier check tiles for PlayerUnits
+	/// The ID of the unit occupying this tile, or null if the tile is empty.
 	/// </summary>
-	public int UnitId
+	public int? UnitId
 	{
 		get { return unitId; }
 		set { unitId = value; }
@@ -83,11 +82,11 @@ public class Tile
 		set { pickUpId = value; }
 	}
 
-	private int tileType = 0;
+	private TileTerrainType tileType = TileTerrainType.Ground;
 	/// <summary>
 	/// for WA mode Tile Type can be exit map as well
 	/// </summary>
-	public int TileType
+	public TileTerrainType TileType
 	{
 		get { return tileType; }
 		set { tileType = value; }

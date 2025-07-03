@@ -14,6 +14,7 @@ public class CombatState : State
     private CombatTeamManager combatTeamManager;
     private UnitService unitService;
     private AllianceManager allianceManager;
+    private Board board;
 
     /// <summary>
     /// Constructor that takes a state manager.
@@ -23,6 +24,7 @@ public class CombatState : State
     {
         unitService = new UnitService();
         combatTeamManager = new CombatTeamManager();
+        board = new Board();
     }
 
     /// <summary>
@@ -35,6 +37,9 @@ public class CombatState : State
         Console.WriteLine("Entering Combat State");
         Console.WriteLine("Combat has begun!");
 
+        // Initialize the board from map configuration
+        InitializeBoard();
+
         // Initialize teams and units
         InitializeTeams();
 
@@ -44,7 +49,81 @@ public class CombatState : State
         // Initialize victory condition from game context
         InitializeVictoryCondition();
 
-        
+        // Place units on the board
+        PlaceUnitsOnBoard();
+    }
+
+    /// <summary>
+    /// Initialize the board using the map configuration from game context
+    /// </summary>
+    private void InitializeBoard()
+    {
+        if (GameContext != null && GameContext.GameConfig != null && GameContext.GameConfig.Map != null)
+        {
+            board.Load(GameContext.GameConfig.Map);
+            Console.WriteLine("Board initialized from map configuration");
+        }
+        else
+        {
+            Console.WriteLine("No map configuration found in Game Context - board will be empty");
+        }
+    }
+
+    /// <summary>
+    /// Place units from unitService onto the board tiles.
+    /// Temporary Units are placed deterministically starting from lowest UnitId,
+    /// into the first available tiles in dictionary iteration order.
+    /// </summary>
+    private void PlaceUnitsOnBoard()
+    {
+        if (unitService == null || unitService.unitDict == null || unitService.unitDict.Count == 0)
+        {
+            Console.WriteLine("No units found to place on board");
+            return;
+        }
+
+        if (board == null || board.tiles == null || board.tiles.Count == 0)
+        {
+            Console.WriteLine("No board tiles available for unit placement");
+            return;
+        }
+
+        // Get units sorted by UnitId (lowest first)
+        var sortedUnits = unitService.unitDict.Values
+            .OrderBy(unit => unit.UnitId)
+            .ToList();
+
+        // Get tiles in dictionary iteration order
+        var availableTiles = board.tiles.Values.ToList();
+
+        int tileIndex = 0;
+        int unitsPlaced = 0;
+
+        foreach (var unit in sortedUnits)
+        {
+            if (tileIndex >= availableTiles.Count)
+            {
+                Console.WriteLine($"Warning: Not enough tiles to place all units. Placed {unitsPlaced}/{sortedUnits.Count} units");
+                break;
+            }
+
+            var tile = availableTiles[tileIndex];
+            bool placed = board.PlaceUnitOnTile(tile, unit.UnitId);
+            
+            if (placed)
+            {
+                Console.WriteLine($"Placed unit {unit.UnitId} (Team {unit.TeamId}) at position {tile.pos}");
+                unitsPlaced++;
+            }
+            else
+            {
+                Console.WriteLine($"Failed to place unit {unit.UnitId} at position {tile.pos} - tile may be occupied");
+            }
+            
+            tileIndex++;
+        }
+
+        Console.WriteLine($"Unit placement complete: {unitsPlaced} units placed on board");
     }
 
     /// <summary>

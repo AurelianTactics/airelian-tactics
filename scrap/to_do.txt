@@ -163,6 +163,7 @@ Takeaways for next project
   I probably need to be more modular
 
 backlog
+  spawn points int he board
   hexagon tiles
   allowing the movement properly with different movement stats
     idea: stat for allowing for more / less movement in high congestion areas?
