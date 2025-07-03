@@ -284,8 +284,33 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
             so special logic. at end of turn checks if this queue has anything, and this queue only, and empties it
             statuses that trigger it need to be added during this check
 
-    - combat engine, main loop
-        - need to set up the player unit and mid turn active turn etc logic correctly
+    STOPPED HERE
+    next steps
+        NO NOT IMPLEMENTED So I think I have the loop correct but may want to review
+            check the player unit and mid turn active turn etc logic correctly
+        need to review my notes above and turn this into logical steps that implement
+            basically world time should be simple enough
+            then the game time is checked between each world time
+                go in order of priority. need to consider how to handle it. thinking dict of queues or dict of dicts
+                    DECISION: DICT of queues. key is the type, then each queue in order of resolve
+                        set the order on the insert. can always improve later if needed
+                    kind of like dict of dict as can key up by resolve time, unit id, and hten unique int that increments
+                    eh idk, would have to search through all of them
+                    queue would be good because can order on each insert and then just grab from the front
+                    and for time to resolve can just use the world tick time so don't have to change time to resolve each time. just check front of the queue
+                    either way not such a big deal. if ever becomes an issue lot of algorithms for searching or inserting quickly
+
+        draft all the edge cases and make sure it works
+            unit mid turn and then some crazy thing happens
+            mime
+            quick
+            slow action resolving but next one in queue not going
+            
+        need something that actually runs it. Ask the AI on the process
+        I was thinking attach the combat engine and then fire it up and away for agent_instructions
+            but not sure if this is the best way as it could be kind of hoggin the thread. maybe that's what I want for now
+                could always make it flag based later
+
     - test cases
     - documentation
 
