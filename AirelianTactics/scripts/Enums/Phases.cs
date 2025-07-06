@@ -3,29 +3,20 @@
     #region World Time
 
     /// <summary>
-    /// Each status that is active and has a counter has a tick decremented from it. Statuses fall off and end at 0.
+    /// Increment the tick variable by 1
     /// </summary>
-    StatusTick = 0,
+    TickIncrement,
 
     /// <summary>
-    /// Each SlowAction in the queue has a tick decremented from it. When a SlowAction reaches 0, it resolves in SlowAction
+    /// Each status that is active and has a counter may end here
     /// </summary>
-    SlowActionTick,
-
-    /// <summary>
-    /// Slow actions that are ready to resolve
-    /// </summary>
-    SlowAction,
+    StatusTick,
 
     /// <summary>
     /// Each Unit
     /// </summary>
     CTIncrement,
 
-    /// <summary>
-    /// Increment the tick variable by 1
-    /// </summary>
-    TickIncrement,
 
     #endregion
 
@@ -68,6 +59,11 @@
     /// Turn has ended but some statuses or other queued events can occur
     /// </summary>
     EndOfActiveTurn,
+
+    /// <summary>
+    /// Slow actions that may be ready to resolve
+    /// </summary>
+    SlowAction,
 
     #endregion
 

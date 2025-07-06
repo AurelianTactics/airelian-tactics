@@ -300,6 +300,23 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                     and for time to resolve can just use the world tick time so don't have to change time to resolve each time. just check front of the queue
                     either way not such a big deal. if ever becomes an issue lot of algorithms for searching or inserting quickly
 
+        pseusdocode
+            world time part
+                simplify it: tick variable goes up, remove status, increment all units CT
+            game time part
+                check each queue in order, if anything to do do that.
+                after any time it occurs set the flag
+                to start at the top of this
+                if reaches the end set the flag to proceed to world time part
+                at some point will want to inherit a shared class for the queue but for now can do sorted lists
+                    I think inner object should be an inhered class with
+                        - tick time to resolve, unique id (lower is better), queue type enum
+                            then sub classes can handle things like unit id, map pos etc
+                    and each type of list object will be its own class
+                    will have the tick to resolve on or a -1 for resolve immediately (I guess the tick check time can be < then is ready to resolve)
+
+
+
         draft all the edge cases and make sure it works
             unit mid turn and then some crazy thing happens
             mime
@@ -310,6 +327,8 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
         I was thinking attach the combat engine and then fire it up and away for agent_instructions
             but not sure if this is the best way as it could be kind of hoggin the thread. maybe that's what I want for now
                 could always make it flag based later
+
+
 
     - test cases
     - documentation
