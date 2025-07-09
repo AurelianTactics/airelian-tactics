@@ -51,6 +51,7 @@ public class CombatState : State
 
         // Place units on the board
         PlaceUnitsOnBoard();
+
     }
 
     /// <summary>
@@ -312,35 +313,88 @@ public class CombatState : State
     }
 
     /// <summary>
-    /// Called to update the state.
+    /// Called to update the state. In prototabye called by program.cs
     /// </summary>
     public override void Update()
     {
         base.Update();
-        
+        /*
+          World time
+                Check if end condition
+                World time stuff
+            While gt object != null
+                Check if end condition
+                Get Gt object
+                Go tbroigh each queue, return first
+
+            Add to backlog status tied to unit turn
+        */
+
+        int worldTick = -1;
+
         if (!hasCompletedCombat)
         {
-            Console.WriteLine("Combat in progress...");
+            Console.WriteLine("Combat in progress. Tick: " + worldTick);
 
             // Check if victory condition has been met
             if (victoryCondition.IsVictoryConditionMet(combatTeamManager, unitService))
             {
                 Console.WriteLine("Victory condition has been met! Combat is now complete.");
                 hasCompletedCombat = true;
-                CompleteState();
             }
-            else
+
+            if (!hasCompletedCombat)
             {
-                // Continue combat
-                Console.WriteLine("Combat continues...");
-                // Process combat turn logic here
-                
-                // For testing purposes, we'll complete combat after one update
-                Console.WriteLine("Combat complete for testing purposes!");
-                hasCompletedCombat = true;
-                CompleteState();
+                worldTick = RunWorldTick(worldTick, victoryCondition, combatTeamManager, unitService);
             }
+            
+            while( true){
+                // Check if victory condition has been met
+                if (victoryCondition.IsVictoryConditionMet(combatTeamManager, unitService))
+                {
+                    Console.WriteLine("Victory condition has been met! Combat is now complete.");
+                    hasCompletedCombat = true;
+                }
+
+                if (hasCompletedCombat){
+                    break;
+                }
+                else{
+                    gameTimeObject = GetNextGameTimeObject();
+
+                    if (gameTimeObject != null)
+                    {
+                        Console.WriteLine("Game time object: " + gameTimeObject.GetType().Name);
+                    }
+                    else
+                    {
+                        Console.WriteLine("No game time object found");
+                        break;
+                    }
+                }
+            }
+          
         }
+    }
+
+    private int RunWorldTick(int worldTick, VictoryCondition victoryCondition, CombatTeamManager combatTeamManager, UnitService unitService)
+    {
+        worldTick++;
+
+        // Check if victory condition has been met
+        if (victoryCondition.IsVictoryConditionMet(combatTeamManager, unitService))
+        {
+            Console.WriteLine("Victory condition has been met! Combat is now complete.");
+            hasCompletedCombat = true;
+            CompleteState();
+        }
+
+        return worldTick;
+    }
+
+    private GameTimeObject GetNextGameTimeObject()
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>

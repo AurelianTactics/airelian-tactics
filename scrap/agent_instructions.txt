@@ -284,7 +284,6 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
             so special logic. at end of turn checks if this queue has anything, and this queue only, and empties it
             statuses that trigger it need to be added during this check
 
-    STOPPED HERE
     next steps
         NO NOT IMPLEMENTED So I think I have the loop correct but may want to review
             check the player unit and mid turn active turn etc logic correctly
@@ -299,11 +298,14 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                     queue would be good because can order on each insert and then just grab from the front
                     and for time to resolve can just use the world tick time so don't have to change time to resolve each time. just check front of the queue
                     either way not such a big deal. if ever becomes an issue lot of algorithms for searching or inserting quickly
+        STOPPED HERE
 
         pseusdocode
             world time part
+                WRITE UP AND IMPLEMENT THIS LOGIC
                 simplify it: tick variable goes up, remove status, increment all units CT
             game time part
+                WRITE UP AND IMPLEMENT THIS LOGIC
                 check each queue in order, if anything to do do that.
                 after any time it occurs set the flag
                 to start at the top of this
@@ -315,7 +317,7 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                     and each type of list object will be its own class
                     will have the tick to resolve on or a -1 for resolve immediately (I guess the tick check time can be < then is ready to resolve)
 
-
+            need to write up GameTimeObject and execution of those objects
 
         draft all the edge cases and make sure it works
             unit mid turn and then some crazy thing happens
@@ -339,7 +341,13 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
     movement works
     waiting works
     attack works
-
+    can quit / interrupt combat loop
+        option to set it to wait or not. can toggle it so combat can proceed or not
+        way to raise a flag for the interrupt
+        can always quit
+        option for user to quit on their turn
+        seperate this into playing modes (one play mode is watching) and testing and debugging
+ 
 9. minimal version of "UI" for testing with player interaction
 
 10. what is needed for logging and analysis

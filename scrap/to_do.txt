@@ -163,6 +163,9 @@ Takeaways for next project
   I probably need to be more modular
 
 backlog
+
+  seeding, loading etc, so can jump to specific games tates and reproduce and test bugs
+  status that can fall off and lasting statuses as seperate management objects?
   spawn points int he board
   hexagon tiles
   allowing the movement properly with different movement stats
