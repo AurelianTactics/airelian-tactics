@@ -298,26 +298,62 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                     queue would be good because can order on each insert and then just grab from the front
                     and for time to resolve can just use the world tick time so don't have to change time to resolve each time. just check front of the queue
                     either way not such a big deal. if ever becomes an issue lot of algorithms for searching or inserting quickly
-        STOPPED HERE
+
 
         pseusdocode
-            world time part
+            DONE world time part
                 WRITE UP AND IMPLEMENT THIS LOGIC
                 simplify it: tick variable goes up, remove status, increment all units CT
             game time part
                 WRITE UP AND IMPLEMENT THIS LOGIC
-                check each queue in order, if anything to do do that.
-                after any time it occurs set the flag
-                to start at the top of this
-                if reaches the end set the flag to proceed to world time part
-                at some point will want to inherit a shared class for the queue but for now can do sorted lists
-                    I think inner object should be an inhered class with
-                        - tick time to resolve, unique id (lower is better), queue type enum
-                            then sub classes can handle things like unit id, map pos etc
-                    and each type of list object will be its own class
-                    will have the tick to resolve on or a -1 for resolve immediately (I guess the tick check time can be < then is ready to resolve)
+                    ug struggling with this. could do one big queue. could key teh ticks with the dict
+                    option 1:
+                        one queue, insert in order. treat it like a list and grab first if if qualifies
+                    option 2:
+                        dict of queues. each queue attached to a tick. check the instant queue and then the world time dict
+                    option 3:
+                        dict of queues by type. check each type in order
+                            leaning towards this one as gives more flexibility in the type handling
+                    if gets to slow and the sorting takes too long then the queues can become trees for easy ordering
 
-            need to write up GameTimeObject and execution of those objects
+                DONE Prompt for gametype object
+                I would like a class for GameTypeObject that @CombatState.cs and other files will use constantly.
+                The class should have these fields: resolveTick, gameTimeObjectId, Phase, unitId
+                    resolveTick defaults to -1.
+                    gameTimeObjectId will be given when created and will auto increment and should be unique.
+                    Phase and unitId are null for now. 
+
+                STOPPED HERE
+                Prompt for GameTimeDict
+                Create a new class to tell what part of the game time loop in @CombatState.cs happens next.
+                The class will have a dict of lists.
+                The class will have a list of the game time phases in @Phases.cs. The order of the list is the order the
+                dict of lists is handled.
+                Each list will handle GameTimeObjects
+                Logic will be needed to go through each dict key and look at each list.
+                If first gametimeobject meets criteria then pop the item from the beginning of the list. If not then go to next list
+
+                how to handle the unit turns
+                    option 1: populate GTO when incrementing unit turns. anything over 100 gets a GTO.
+                        issue is have to pass the queue to world time
+                        if something changes the unit CT, like an ability plus 20 CT, then this doesn't work here
+                    option 2: before doing the active turn phase, clear the list and populate it. downside is this potentially happens a lot
+                    option 3: create a GTO on the fly. for this list just go to the unit manager and get the next unit
+                        kind of ruins the flexibility of the queue of queue things
+                        might be needed for quick turns as well? probably not
+
+                    I like OPTION 3
+                old scrap:
+                    check each queue in order, if anything to do do that.
+                    after any time it occurs set the flag
+                    to start at the top of this
+                    if reaches the end set the flag to proceed to world time part
+                    at some point will want to inherit a shared class for the queue but for now can do sorted lists
+                        I think inner object should be an inhered class with
+                            - tick time to resolve, unique id (lower is better), queue type enum
+                                then sub classes can handle things like unit id, map pos etc
+                        and each type of list object will be its own class
+                        will have the tick to resolve on or a -1 for resolve immediately (I guess the tick check time can be < then is ready to resolve)
 
         draft all the edge cases and make sure it works
             unit mid turn and then some crazy thing happens

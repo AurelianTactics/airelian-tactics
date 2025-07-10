@@ -163,7 +163,12 @@ Takeaways for next project
   I probably need to be more modular
 
 backlog
-
+  so many ideas for the queue stuff
+  not sure how to handle statuses that only increment/decrement on the units turn.
+    maybe a check when the unit goes?
+    maybe a check after the units turn?
+    then things like death sentence or death, I guess beginning of the turn?
+  fix the incremetn CT based on status
   seeding, loading etc, so can jump to specific games tates and reproduce and test bugs
   status that can fall off and lasting statuses as seperate management objects?
   spawn points int he board

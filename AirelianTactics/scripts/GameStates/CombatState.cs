@@ -336,12 +336,7 @@ public class CombatState : State
         {
             Console.WriteLine("Combat in progress. Tick: " + worldTick);
 
-            // Check if victory condition has been met
-            if (victoryCondition.IsVictoryConditionMet(combatTeamManager, unitService))
-            {
-                Console.WriteLine("Victory condition has been met! Combat is now complete.");
-                hasCompletedCombat = true;
-            }
+            hasCompletedCombat = IsVictoryConditionMet(victoryCondition, combatTeamManager, unitService);
 
             if (!hasCompletedCombat)
             {
@@ -349,18 +344,14 @@ public class CombatState : State
             }
             
             while( true){
-                // Check if victory condition has been met
-                if (victoryCondition.IsVictoryConditionMet(combatTeamManager, unitService))
-                {
-                    Console.WriteLine("Victory condition has been met! Combat is now complete.");
-                    hasCompletedCombat = true;
-                }
+                
+                hasCompletedCombat = IsVictoryConditionMet(victoryCondition, combatTeamManager, unitService);
 
                 if (hasCompletedCombat){
                     break;
                 }
                 else{
-                    gameTimeObject = GetNextGameTimeObject();
+                    GameTimeObject gameTimeObject = GetNextGameTimeObject();
 
                     if (gameTimeObject != null)
                     {
@@ -377,17 +368,23 @@ public class CombatState : State
         }
     }
 
+    /// <summary>
+    /// Run world time related logic
+    /// increment world tick, potentially remove statuses, increment unit CT
+    /// </summary>
+    /// <param name="worldTick">The current world tick</param>
+    /// <param name="victoryCondition">The victory condition</param>
+    /// <param name="combatTeamManager">The combat team manager</param>
+    /// <param name="unitService">The unit service</param>
     private int RunWorldTick(int worldTick, VictoryCondition victoryCondition, CombatTeamManager combatTeamManager, UnitService unitService)
     {
+        // increment world tick
         worldTick++;
 
-        // Check if victory condition has been met
-        if (victoryCondition.IsVictoryConditionMet(combatTeamManager, unitService))
-        {
-            Console.WriteLine("Victory condition has been met! Combat is now complete.");
-            hasCompletedCombat = true;
-            CompleteState();
-        }
+        // to do: potentially remove statuses
+
+        // update unit CT
+        unitService.IncrementCTAll();
 
         return worldTick;
     }
@@ -395,6 +392,11 @@ public class CombatState : State
     private GameTimeObject GetNextGameTimeObject()
     {
         throw new NotImplementedException();
+    }
+
+    private bool IsVictoryConditionMet(VictoryCondition victoryCondition, CombatTeamManager combatTeamManager, UnitService unitService)
+    {
+        return victoryCondition.IsVictoryConditionMet(combatTeamManager, unitService);
     }
 
     /// <summary>
