@@ -234,60 +234,61 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
 
 
 7. integrates the core game engine and loop parts
-    - me: maybe plan out the game loop a bit better with my queue ideas
-    So the abstraction is three fold
-        1.: bunch of waiting stuff like for RL, WA, MP that not dealing with here
-            Standby, Prephase, WaitTick, NonCombat, RLWait
-        2.: is the time flow that is like being in the game world:
-            Tick increment, CT increment, status decrement, slow action decrement
-                me: TO DO add a tickincrement and tick variable to increment
-                    needs to mod over at some point and a back up variable for it
-                StatusTick
-                SlowActionTick
-                CTIncrement
-                to add: Process game flow stuff
+    DONE game engine and loop brainstorming
+        - me: maybe plan out the game loop a bit better with my queue ideas
+        So the abstraction is three fold
+            1.: bunch of waiting stuff like for RL, WA, MP that not dealing with here
+                Standby, Prephase, WaitTick, NonCombat, RLWait
+            2.: is the time flow that is like being in the game world:
+                Tick increment, CT increment, status decrement, slow action decrement
+                    me: TO DO add a tickincrement and tick variable to increment
+                        needs to mod over at some point and a back up variable for it
+                    StatusTick
+                    SlowActionTick
+                    CTIncrement
+                    to add: Process game flow stuff
 
-        3.: Game Flow stuff that needs to be ordered and unfolded per logic
-            FastAction (to add)
-            SlowAction
-            ActiveTurn
-            EndActiveTurn
-            Mime
-            Reaction
-            Quick
+            3.: Game Flow stuff that needs to be ordered and unfolded per logic
+                FastAction (to add)
+                SlowAction
+                ActiveTurn
+                EndActiveTurn
+                Mime
+                Reaction
+                Quick
 
-            then in game flow stuff want one or multiple queue's where I see the priority on these
-            then I can be more flexible in the future and kind of mess with new abilities and new priorities
+                then in game flow stuff want one or multiple queue's where I see the priority on these
+                then I can be more flexible in the future and kind of mess with new abilities and new priorities
 
-        ideas:
-            different spots for differeng game flow stuff
-            two queues: time stuff and game flow stuff
-                hardcode the time stuff, can adjust it later if you want
-                abstract the time stuff so other things can come later
-                    maybe like a list of iterations that loops through
-            many quees in game flow stuff
-                or just one and then can abstract and do it that way
+            ideas:
+                different spots for differeng game flow stuff
+                two queues: time stuff and game flow stuff
+                    hardcode the time stuff, can adjust it later if you want
+                    abstract the time stuff so other things can come later
+                        maybe like a list of iterations that loops through
+                many quees in game flow stuff
+                    or just one and then can abstract and do it that way
 
-    More ideas:
-        World time
-        Add tick increment at end, same order as current but in between each check game time queue
+        More ideas:
+            World time
+            Add tick increment at end, same order as current but in between each check game time queue
 
-        Game time queue
-        Hard coded list of enums
-        Each enum is key in dict
-        Dict has list of queues
-        Check each queue and if action pop from queue and go
-        For each queue get first one that is ready with tiebreaker being unit id then queue id. Lowest wins
-        At queue order is faster than fast, reaction, mime, mid turn, quick turn, slow action, unit turn
+            Game time queue
+            Hard coded list of enums
+            Each enum is key in dict
+            Dict has list of queues
+            Check each queue and if action pop from queue and go
+            For each queue get first one that is ready with tiebreaker being unit id then queue id. Lowest wins
+            At queue order is faster than fast, reaction, mime, mid turn, quick turn, slow action, unit turn
 
-        EndActiveTurn is tricky. tied to the unit ending its turn and triggered on end turn
-            so special logic. at end of turn checks if this queue has anything, and this queue only, and empties it
-            statuses that trigger it need to be added during this check
+            EndActiveTurn is tricky. tied to the unit ending its turn and triggered on end turn
+                so special logic. at end of turn checks if this queue has anything, and this queue only, and empties it
+                statuses that trigger it need to be added during this check
 
-    next steps
-        NO NOT IMPLEMENTED So I think I have the loop correct but may want to review
+    DONE next steps
+        DONE NO NOT IMPLEMENTED So I think I have the loop correct but may want to review
             check the player unit and mid turn active turn etc logic correctly
-        need to review my notes above and turn this into logical steps that implement
+        DONE need to review my notes above and turn this into logical steps that implement
             basically world time should be simple enough
             then the game time is checked between each world time
                 go in order of priority. need to consider how to handle it. thinking dict of queues or dict of dicts
@@ -323,17 +324,20 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                     gameTimeObjectId will be given when created and will auto increment and should be unique.
                     Phase and unitId are null for now. 
 
-                STOPPED HERE
-                Prompt for GameTimeDict
-                Create a new class to tell what part of the game time loop in @CombatState.cs happens next.
-                The class will have a dict of lists.
-                The class will have a list of the game time phases in @Phases.cs. The order of the list is the order the
-                dict of lists is handled.
-                Each list will handle GameTimeObjects
-                Logic will be needed to go through each dict key and look at each list.
-                If first gametimeobject meets criteria then pop the item from the beginning of the list. If not then go to next list
+                DONE Prompt for GameTimeDict
+                                Create a new class to tell what part of the game time loop in @CombatState.cs happens next.
+                    The class will have a dict of lists.
+                    The class will have a list of the game time phases in @Phases.cs. The order of the list is the order the
+                    dict of lists is handled.
+                    Each list will handle GameTimeObjects
+                    Logic will be needed to go through each dict key and look at each list.
+                    If first gametimeobject meets criteria then pop the item from the beginning of the list. If not then go to next list
+                    for MidTurn and ActiveTurn phases don't use a queue.
+                    Do a check to @UnitService.cs and see if there is a midturn unit and if so get the next one and
+                    make a @GameTimeObject.cs out of it. For activeTurn see if there is an activeturn unit and
+                    get the next one and make an @GameTimeObject.cs out of it.
 
-                how to handle the unit turns
+                DONE how to handle the unit turns
                     option 1: populate GTO when incrementing unit turns. anything over 100 gets a GTO.
                         issue is have to pass the queue to world time
                         if something changes the unit CT, like an ability plus 20 CT, then this doesn't work here
@@ -343,7 +347,7 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                         might be needed for quick turns as well? probably not
 
                     I like OPTION 3
-                old scrap:
+                DONE old scrap:
                     check each queue in order, if anything to do do that.
                     after any time it occurs set the flag
                     to start at the top of this
@@ -355,18 +359,73 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                         and each type of list object will be its own class
                         will have the tick to resolve on or a -1 for resolve immediately (I guess the tick check time can be < then is ready to resolve)
 
-        draft all the edge cases and make sure it works
+        BACKLOG draft all the edge cases and make sure it works
             unit mid turn and then some crazy thing happens
             mime
             quick
             slow action resolving but next one in queue not going
+
+    STOPPED HERE
+
+    DONE GTO deals with when something happens and is used in the queues
+        could potentially add in the spell details in it
+        thinking instead have the spell object be its own thing or maybe a combination of the two
+        I'll need all the spell details eventually:
+            https://github.com/AurelianTactics/OpenTactics/blob/main/Assets/Scripts/Combat/SpellName.cs
+            most of these should be its own thing
+        I think GTO should expand to have
+            target
+                maybe its  own subclass at some point
+                unit, single tile plus AOE, or list of targets
+                when spell resolves decides whether it hits the tiles/units/or around based on other criteria
+            unit casting it
+                need to know this as will often be checks to see if unit able to do the ability or not
+            spell object
+        so next steps:
+            DONE create the spell object. use spellname for now and all nulls
+            DONE add to GTO what is needed
+
+    ask the AI, hey now its someones turn, how should this be handled
+        pretty sure collection of new states
+            choose which action
+                wait state
+                ability state
+                move state
+            need it to be AI or human
+            need it to be able to handl outputs from inner sources
+            need it to be able to handle outputs from outer sources
+                just check for now it an be done and format works. don't actually hook it up
             
-        need something that actually runs it. Ask the AI on the process
-        I was thinking attach the combat engine and then fire it up and away for agent_instructions
-            but not sure if this is the best way as it could be kind of hoggin the thread. maybe that's what I want for now
-                could always make it flag based later
+    so for now midactive turn or active turn, need to handle inputs
+        can have AI do wait for now
+        or can start having the user inputs
+            wait
+                subtract 60, 80 or 100 CT depending on what unit did
+                this should be easy enough
+            move
+                choose tile (don't need search for now)
+                    will have to update unit position and the board
+            attack
+                choose tile, create the spell object, instant cast it
+                    will have to do a basic calculation
+                    will have to apply it to the target
+
+    need something that executes the gameTimeObjects. Ask the AI on the process
+        me: I want to describe the types of things
+            mid turn or active turn, then user or AI controls the unit
+            other things than it resolves and will do something like resolve a spell or what not. hold off implementation
+            but stubb it out
+            GTO is like a spellOjbect was in prior versions. will have all sorts of math and settings with it
+                so maybe add that object to GTO. call it CombatActionObject. flesh it out as you start adding and developing it
+            backlog: executes things from the queue (can act like it does)
+            current version: shortcut to do the instant attack as only ability so far
+    Prompt:
 
 
+    - run this all by the AI. seems like it iwll work but is it good? bit odd calling from Program.cs.
+        kind of hogs the thread in a way. guess will have to add some robust interrupt handling and back to it parts
+            how would it work with user wanting to do UI stuff while game is unfolding? guess would have to make UI part seperate
+                and can decide to have UI interrupt or UI just run
 
     - test cases
     - documentation

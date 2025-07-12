@@ -24,9 +24,19 @@ public class GameTimeObject
     public Phases? Phase { get; set; }
 
     /// <summary>
-    /// The unit ID associated with this object. Can be null.
+    /// The targetunit ID associated with this object. Can be null.
     /// </summary>
-    public int? UnitId { get; set; }
+    public int? TargetUnitId { get; set; }
+
+    /// <summary>
+    /// The actor / caster unit ID associated with this object. Can be null.
+    /// </summary>
+    public int? ActorUnitId { get; set; }
+
+    /// <summary>
+    /// The spell name associated with this object. Can be null.
+    /// </summary>
+    public SpellName SpellName { get; set; }
 
     /// <summary>
     /// Base constructor. Creates a new GameTimeObject with auto-incremented ID.
@@ -35,12 +45,15 @@ public class GameTimeObject
     /// <param name="resolveTick">The tick at which this object should be resolved. Defaults to -1.</param>
     /// <param name="phase">The phase in which this object should be processed. Can be null.</param>
     /// <param name="unitId">The unit ID associated with this object. Can be null.</param>
-    public GameTimeObject(int? resolveTick = null, Phases? phase = null, int? unitId = null)
+    public GameTimeObject(int? resolveTick = null, Phases? phase = null, int? targetUnitId = null, 
+        int? actorUnitId = null, SpellName spellName = null)
     {
         GameTimeObjectId = GetNextGameTimeObjectId();
         ResolveTick = resolveTick ?? -1;
         Phase = phase;
-        UnitId = unitId;
+        TargetUnitId = targetUnitId;
+        ActorUnitId = actorUnitId;
+        SpellName = spellName;
     }
 
     /// <summary>
@@ -66,6 +79,14 @@ public class GameTimeObject
     /// <returns>A string containing the object's properties.</returns>
     public override string ToString()
     {
-        return $"GameTimeObject[ID:{GameTimeObjectId}, ResolveTick:{ResolveTick}, Phase:{Phase?.ToString() ?? "null"}, UnitId:{UnitId?.ToString() ?? "null"}]";
+        return $@"GameTimeObject[
+            ID: {GameTimeObjectId}
+            ResolveTick: {ResolveTick}
+            Phase: {Phase?.ToString() ?? "null"}
+            TargetUnitId: {TargetUnitId?.ToString() ?? "null"}
+            ActorUnitId: {ActorUnitId?.ToString() ?? "null"}
+            SpellName: {SpellName?.ToString() ?? "null"}
+        ]";
+
     }
 } 

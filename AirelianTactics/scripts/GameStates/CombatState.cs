@@ -15,6 +15,7 @@ public class CombatState : State
     private UnitService unitService;
     private AllianceManager allianceManager;
     private Board board;
+    private GameTimeManager gameTimeManager;
 
     /// <summary>
     /// Constructor that takes a state manager.
@@ -25,6 +26,7 @@ public class CombatState : State
         unitService = new UnitService();
         combatTeamManager = new CombatTeamManager();
         board = new Board();
+        gameTimeManager = new GameTimeManager(unitService);
     }
 
     /// <summary>
@@ -391,7 +393,7 @@ public class CombatState : State
 
     private GameTimeObject GetNextGameTimeObject()
     {
-        throw new NotImplementedException();
+        return gameTimeManager.GetNextGameTimeObject();
     }
 
     private bool IsVictoryConditionMet(VictoryCondition victoryCondition, CombatTeamManager combatTeamManager, UnitService unitService)
