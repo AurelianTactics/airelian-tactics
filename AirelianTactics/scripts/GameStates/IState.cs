@@ -30,4 +30,11 @@ public interface IState
     /// This is where the main logic of the state is executed.
     /// </summary>
     void Update();
+
+    /// <summary>
+    /// Called when user input is received.
+    /// Use this to handle user input specific to this state.
+    /// </summary>
+    /// <param name="input">The user input string</param>
+    void HandleInput(string input);
 } 

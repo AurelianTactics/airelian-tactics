@@ -183,6 +183,18 @@ public class StateManager
     }
 
     /// <summary>
+    /// Passes user input to the current state.
+    /// </summary>
+    /// <param name="input">The user input string</param>
+    public void HandleInput(string input)
+    {
+        if (currentState != null)
+        {
+            currentState.HandleInput(input);
+        }
+    }
+
+    /// <summary>
     /// Gets the current state.
     /// </summary>
     /// <returns>The current state.</returns>

@@ -61,6 +61,16 @@ public abstract class State : IState
     }
 
     /// <summary>
+    /// Called when user input is received.
+    /// Override this method to handle user input specific to this state.
+    /// </summary>
+    /// <param name="input">The user input string</param>
+    public virtual void HandleInput(string input)
+    {
+        // Default implementation does nothing
+    }
+
+    /// <summary>
     /// Adds event listeners for this state.
     /// Override this method to add specific listeners.
     /// </summary>

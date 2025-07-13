@@ -385,7 +385,10 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
             DONE create the spell object. use spellname for now and all nulls
             DONE add to GTO what is needed
 
-    ask the AI, hey now its someones turn, how should this be handled
+    DONE implement wait in unit servcie (maybe do this with spellname later)
+    DONE default spell thing for attack
+
+    DONE ask the AI, hey now its someones turn, how should this be handled
         pretty sure collection of new states
             choose which action
                 wait state
@@ -395,7 +398,26 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
             need it to be able to handl outputs from inner sources
             need it to be able to handle outputs from outer sources
                 just check for now it an be done and format works. don't actually hook it up
+
+    need something to executes
+        wait commands
+        move commands
+        act commands
             
+    stop for testing
+        This ballooned a bit in complexity.
+        need to test core game loop works
+        need to test that the activeturn wait works
+        need to test that wait objects are being implemented
+
+
+    once wait works
+        then add move
+        then add act
+        need to test mid active turn works
+
+    hold off on act for now
+
     so for now midactive turn or active turn, need to handle inputs
         can have AI do wait for now
         or can start having the user inputs

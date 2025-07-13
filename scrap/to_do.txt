@@ -163,6 +163,15 @@ Takeaways for next project
   I probably need to be more modular
 
 backlog
+  figure out the spellname factory
+    think through all the different things I want
+      AI can create, but at game time want them accesible.
+    maybe make wait a spell name
+
+  maybe expand the states
+    combatstate doing a bunch of things that before were seperated
+      set up combat state, game loop increment state. each action was like its own state before etc
+
   execution of the queues for game loop stubbed out. will need the spell objects
   so many ideas for the queue stuff
   not sure how to handle statuses that only increment/decrement on the units turn.

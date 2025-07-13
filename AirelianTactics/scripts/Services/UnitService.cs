@@ -135,5 +135,18 @@ namespace AirelianTactics.Services
             }
             return true;
         }
+
+        // public void SetUnitHasActed(PlayerUnit unit){
+        //     unit.HasActed = true;
+        // }
+
+        // public void SetUnitHasMoved(PlayerUnit unit){
+        //     unit.HasMoved = true;
+        // }
+
+        public void EndUnitTurn(PlayerUnit unit){
+            unit.EndTurn();
+
+        }
     }
 } 

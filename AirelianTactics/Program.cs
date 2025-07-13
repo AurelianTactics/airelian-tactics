@@ -56,12 +56,23 @@ namespace AirelianTactics
                 }
                 else
                 {
-                    // Simple way to exit the game loop
-                    Console.WriteLine("Press 'Q' to quit or any other key to continue...");
-                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                    if (keyInfo.Key == ConsoleKey.Q)
+                    // Handle input for states that need it (like UnitActionState)
+                    IState currentState = stateManager.GetCurrentState();
+                    if (currentState is UnitActionState unitActionState && unitActionState.IsWaitingForInput)
                     {
-                        isRunning = false;
+                        // Get user input and pass it to the state
+                        string input = Console.ReadLine();
+                        stateManager.HandleInput(input);
+                    }
+                    else
+                    {
+                        // Simple way to exit the game loop for other states
+                        Console.WriteLine("Press 'Q' to quit or any other key to continue...");
+                        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                        if (keyInfo.Key == ConsoleKey.Q)
+                        {
+                            isRunning = false;
+                        }
                     }
                 }
             }

@@ -223,6 +223,87 @@ public class Board
 		return tile != null && tile.UnitId != null;
 	}
 
+	/// <summary>
+	/// Get the unit ID at a specific position, if any
+	/// </summary>
+	/// <param name="position">The position to check</param>
+	/// <returns>The unit ID at the position, or null if no unit is there</returns>
+	public int? GetUnitAtPosition(Point position)
+	{
+		Tile tile = GetTile(position);
+		return tile?.UnitId;
+	}
+
+	/// <summary>
+	/// Get the current position of a unit on the board
+	/// </summary>
+	/// <param name="unitId">The ID of the unit to find</param>
+	/// <returns>The position of the unit, or null if not found</returns>
+	public Point? GetUnitPosition(int unitId)
+	{
+		// Search through all tiles to find the unit
+		foreach (var kvp in tiles)
+		{
+			if (kvp.Value.UnitId == unitId)
+			{
+				return kvp.Key;
+			}
+		}
+		
+		// Unit not found on board
+		return null;
+	}
+
+	/// <summary>
+	/// Get valid move tiles for a unit from a given position with a movement range
+	/// </summary>
+	/// <param name="startPosition">The starting position</param>
+	/// <param name="moveRange">The maximum movement range</param>
+	/// <returns>List of tiles the unit can move to</returns>
+	public List<Tile> GetValidMoveTiles(Point startPosition, int moveRange)
+	{
+		Tile startTile = GetTile(startPosition);
+		if (startTile == null)
+		{
+			return new List<Tile>();
+		}
+
+		// Use the board's search functionality to find valid move tiles
+		List<Tile> validTiles = Search(startTile, (currentTile, nextTile) =>
+		{
+			// Can move to a tile if:
+			// 1. It's not occupied by another unit
+			// 2. The height difference is not too great (basic jump check)
+			// 3. It's within movement range (handled by search algorithm)
+			
+			if (nextTile.UnitId != null)
+			{
+				return false; // Tile is occupied
+			}
+			
+			// Basic height check - allow movement if height difference is 1 or less
+			int heightDiff = Math.Abs(nextTile.height - currentTile.height);
+			if (heightDiff > 1)
+			{
+				return false; // Too high to jump
+			}
+			
+			return true; // Valid tile to move to
+		});
+
+		// Filter out tiles that are beyond movement range
+		List<Tile> tilesInRange = new List<Tile>();
+		foreach (Tile tile in validTiles)
+		{
+			if (tile.distance <= moveRange && tile != startTile)
+			{
+				tilesInRange.Add(tile);
+			}
+		}
+
+		return tilesInRange;
+	}
+
 	// public Tile GetTile(PlayerUnit target)
 	// {
 	// 	Point p = new Point();

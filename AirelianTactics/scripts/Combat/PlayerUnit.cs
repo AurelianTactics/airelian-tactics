@@ -1,12 +1,12 @@
 public class PlayerUnit {
 
     // stats can come from Unit or Item. Total is the sum of the two. In future maybe add more components   
-    private int StatTotalCT { get; set; }
-    private int StatTotalSpeed { get; set; }
-    private int StatTotalPA { get; set; }
-    private int StatTotalHP { get; set; }
-    private int StatTotalMove { get; set; }
-    private int StatTotalJump { get; set; }
+    public int StatTotalCT { get; set; }
+    public int StatTotalSpeed { get; set; }
+    public int StatTotalPA { get; set; }
+    public int StatTotalHP { get; set; }
+    public int StatTotalMove { get; set; }
+    public int StatTotalJump { get; set; }
 
     /// <summary>
     /// Units unique identifier. Lower number goes first in case of turn order and
@@ -82,6 +82,15 @@ public class PlayerUnit {
         if (this.StatTotalCT >= 100 && !this.IsIncapacitated) {
             // Unit is eligible for an active turn
             // Any additional logic can be added here
+        }
+    }
+
+    public void EndTurn(){
+        this.IsMidActiveTurn = false;
+        // to do: use act/wait to potentially change CT
+        this.StatTotalCT -= 100;
+        if(this.StatTotalCT < 0){
+            this.StatTotalCT = 0;
         }
     }
 }

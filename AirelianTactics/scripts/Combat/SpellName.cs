@@ -9,6 +9,8 @@ public class SpellName {
 
     public int Index { get; set; }
 
+    public Point TargetPoint { get; set; }
+
     public int SpellId { get; set; }
     public int Version { get; set; }
     public string AbilityName { get; set; }
@@ -49,6 +51,8 @@ public class SpellName {
     /// </summary>.
     public SpellName()
     {
+        this.TargetPoint = null;
+
         this.Index = 0; //Debug.Log("snd index is " + snd.Index + "," + snd.AbilityName);
 
         this.SpellId = 0;
@@ -84,6 +88,7 @@ public class SpellName {
         this.EffectXY = 1;
         this.EffectZ = 1;
     }
+
 
     // public SpellName(SpellNameData snd)
     // {
