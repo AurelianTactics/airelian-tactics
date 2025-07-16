@@ -401,8 +401,15 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
 
     need something to executes
         wait commands
+            takes the GTO, takes the spellname, just reads the string and does the unit service call
+                backlog is to make it more abstract. Ie alters unit, unit is itself, state is CT etc
         move commands
+            takes the GTO takes the spellname, reads the string and moves the unit
+                assume the GTO is correct and doesn't validte move is valid
         act commands
+            takes the GTO, tatkes the spellname reads the sting
+                checks target tile, checks if unit there. does calculation
+                backlog is to make it more abstract. ie alters unit, does HP dmg etc
             
     stop for testing
         This ballooned a bit in complexity.
