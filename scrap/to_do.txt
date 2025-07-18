@@ -163,6 +163,23 @@ Takeaways for next project
   I probably need to be more modular
 
 backlog
+  state manager aproach is inconsistent. might be fine.
+      🤔 Design Philosophy Issue
+    This creates an inconsistent pattern:
+    Some transitions are event-driven (manual when specific game events occur)
+    Others are completion-driven (automatic when a state finishes its work)
+    🛠️ Cleaner Alternatives
+    Option A: Make all transitions manual (event-driven)
+    Remove the conflicting state flows
+    Have each state explicitly call ChangeState<>() when needed
+    Option B: Make all transitions automatic (completion-driven)
+    Define separate flows for different completion scenarios
+    Use state completion flags or return values to indicate which flow to take
+    Option C: Use a hybrid approach with clear separation
+    Manual transitions for reactive events (like unit turns)
+    Automatic transitions for completion events (like state finishing)
+The current approach works but mixes paradigms, which is why it feels inconsistent. The StateManager was designed primarily for linear state flows, but combat requires more complex branching logic.
+  action executing can be more abstract
   figure out the spellname factory
     think through all the different things I want
       AI can create, but at game time want them accesible.

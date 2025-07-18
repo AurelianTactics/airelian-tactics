@@ -12,14 +12,19 @@ public class GameTimeManager
     private Dictionary<Phases, List<GameTimeObject>> phaseQueues;
     private List<Phases> phaseOrder;
     private UnitService unitService;
+    private GameTimeObjectProcessor processor;
 
     /// <summary>
     /// Constructor that initializes the phase queues and order
     /// </summary>
     /// <param name="unitService">The unit service to check for midturn and activeturn units</param>
-    public GameTimeManager(UnitService unitService)
+    /// <param name="spellService">The spell service for processing spell effects</param>
+    /// <param name="statusService">The status service for processing status effects</param>
+    /// <param name="board">The board for managing unit positions</param>
+    public GameTimeManager(UnitService unitService, SpellService spellService, StatusService statusService, Board board)
     {
         this.unitService = unitService;
+        this.processor = new GameTimeObjectProcessor(unitService, spellService, statusService, board);
         InitializePhaseOrder();
         InitializePhaseQueues();
     }
@@ -217,4 +222,33 @@ public class GameTimeManager
     {
         return phaseQueues.ContainsKey(phase) ? new List<GameTimeObject>(phaseQueues[phase]) : new List<GameTimeObject>();
     }
+
+    /// <summary>
+    /// Process a specific GameTimeObject directly using the processor
+    /// to do: should not process midturn or activeturn
+    /// </summary>
+    /// <param name="gameTimeObject">The GameTimeObject to process</param>
+    /// <returns>True if processed successfully, false otherwise</returns>
+    public bool ProcessGameTimeObject(GameTimeObject gameTimeObject)
+    {
+        if (gameTimeObject == null)
+        {
+            return false;
+        }
+
+        Console.WriteLine($"Processing {processor.GetActionSummary(gameTimeObject)}");
+        bool processResult = processor.ProcessGameTimeObject(gameTimeObject);
+        
+        if (processResult)
+        {
+            Console.WriteLine($"Successfully processed GameTimeObject {gameTimeObject.GameTimeObjectId}");
+        }
+        else
+        {
+            Console.WriteLine($"Failed to process GameTimeObject {gameTimeObject.GameTimeObjectId}");
+        }
+        
+        return processResult;
+    }
+
 } 

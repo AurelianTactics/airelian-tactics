@@ -13,6 +13,8 @@ public class CombatState : State
     private VictoryCondition victoryCondition;
     private CombatTeamManager combatTeamManager;
     private UnitService unitService;
+    private SpellService spellService;
+    private StatusService statusService;
     private AllianceManager allianceManager;
     private Board board;
     private GameTimeManager gameTimeManager;
@@ -24,9 +26,11 @@ public class CombatState : State
     public CombatState(StateManager stateManager) : base(stateManager)
     {
         unitService = new UnitService();
+        spellService = new SpellService();
+        statusService = new StatusService();
         combatTeamManager = new CombatTeamManager();
         board = new Board();
-        gameTimeManager = new GameTimeManager(unitService);
+        gameTimeManager = new GameTimeManager(unitService, spellService, statusService, board);
     }
 
     /// <summary>
@@ -353,11 +357,33 @@ public class CombatState : State
                     break;
                 }
                 else{
-                    GameTimeObject gameTimeObject = GetNextGameTimeObject();
+                    GameTimeObject gameTimeObject = gameTimeManager.GetNextGameTimeObject();
 
                     if (gameTimeObject != null)
                     {
-                        Console.WriteLine("Game time object: " + gameTimeObject.GetType().Name);
+                        // Handle different types of GameTimeObjects
+                        if (gameTimeObject.Phase == Phases.ActiveTurn || gameTimeObject.Phase == Phases.MidTurn)
+                        {
+                            // Turn trigger - transition to UnitActionState for player input
+                            Console.WriteLine($"Unit {gameTimeObject.ActorUnitId} turn - transitioning to UnitActionState");
+                            
+                            // Set the actor unit ID in UnitActionState before transitioning
+                            var unitActionState = stateManager.GetState<UnitActionState>();
+                            unitActionState.SetActorUnit(gameTimeObject.ActorUnitId.Value);
+                            
+                            // Transition to UnitActionState
+                            stateManager.ChangeState<UnitActionState>();
+                            return; // Exit the game loop to let UnitActionState take over
+                        }
+                        else
+                        {
+                            // Action effect - process through the processor
+                            bool processed = gameTimeManager.ProcessGameTimeObject(gameTimeObject);
+                            if (!processed)
+                            {
+                                Console.WriteLine("Failed to process action GameTimeObject");
+                            }
+                        }
                     }
                     else
                     {
@@ -391,10 +417,6 @@ public class CombatState : State
         return worldTick;
     }
 
-    private GameTimeObject GetNextGameTimeObject()
-    {
-        return gameTimeManager.GetNextGameTimeObject();
-    }
 
     private bool IsVictoryConditionMet(VictoryCondition victoryCondition, CombatTeamManager combatTeamManager, UnitService unitService)
     {

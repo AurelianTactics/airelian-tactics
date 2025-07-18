@@ -255,6 +255,36 @@ public class Board
 	}
 
 	/// <summary>
+	/// Move a unit from one position to another on the board
+	/// </summary>
+	/// <param name="unitId">The ID of the unit to move</param>
+	/// <param name="fromPosition">The current position of the unit</param>
+	/// <param name="toPosition">The target position to move to</param>
+	/// <returns>True if the move was successful, false otherwise</returns>
+	public bool MoveUnit(int unitId, Point fromPosition, Point toPosition)
+	{
+		// Validate that the unit is actually at the from position
+		Tile fromTile = GetTile(fromPosition);
+		if (fromTile == null || fromTile.UnitId != unitId)
+		{
+			return false; // Unit is not at the expected position
+		}
+		
+		// Validate that the target position exists and is empty
+		Tile toTile = GetTile(toPosition);
+		if (toTile == null || toTile.UnitId != null)
+		{
+			return false; // Target position doesn't exist or is occupied
+		}
+		
+		// Perform the move
+		fromTile.UnitId = null;  // Remove unit from old position
+		toTile.UnitId = unitId;  // Place unit at new position
+		
+		return true;
+	}
+
+	/// <summary>
 	/// Get valid move tiles for a unit from a given position with a movement range
 	/// </summary>
 	/// <param name="startPosition">The starting position</param>

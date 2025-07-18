@@ -24,17 +24,23 @@ namespace AirelianTactics
             GameInitState initState = new GameInitState(stateManager);
             //MapSetupState mapSetupState = new MapSetupState(stateManager);
             CombatState combatState = new CombatState(stateManager);
+            UnitActionState unitActionStateInstance = new UnitActionState(stateManager);
             GameEndState endState = new GameEndState(stateManager);
             
             stateManager.RegisterState(initState);
             //stateManager.RegisterState(mapSetupState);
             stateManager.RegisterState(combatState);
+            stateManager.RegisterState(unitActionStateInstance);
             stateManager.RegisterState(endState);
             
             // Define the state flow
             stateManager.DefineStateFlow<GameInitState, CombatState>();
             //stateManager.DefineStateFlow<GameInitState, MapSetupState>();
             //stateManager.DefineStateFlow<MapSetupState, CombatState>();
+            // CombatSTate to UnitActionState is event driven. This is inconsistent with the other states.
+            // may or may not want to change this
+            //stateManager.DefineStateFlow<CombatState, UnitActionState>();
+            //stateManager.DefineStateFlow<UnitActionState, CombatState>();
             stateManager.DefineStateFlow<CombatState, GameEndState>();
             
             // Start with the game initialization state

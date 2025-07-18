@@ -11,6 +11,8 @@ public class UnitActionState : State
     private int actorUnitId;
     private PlayerUnit currentUnit;
     private UnitService unitService;
+    private SpellService spellService;
+    private StatusService statusService;
     private Board board;
     private GameTimeManager gameTimeManager;
     
@@ -39,8 +41,10 @@ public class UnitActionState : State
     public UnitActionState(StateManager stateManager) : base(stateManager)
     {
         unitService = new UnitService();
+        spellService = new SpellService();
+        statusService = new StatusService();
         board = new Board();
-        gameTimeManager = new GameTimeManager(unitService);
+        gameTimeManager = new GameTimeManager(unitService, spellService, statusService, board);
     }
 
     /// <summary>

@@ -399,18 +399,29 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
             need it to be able to handle outputs from outer sources
                 just check for now it an be done and format works. don't actually hook it up
 
-    need something to executes
+    DONE need something to executes
+        want own class for this. create instance in GT manager
+            basically a big complicated thing that handles a bunch of GT and a bunch of Spells and manages
+            the complexity and what services to call
         wait commands
             takes the GTO, takes the spellname, just reads the string and does the unit service call
                 backlog is to make it more abstract. Ie alters unit, unit is itself, state is CT etc
         move commands
             takes the GTO takes the spellname, reads the string and moves the unit
                 assume the GTO is correct and doesn't validte move is valid
+                updates unit, updates board
         act commands
             takes the GTO, tatkes the spellname reads the sting
                 checks target tile, checks if unit there. does calculation
                 backlog is to make it more abstract. ie alters unit, does HP dmg etc
-            
+
+    review file changes
+        
+    act command needs to be fleshed out
+        make sure act GTO has a target unit. can be null if nothing on it
+        need to fill out CalculateBasicDamage
+            make it like 999 HP and do a subtract health from unit and incapaciteate unit
+
     stop for testing
         This ballooned a bit in complexity.
         need to test core game loop works
