@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using AirelianTactics.Services;
 
 /// <summary>
 /// StateManager handles the transitions between different game states.
 /// It maintains a reference to the current state and manages the state transitions.
+/// Also manages shared services and game state that persists across states.
 /// </summary>
 public class StateManager
 {
@@ -29,6 +31,37 @@ public class StateManager
     /// </summary>
     private GameContext gameContext;
 
+    // Shared services that persist across all game states
+    /// <summary>
+    /// Shared unit service instance used by all states
+    /// </summary>
+    public UnitService UnitService { get; private set; }
+
+    /// <summary>
+    /// Shared spell service instance used by all states
+    /// </summary>
+    public SpellService SpellService { get; private set; }
+
+    /// <summary>
+    /// Shared status service instance used by all states
+    /// </summary>
+    public StatusService StatusService { get; private set; }
+
+    /// <summary>
+    /// Shared board instance used by all states
+    /// </summary>
+    public Board Board { get; private set; }
+
+    /// <summary>
+    /// Shared game time manager that persists queues across state transitions
+    /// </summary>
+    public GameTimeManager GameTimeManager { get; private set; }
+
+    /// <summary>
+    /// World tick counter for game time progression
+    /// </summary>
+    public int WorldTick { get; private set; } = -1;
+
     /// <summary>
     /// Event triggered when a state transition occurs.
     /// Provides the previous state and the new state.
@@ -41,11 +74,28 @@ public class StateManager
     private bool currentStateCompleted = false;
 
     /// <summary>
-    /// Constructor initializes a new StateManager with a new GameContext.
+    /// Constructor initializes a new StateManager with a new GameContext and services.
     /// </summary>
     public StateManager()
     {
         gameContext = new GameContext();
+        
+        // Initialize shared services
+        UnitService = new UnitService();
+        SpellService = new SpellService();
+        StatusService = new StatusService();
+        Board = new Board();
+        
+        // Initialize game time manager with services
+        GameTimeManager = new GameTimeManager(UnitService, SpellService, StatusService, Board);
+    }
+
+    /// <summary>
+    /// Increment the world tick counter
+    /// </summary>
+    public void IncrementWorldTick()
+    {
+        WorldTick++;
     }
 
     /// <summary>

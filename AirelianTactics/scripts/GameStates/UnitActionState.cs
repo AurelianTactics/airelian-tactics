@@ -40,11 +40,7 @@ public class UnitActionState : State
     /// <param name="stateManager">The state manager that will manage this state.</param>
     public UnitActionState(StateManager stateManager) : base(stateManager)
     {
-        unitService = new UnitService();
-        spellService = new SpellService();
-        statusService = new StatusService();
-        board = new Board();
-        gameTimeManager = new GameTimeManager(unitService, spellService, statusService, board);
+        // Services will be initialized from GameContext in Enter()
     }
 
     /// <summary>
@@ -62,6 +58,14 @@ public class UnitActionState : State
     public override void Enter()
     {
         base.Enter();
+        
+        // Get shared services from StateManager
+        unitService = stateManager.UnitService;
+        spellService = stateManager.SpellService;
+        statusService = stateManager.StatusService;
+        board = stateManager.Board;
+        gameTimeManager = stateManager.GameTimeManager;  // Use persistent GameTimeManager
+        
         Console.WriteLine("Entering Unit Action State");
         
         // Get the current unit using the actorUnitId

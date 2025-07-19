@@ -19,18 +19,16 @@ public class CombatState : State
     private Board board;
     private GameTimeManager gameTimeManager;
 
+    public int worldTick;
+
     /// <summary>
     /// Constructor that takes a state manager.
     /// </summary>
     /// <param name="stateManager">The state manager that will manage this state.</param>
     public CombatState(StateManager stateManager) : base(stateManager)
     {
-        unitService = new UnitService();
-        spellService = new SpellService();
-        statusService = new StatusService();
         combatTeamManager = new CombatTeamManager();
-        board = new Board();
-        gameTimeManager = new GameTimeManager(unitService, spellService, statusService, board);
+
     }
 
     /// <summary>
@@ -39,6 +37,14 @@ public class CombatState : State
     public override void Enter()
     {
         base.Enter();
+        
+        // Get shared services from StateManager
+        unitService = stateManager.UnitService;
+        spellService = stateManager.SpellService;
+        statusService = stateManager.StatusService;
+        board = stateManager.Board;
+        gameTimeManager = stateManager.GameTimeManager;  // Use persistent GameTimeManager
+        
         hasCompletedCombat = false;
         Console.WriteLine("Entering Combat State");
         Console.WriteLine("Combat has begun!");
@@ -336,17 +342,15 @@ public class CombatState : State
             Add to backlog status tied to unit turn
         */
 
-        int worldTick = -1;
-
         if (!hasCompletedCombat)
         {
-            Console.WriteLine("Combat in progress. Tick: " + worldTick);
+            Console.WriteLine("Combat in progress. Tick: " + stateManager.WorldTick);
 
             hasCompletedCombat = IsVictoryConditionMet(victoryCondition, combatTeamManager, unitService);
 
             if (!hasCompletedCombat)
             {
-                worldTick = RunWorldTick(worldTick, victoryCondition, combatTeamManager, unitService);
+                RunWorldTick(victoryCondition, combatTeamManager, unitService);
             }
             
             while( true){
@@ -387,7 +391,7 @@ public class CombatState : State
                     }
                     else
                     {
-                        Console.WriteLine("No game time object found");
+                        //Console.WriteLine("No game time object found");
                         break;
                     }
                 }
@@ -400,21 +404,19 @@ public class CombatState : State
     /// Run world time related logic
     /// increment world tick, potentially remove statuses, increment unit CT
     /// </summary>
-    /// <param name="worldTick">The current world tick</param>
     /// <param name="victoryCondition">The victory condition</param>
     /// <param name="combatTeamManager">The combat team manager</param>
     /// <param name="unitService">The unit service</param>
-    private int RunWorldTick(int worldTick, VictoryCondition victoryCondition, CombatTeamManager combatTeamManager, UnitService unitService)
+    private void RunWorldTick(VictoryCondition victoryCondition, CombatTeamManager combatTeamManager, UnitService unitService)
     {
         // increment world tick
-        worldTick++;
+        stateManager.IncrementWorldTick();
 
         // to do: potentially remove statuses
 
         // update unit CT
         unitService.IncrementCTAll();
 
-        return worldTick;
     }
 
 

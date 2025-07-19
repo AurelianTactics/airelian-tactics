@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// Contains shared game data that can be accessed across different game states.
+/// Contains shared configuration data that can be accessed across different game states.
+/// Services and game state management are handled by StateManager.
 /// </summary>
 public class GameContext
 {

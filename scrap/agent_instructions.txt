@@ -415,16 +415,30 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                 checks target tile, checks if unit there. does calculation
                 backlog is to make it more abstract. ie alters unit, does HP dmg etc
 
-    review file changes
-        
-    act command needs to be fleshed out
+    DONE review file changes
+
+    DONE act command needs to be fleshed out
         make sure act GTO has a target unit. can be null if nothing on it
         need to fill out CalculateBasicDamage
             make it like 999 HP and do a subtract health from unit and incapaciteate unit
 
+    learn more about agent rules and set up some reuls file
+
+    testing issues
+    
+
+            Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.
+            at UnitActionState.CreateAndQueueGameTimeObject() in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\scripts\GameStates\UnitActionState.cs:line 399
+            at UnitActionState.HandleConfirmation() in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\scripts\GameStates\UnitActionState.cs:line 376
+            at UnitActionState.Update() in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\scripts\GameStates\UnitActionState.cs:line 107
+            at StateManager.Update() in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\scripts\GameStates\StateManager.cs:line 
+            164
+            at AirelianTactics.Program.Main(String[] args) in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\Program.cs:line 54
+
     stop for testing
         This ballooned a bit in complexity.
         need to test core game loop works
+        test that can select actions and see actions
         need to test that the activeturn wait works
         need to test that wait objects are being implemented
 

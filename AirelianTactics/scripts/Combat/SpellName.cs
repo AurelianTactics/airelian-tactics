@@ -9,7 +9,7 @@ public class SpellName {
 
     public int Index { get; set; }
 
-    public Point TargetPoint { get; set; }
+    public Point? TargetPoint { get; set; }
 
     public int SpellId { get; set; }
     public int Version { get; set; }

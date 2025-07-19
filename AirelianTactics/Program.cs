@@ -70,6 +70,10 @@ namespace AirelianTactics
                         string input = Console.ReadLine();
                         stateManager.HandleInput(input);
                     }
+                    else if( currentState is CombatState combatStateInstance )
+                    {
+                        Console.WriteLine("Continuing to update combat state...");
+                    }
                     else
                     {
                         // Simple way to exit the game loop for other states

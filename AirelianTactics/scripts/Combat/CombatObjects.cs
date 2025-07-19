@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using AirelianTactics.Services;
-using AirelianTactics.Core.Logic;
 
-/// <summary>
-/// CombatObject is a class that contains all the data for a combat session.
-/// Used in CombatEngine to process the game loop.  
-/// to do: mime queue, quick queue?, counter queue?
-/// </summary>
-public class CombatObject
+namespace AirelianTactics.Combat
+{
+    /// <summary>
+    /// CombatObject is a class that contains all the data for a combat session.
+    /// Used in CombatEngine to process the game loop.  
+    /// to do: mime queue, quick queue?, counter queue?
+    /// </summary>
+    public class CombatObject
 {
 
     //private readonly IUnitService _unitService;
@@ -88,4 +89,5 @@ public class CombatObject
 	// 	}
 	// 	return currentPhase;
 	// }
+}
 }
