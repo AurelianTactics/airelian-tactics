@@ -57,6 +57,7 @@ namespace AirelianTactics.Tests.GameStates
             public System.Action? OnEnter { get; set; }
             public System.Action? OnExit { get; set; }
             public System.Action? OnUpdate { get; set; }
+            public System.Action<string>? OnHandleInput { get; set; }
             
             // Implement the GameContext property
             public GameContext GameContext { get; set; } = new GameContext();
@@ -64,6 +65,7 @@ namespace AirelianTactics.Tests.GameStates
             public void Enter() => OnEnter?.Invoke();
             public void Exit() => OnExit?.Invoke();
             public void Update() => OnUpdate?.Invoke();
+            public void HandleInput(string input) => OnHandleInput?.Invoke(input);
         }
     }
 } 

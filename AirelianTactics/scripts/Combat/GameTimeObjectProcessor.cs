@@ -214,15 +214,10 @@ public class GameTimeObjectProcessor
     {
         // Simple damage calculation for now
         // Base damage from attacker's PA, with some randomization
-        Random random = new Random();
-        int baseDamage = attacker.StatTotalPA;
-        
-        // Add some variance (±25%)
-        int variance = (int)(baseDamage * 0.25f);
-        int finalDamage = baseDamage + random.Next(-variance, variance + 1);
-        
+        int baseDamage = attacker.StatTotalPA * spell.BaseQ;
+    
         // Ensure minimum damage of 1
-        return Math.Max(1, finalDamage);
+        return Math.Max(0, baseDamage);
     }
 
     /// <summary>

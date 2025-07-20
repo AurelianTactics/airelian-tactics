@@ -1,155 +1,70 @@
-# Combat Initialization
+# Game Initialization
 
-This document covers the initialization systems in `CombatState` that set up the combat environment, including alliances, victory conditions, teams, and unit population.
+This document covers the complete game initialization process handled by `GameInitState`, which sets up all game components including configurations, teams, units, board, and combat objects before transitioning to combat.
 
 ## Overview
 
-When `CombatState` is entered, it performs several initialization steps to prepare the combat environment:
+When `GameInitState` is entered, it performs a comprehensive initialization sequence to prepare the entire game environment:
 
-1. **Team Instantiation** - Creates `CombatTeam` objects from loaded team configurations
-2. **Alliance Management** - Sets up relationships between teams based on game configuration
-3. **Victory Condition Setup** - Initializes the win condition for the combat session
-4. **Unit Population** - Creates `PlayerUnit` objects and assigns them fair unit IDs using a snake draft system
+1. **Configuration Loading** - Loads game, team, and map configurations from JSON files
+2. **Service Initialization** - Sets up shared services through StateManager
+3. **Board Setup** - Creates the game map from configuration data
+4. **Unit Creation** - Instantiates all player units using snake draft for fair ID assignment
+5. **Unit Placement** - Places units on the board in starting positions
+6. **Combat Object Setup** - Initializes alliances, victory conditions, and team management
 
-## Alliance System
+All initialization is completed before any combat begins, ensuring a clean separation between setup and gameplay.
 
-### Components
+## Configuration Loading System
 
-- **`AllianceManager`** - Main class that manages team relationships
-- **`Alliances` enum** - Defines relationship types between teams
-- **Game Configuration** - JSON-based alliance definitions
+### Game Configuration Loading
 
-### Alliance Types
+The initialization process begins by loading the master game configuration file:
 
-The `Alliances` enum defines the following relationship types:
+**File Path:** `AirelianTactics/Configs/GameConfigDirectory/game_config.json`
 
-- `None` (0) - No alliance relationship
-- `Neutral` (1 << 0) - Not hostile but not allied
-- `Hero` (1 << 1) - Units under your control and on your side
-- `Enemy` (1 << 2) - Hostile units
-- `Allied` (1 << 3) - On your side but not under your control
-- `Self` (1 << 4) - Always allied with self
-
-### Configuration Format
-
-Alliances are defined in the game configuration JSON file:
-
+**Configuration Structure:**
 ```json
 {
   "general": {
+    "victoryCondition": "LastTeamStanding",
     "alliances": [
       {
-        "0": {"1": "Enemy"},
-        "1": {"0": "Enemy"}
+        "0": {"1":"Enemy"},
+        "1": {"0":"Enemy"}
       }
     ]
+  },
+  "teams": [
+    "Configs/TeamConfigDirectory/team_sample.json",
+    "Configs/TeamConfigDirectory/team_sample_2.json"
+  ],
+  "map": {
+    "mapFile": "Configs/MapConfigDirectory/default_map.json"
   }
 }
 ```
 
-### Implementation Details
+**Key Components:**
+- **Victory Condition**: Defines win condition for the game session
+- **Alliances**: Specifies relationships between teams (Enemy, Allied, Neutral, etc.)
+- **Teams**: Array of file paths to individual team configuration files
+- **Map**: Reference to the map configuration file
 
-1. **Initialization in CombatState**:
-   ```csharp
-   private void InitializeAlliances()
-   ```
-   - Creates `AllianceManager` with alliance configurations from `GameContext`
-   - Falls back to default neutral relationships if no configuration exists
+### Team Configuration Loading
 
-2. **Alliance Storage**:
-   - Uses nested `Dictionary<int, Dictionary<int, Alliances>>` structure
-   - First key: Source team ID
-   - Second key: Target team ID
-   - Value: Alliance type
+The system loads multiple team configurations specified in the game config:
 
-3. **Key Methods**:
-   - `GetAlliance(int sourceTeamId, int targetTeamId)` - Returns alliance type between teams
-   - `AreTeamsAllied(int team1Id, int team2Id)` - Checks if teams are allied (Hero or Allied)
-   - `AreTeamsEnemies(int team1Id, int team2Id)` - Checks if teams are enemies
-
-## Victory Condition System
-
-### Components
-
-- **`VictoryCondition`** - Main class that checks and manages win conditions
-- **`VictoryType` enum** - Defines available victory condition types
-- **`CombatTeamManager`** - Manages team status updates
-- **`UnitService`** - Provides team defeat status information
-
-### Victory Types
-
-Currently supported victory conditions:
-- `LastTeamStanding` - Game continues until all teams except one have all units incapacitated
-
-### Configuration
-
-Victory conditions are defined in the game configuration:
-
+**Team Configuration Format:**
 ```json
 {
-  "general": {
-    "victoryCondition": "LastTeamStanding"
-  }
-}
-```
-
-### Implementation Details
-
-1. **Initialization in CombatState**:
-   ```csharp
-   private void InitializeVictoryCondition()
-   ```
-   - Creates `VictoryCondition` object with configuration string
-   - Defaults to `LastTeamStanding` if no configuration exists
-
-2. **Victory Checking Process**:
-   - Called during combat update loop: `victoryCondition.IsVictoryConditionMet()`
-   - Updates team status by checking if all units in each team are incapacitated
-   - Returns `true` when only one team remains active
-
-3. **Team Defeat Logic**:
-   - `UnitService.IsTeamDefeated(int teamId)` checks if all team units are incapacitated
-   - `CombatTeamManager.UpdateTeamStatus()` refreshes defeat status for all teams
-
-## Team Instantiation
-
-### Components
-
-- **`CombatTeam`** - Represents a team in combat with basic properties
-- **`CombatTeamManager`** - Collection and manager for all combat teams
-- **`GameContext`** - Contains loaded team configurations
-
-### Team Creation Process
-
-1. **Loading in GameInitState**:
-   - Teams are loaded from JSON files specified in game configuration
-   - Stored as `List<TeamConfig>` in `GameContext.Teams`
-
-2. **Instantiation in CombatState**:
-   ```csharp
-   private void InitializeTeams()
-   ```
-   - Creates `CombatTeam` objects for each loaded team configuration
-   - Assigns sequential team IDs starting from 0
-   - Adds teams to `CombatTeamManager`
-
-### CombatTeam Properties
-
-- `TeamId` - Unique identifier for the team
-- `IsDefeated` - Boolean indicating if the team has been defeated
-
-### Team Configuration Format
-
-Teams are defined in separate JSON files:
-
-```json
-{
-  "teamId": "0",
-  "teamName": "Player Team",
+  "teamId": "1",
+  "teamName": "AI Team",
+  "isAI": true,
   "units": [
     {
       "unitId": 1,
-      "name": "Ralph",
+      "name": "Sam",
       "hp": 100,
       "speed": 10,
       "pa": 5,
@@ -161,50 +76,50 @@ Teams are defined in separate JSON files:
 }
 ```
 
-## Unit Population and Snake Draft System
+**Key Properties:**
+- **teamId**: Unique identifier for the team
+- **teamName**: Display name for the team
+- **isAI**: Boolean flag indicating if team is AI-controlled
+- **units**: Array of unit configurations with stats and properties
 
-### Components
+### Map Configuration Loading
 
-- **`PlayerUnit`** - Combat-ready unit objects with stats and properties
-- **`UnitService`** - Dictionary-based storage and management of all units
-- **Snake Draft Algorithm** - Fair unit ID assignment system
+Map data is loaded from the file specified in the game configuration, setting up the battlefield layout and tile properties.
 
-### Purpose of Snake Draft
+## Services Architecture Integration
 
-Unit IDs serve as tiebreakers in turn order and other game mechanics. Lower unit IDs have priority, so fair distribution ensures no team has an inherent advantage.
+### Shared Services Pattern
+
+GameInitState initializes and configures shared services that persist throughout the game session:
+
+**Services Managed by StateManager:**
+- **UnitService**: Manages all player units and their states
+- **SpellService**: Handles spell and ability processing
+- **StatusService**: Manages status effects on units
+- **Board**: Manages map tiles and unit positions
+- **GameTimeManager**: Controls turn order and action timing
+
+**Benefits:**
+- Services persist across state transitions
+- Consistent data access patterns
+- Centralized service management
+- Clean separation of concerns
+
+## Unit Creation and Snake Draft System
 
 ### Snake Draft Algorithm
 
-The algorithm distributes unit IDs fairly across teams:
+The system uses a snake draft algorithm to fairly distribute unit IDs across teams, preventing any team from having inherent advantages based on turn order priority.
+
+**Algorithm Process:**
 
 1. **Collection Phase**: Gather all unit configurations from all teams
-2. **Grouping Phase**: Organize units by team
+2. **Grouping Phase**: Organize units by team ID
 3. **Assignment Phase**: Use alternating order per round:
    - **Even rounds** (0, 2, 4...): Team 0 → Team 1 → Team 2 → ...
    - **Odd rounds** (1, 3, 5...): Team N → Team N-1 → ... → Team 0
 
-### Implementation Details
-
-1. **Main Function**:
-   ```csharp
-   private void InitializeAllUnitsWithSnakeDraft()
-   ```
-
-2. **Unit Creation**:
-   ```csharp
-   private void CreateAndAddPlayerUnit(UnitConfig unitConfig, int teamId, int assignedUnitId)
-   ```
-   - Creates `PlayerUnit` from `UnitConfig`
-   - Uses snake draft assigned ID instead of original unit ID
-   - Adds to `UnitService` dictionary with specific ID
-
-3. **Storage**:
-   - Units stored in `Dictionary<int, PlayerUnit>` in `UnitService`
-   - Key: Snake draft assigned unit ID
-   - Value: `PlayerUnit` object
-
-### Example Snake Draft
-
+**Example Snake Draft:**
 For 2 teams with 2 units each:
 
 | Round | Order | Team 0 Unit | Team 1 Unit | Assigned IDs |
@@ -212,46 +127,185 @@ For 2 teams with 2 units each:
 | 0 (even) | Forward | Unit A | Unit C | A=0, C=1 |
 | 1 (odd) | Reverse | Unit B | Unit D | D=2, B=3 |
 
-Final ID assignment: Team 0 gets IDs 0,3 and Team 1 gets IDs 1,2
+**Result:** Team 0 gets IDs 0,3 and Team 1 gets IDs 1,2
 
-### PlayerUnit Properties
+### PlayerUnit Creation
 
-Key properties set during creation:
-- `UnitId` - Snake draft assigned ID (used for tiebreakers)
-- `TeamId` - Team the unit belongs to
-- `IsIncapacitated` - Health status (initially false)
-- `IsMidActiveTurn` - Turn state (initially false)
+Units are created with the following process:
+
+```csharp
+PlayerUnit playerUnit = new PlayerUnit(
+    unitConfig.InitialCT,     // Starting charge time
+    unitConfig.Speed,         // Movement speed stat
+    unitConfig.PA,            // Physical attack power
+    unitConfig.HP,            // Hit points
+    unitConfig.Move,          // Movement range
+    unitConfig.Jump,          // Jump height
+    assignedUnitId,           // Snake draft assigned ID
+    teamId                    // Team identifier
+);
+```
+
+**Key Properties Set:**
 - Combat stats from configuration (HP, Speed, PA, Move, Jump, Initial CT)
+- Snake draft assigned ID (used for tiebreakers and turn order)
+- Team assignment
+- Initial state flags (IsIncapacitated = false, IsMidActiveTurn = false)
+
+## Board Initialization and Unit Placement
+
+### Board Setup
+
+The board is initialized using the map configuration loaded from JSON:
+
+1. **Map Loading**: Board loads tile data from MapConfig
+2. **Tile Creation**: Creates Tile objects with properties and positions
+3. **Accessibility Setup**: Configures movement and placement permissions
+
+### Unit Placement Process
+
+Units are placed on the board in a systematic order:
+
+1. **Unit Sorting**: Units sorted by UnitId (lowest first)
+2. **Tile Selection**: Available tiles selected in iteration order
+3. **Sequential Placement**: Each unit placed on next available tile
+4. **Validation**: Placement success verified for each unit
+
+**Placement Logic:**
+```csharp
+// Sort units by ID for consistent placement order
+var sortedUnits = unitService.unitDict.Values.OrderBy(unit => unit.UnitId);
+
+// Place each unit on next available tile
+foreach (var unit in sortedUnits)
+{
+    bool placed = board.PlaceUnitOnTile(tile, unit.UnitId);
+    // Handle placement success/failure
+}
+```
+
+## Combat Object Initialization
+
+### Alliance System Setup
+
+The AllianceManager is initialized with configurations from the game config:
+
+**Implementation:**
+```csharp
+stateManager.InitializeAllianceManager();
+```
+
+**Functionality:**
+- Parses alliance configurations from JSON
+- Sets up team relationship mappings
+- Provides alliance queries for combat logic
+
+### Victory Condition Setup
+
+Victory conditions are configured based on game settings:
+
+**Supported Victory Types:**
+- **LastTeamStanding**: Game continues until only one team remains
+
+**Implementation:**
+```csharp
+stateManager.InitializeVictoryCondition();
+```
+
+### Combat Team Management
+
+CombatTeam objects are created for team-level management:
+
+**Team Properties:**
+- **TeamId**: Unique team identifier
+- **IsDefeated**: Current defeat status
+- **IsAI**: AI control flag from configuration
+
+**Implementation:**
+```csharp
+stateManager.InitializeCombatTeams();
+```
 
 ## Integration with Game Flow
 
-These initialization systems work together to prepare combat:
+### State Transition
 
-1. **GameInitState** loads configurations from JSON files
-2. **CombatState.Enter()** calls initialization methods in sequence:
-   - `InitializeTeams()` - Creates teams and populates units with snake draft
-   - `InitializeAlliances()` - Sets up team relationships
-   - `InitializeVictoryCondition()` - Prepares win condition checking
-3. **Combat Loop** uses these systems:
-   - Alliance relationships affect targeting and AI behavior
-   - Victory condition is checked each update cycle
-   - Unit IDs determine turn order priority
-   - Team status affects victory condition evaluation
+Once initialization is complete, GameInitState transitions to CombatState:
 
-## Configuration Files
+1. **Completion Check**: All initialization steps completed successfully
+2. **State Marking**: `CompleteState()` called to mark initialization done
+3. **Automatic Transition**: StateManager transitions to CombatState
+4. **Service Handoff**: All initialized services available to CombatState
 
-### Game Configuration
-Located at: `AirelianTactics/Configs/GameConfigDirectory/game_config.json`
+### Data Persistence
 
-### Team Configurations  
-Located at: `AirelianTactics/Configs/TeamConfigDirectory/`
-- `team_sample.json` - Player team
-- `team_sample_2.json` - AI team
+**GameContext Storage:**
+- Game configuration data
+- Team configurations
+- Map configuration
+- All data accessible across states
 
-## Related Classes
+**StateManager Services:**
+- Unit dictionary with all created units
+- Initialized board with placed units
+- Combat management objects
+- Shared services ready for combat
 
-- `GameContext` - Shared data container
-- `GameConfig` - Game configuration model
-- `TeamConfig` / `UnitConfig` - Team and unit configuration models
-- `StateManager` - Manages game state transitions
-- `State` base class - Provides `GameContext` access to all states 
+## Error Handling and Validation
+
+### Configuration Validation
+
+The system validates configurations during loading:
+
+- **File Existence**: Checks if configuration files exist
+- **JSON Parsing**: Validates JSON structure and content
+- **Data Integrity**: Ensures required fields are present
+- **Graceful Degradation**: Continues loading other teams if one fails
+
+### Initialization Verification
+
+Each initialization step includes validation:
+
+- **Service Availability**: Confirms services are properly initialized
+- **Data Consistency**: Validates cross-references between configurations
+- **Placement Success**: Verifies unit placement on board
+- **Combat Readiness**: Ensures all combat objects are properly set up
+
+## Configuration Files Reference
+
+### File Locations
+
+- **Game Config**: `AirelianTactics/Configs/GameConfigDirectory/game_config.json`
+- **Team Configs**: `AirelianTactics/Configs/TeamConfigDirectory/`
+  - `team_sample.json` - Human team
+  - `team_sample_2.json` - AI team
+- **Map Config**: `AirelianTactics/Configs/MapConfigDirectory/default_map.json`
+
+### Required Configuration Elements
+
+**Game Configuration Must Include:**
+- Victory condition specification
+- Team file references
+- Map file reference
+- Alliance definitions (optional, defaults to neutral)
+
+**Team Configuration Must Include:**
+- Team identification and naming
+- AI control flag
+- Unit definitions with complete stats
+
+**Map Configuration Must Include:**
+- Tile definitions with positions
+- Movement and placement permissions
+- Terrain type specifications
+
+## Best Practices
+
+1. **Configuration Management**: Keep configuration files in designated directories
+2. **Error Recovery**: Handle missing files gracefully with meaningful error messages
+3. **Data Validation**: Validate all loaded data before proceeding to combat
+4. **Service Lifecycle**: Initialize services once in GameInitState, reuse across states
+5. **Snake Draft**: Use fair ID assignment to prevent gameplay imbalances
+6. **Clean Separation**: Complete all initialization before starting combat logic
+
+This initialization system provides a robust foundation for the game's combat system, ensuring all components are properly configured and ready before gameplay begins. 

@@ -163,6 +163,8 @@ Takeaways for next project
   I probably need to be more modular
 
 backlog
+  units within a team can be AI or human
+  moving is ending turn
   storing a bunch of shared stuff in statemanager. some argument for dependency injection but Idk
     need them shared and referenced from somewhere
   state manager aproach is inconsistent. might be fine.

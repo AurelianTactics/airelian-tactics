@@ -119,6 +119,7 @@ namespace AirelianTactics.Tests.GameStates
             public Action? OnEnter { get; set; }
             public Action? OnExit { get; set; }
             public Action? OnUpdate { get; set; }
+            public Action<string>? OnHandleInput { get; set; }
             
             // Implement the GameContext property
             public GameContext GameContext { get; set; } = new GameContext();
@@ -126,6 +127,7 @@ namespace AirelianTactics.Tests.GameStates
             public void Enter() => OnEnter?.Invoke();
             public void Exit() => OnExit?.Invoke();
             public void Update() => OnUpdate?.Invoke();
+            public void HandleInput(string input) => OnHandleInput?.Invoke(input);
         }
 
         private class TestState2 : IState
@@ -133,6 +135,7 @@ namespace AirelianTactics.Tests.GameStates
             public Action? OnEnter { get; set; }
             public Action? OnExit { get; set; }
             public Action? OnUpdate { get; set; }
+            public Action<string>? OnHandleInput { get; set; }
             
             // Implement the GameContext property
             public GameContext GameContext { get; set; } = new GameContext();
@@ -140,6 +143,7 @@ namespace AirelianTactics.Tests.GameStates
             public void Enter() => OnEnter?.Invoke();
             public void Exit() => OnExit?.Invoke();
             public void Update() => OnUpdate?.Invoke();
+            public void HandleInput(string input) => OnHandleInput?.Invoke(input);
         }
 
         private class CompletableState : State

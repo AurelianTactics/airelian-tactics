@@ -22,5 +22,7 @@ For detailed documentation, please check the [docs folder](./docs/README.md).
 
 ## Minimum Viable Product (MVP)
 - Basic turn-based combat
-- Play online
-- One AI augmented item to improve the development loop 
+
+## Later goals (upcoming projects)
+- Playable online
+- Use AI tools for enhanced developer / creator experience

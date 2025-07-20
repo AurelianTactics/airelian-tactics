@@ -24,9 +24,19 @@ public class UnitActionState : State
         Confirming
     }
     
+    private enum TargetingSubPhase
+    {
+        SelectingAbility,
+        SelectingTarget
+    }
+    
     private ActionPhase currentPhase = ActionPhase.SelectingCommand;
+    private TargetingSubPhase targetingSubPhase = TargetingSubPhase.SelectingAbility;
     private string selectedCommand = "";
     private object targetingData = null;
+    private string currentTargetingInput = ""; // Store current targeting input separately
+    private List<Tile> validMoveTiles = null; // Store valid move tiles separately
+    private string confirmationInput = ""; // Store confirmation input separately
     private bool waitingForUserInput = false;
     
     /// <summary>
@@ -120,9 +130,8 @@ public class UnitActionState : State
     private void ShowCommandMenu()
     {
         Console.WriteLine("=== UNIT ACTION MENU ===");
-        // Add move and act when Wait is implemented
-        // Console.WriteLine("1. Move");
-        // Console.WriteLine("2. Act");
+        Console.WriteLine("1. Move");
+        Console.WriteLine("2. Act");
         Console.WriteLine("3. Wait");
         Console.WriteLine("Select your command:");
         
@@ -138,16 +147,17 @@ public class UnitActionState : State
         // This would be called when user input is received
         switch (selectedCommand)
         {
-            // case "1":
-            //     selectedCommand = "Move";
-            //     currentPhase = ActionPhase.Targeting;
-            //     ShowMoveTargeting();
-            //     break;
-            // case "2":
-            //     selectedCommand = "Act";
-            //     currentPhase = ActionPhase.Targeting;
-            //     ShowActTargeting();
-            //     break;
+            case "1":
+                selectedCommand = "Move";
+                currentPhase = ActionPhase.Targeting;
+                ShowMoveTargeting();
+                break;
+            case "2":
+                selectedCommand = "Act";
+                currentPhase = ActionPhase.Targeting;
+                targetingSubPhase = TargetingSubPhase.SelectingAbility; // Reset sub-phase
+                ShowActTargeting();
+                break;
             case "3":
                 selectedCommand = "Wait";
                 currentPhase = ActionPhase.Confirming;
@@ -212,7 +222,7 @@ public class UnitActionState : State
         Console.WriteLine("Enter number (0-9):");
         
         // Store the valid tiles for later reference
-        targetingData = validMoveTiles;
+        this.validMoveTiles = validMoveTiles;
         waitingForUserInput = true;
         // Input will be handled by the HandleInput method when user provides it
     }
@@ -226,6 +236,7 @@ public class UnitActionState : State
         Console.WriteLine("Select an ability:");
         Console.WriteLine("1. Attack");
         
+        targetingSubPhase = TargetingSubPhase.SelectingAbility; // Reset to ability selection
         waitingForUserInput = true;
         // Input will be handled by the HandleInput method when user provides it
     }
@@ -241,7 +252,16 @@ public class UnitActionState : State
                 HandleMoveTargeting();
                 break;
             case "Act":
-                HandleActTargeting();
+                // Handle based on sub-phase for Act command
+                switch (targetingSubPhase)
+                {
+                    case TargetingSubPhase.SelectingAbility:
+                        HandleActTargeting();
+                        break;
+                    case TargetingSubPhase.SelectingTarget:
+                        HandleAttackTargeting();
+                        break;
+                }
                 break;
         }
     }
@@ -252,7 +272,7 @@ public class UnitActionState : State
     private void HandleMoveTargeting()
     {
         // Get the user's selection
-        string input = selectedCommand;
+        string input = currentTargetingInput;
         
         // Parse the input as a number
         if (int.TryParse(input, out int selection))
@@ -265,13 +285,11 @@ public class UnitActionState : State
                 return;
             }
             
-            // Get the valid tiles list from targetingData
-            List<Tile> validTiles = targetingData as List<Tile>;
-            
-            if (validTiles != null && selection >= 1 && selection <= Math.Min(validTiles.Count, 9))
+            // Get the valid tiles list from the stored field
+            if (validMoveTiles != null && selection >= 1 && selection <= Math.Min(validMoveTiles.Count, 9))
             {
                 // Valid selection - get the selected tile
-                Tile selectedTile = validTiles[selection - 1];
+                Tile selectedTile = validMoveTiles[selection - 1];
                 targetingData = selectedTile.pos;
                 
                 Console.WriteLine($"Selected tile: ({selectedTile.pos.x},{selectedTile.pos.y})");
@@ -296,45 +314,153 @@ public class UnitActionState : State
     /// </summary>
     private void HandleActTargeting()
     {
-        string abilityChoice = targetingData.ToString();
+        string abilityChoice = currentTargetingInput;
         
         if (abilityChoice == "1") // Attack
         {
-            Console.WriteLine("Select target tile for attack:");
-            Console.WriteLine("Available targets: (2,1), (1,2)");
-            
-            waitingForUserInput = true;
-            // Input will be handled by the HandleInput method when user provides it
-            
-            // After getting target, create act targeting data
-            targetingData = new ActTargetingData
-            {
-                AbilityName = "Attack",
-                TargetPoint = new Point(2, 1),
-                SpellName = new SpellName() // Default attack spell
-            };
-            
-            currentPhase = ActionPhase.Confirming;
-            ShowConfirmation();
-        }
-        else if (abilityChoice == "2") // Heal
-        {
-            Console.WriteLine("Select target for heal:");
-            // Similar flow for heal
-            targetingData = new ActTargetingData
-            {
-                AbilityName = "Heal",
-                TargetPoint = new Point(1, 1),
-                SpellName = new SpellName() // Default heal spell
-            };
-            
-            currentPhase = ActionPhase.Confirming;
-            ShowConfirmation();
+            targetingSubPhase = TargetingSubPhase.SelectingTarget;
+            ShowAttackTargeting();
         }
         else
         {
             Console.WriteLine("Invalid ability selection. Please try again.");
             ShowActTargeting();
+        }
+    }
+
+    /// <summary>
+    /// Show attack targeting interface with actual enemy units
+    /// </summary>
+    private void ShowAttackTargeting()
+    {
+        Console.WriteLine("=== ATTACK TARGETING ===");
+        Console.WriteLine("Select a target:");
+        
+        // Find enemy units that can be targeted
+        List<(PlayerUnit unit, Point position)> validTargets = FindValidAttackTargets();
+        
+        if (validTargets.Count == 0)
+        {
+            Console.WriteLine("No valid targets available");
+            currentPhase = ActionPhase.SelectingCommand;
+            ShowCommandMenu();
+            return;
+        }
+        
+        // Show available targets
+        Console.WriteLine("Available targets:");
+        int displayCount = Math.Min(validTargets.Count, 9);
+        for (int i = 0; i < displayCount; i++)
+        {
+            var (unit, position) = validTargets[i];
+            Console.WriteLine($"{i + 1}. Unit {unit.UnitId} (Team {unit.TeamId}) at ({position.x},{position.y})");
+        }
+        
+        if (validTargets.Count > 9)
+        {
+            Console.WriteLine($"... and {validTargets.Count - 9} more targets (not shown)");
+        }
+        
+        Console.WriteLine("0. Cancel");
+        Console.WriteLine("Enter number (0-9):");
+        
+        // Store valid targets for later reference
+        targetingData = validTargets;
+        waitingForUserInput = true;
+    }
+
+    /// <summary>
+    /// Find valid enemy units that can be attacked
+    /// </summary>
+    /// <returns>List of enemy units with their positions</returns>
+    private List<(PlayerUnit unit, Point position)> FindValidAttackTargets()
+    {
+        List<(PlayerUnit unit, Point position)> validTargets = new List<(PlayerUnit unit, Point position)>();
+        
+        // Get alliance manager from state manager
+        var allianceManager = stateManager.AllianceManager;
+        if (allianceManager == null)
+        {
+            Console.WriteLine("Warning: No alliance manager found");
+            return validTargets;
+        }
+        
+        // Check all units to find enemies
+        foreach (var kvp in unitService.unitDict)
+        {
+            PlayerUnit unit = kvp.Value;
+            
+            // Skip self
+            if (unit.UnitId == currentUnit.UnitId)
+                continue;
+                
+            // Skip incapacitated units
+            if (unit.IsIncapacitated)
+                continue;
+            
+            // Check if this unit is an enemy
+            if (allianceManager.AreTeamsEnemies(currentUnit.TeamId, unit.TeamId))
+            {
+                // Find the unit's position on the board
+                Point? position = board.GetUnitPosition(unit.UnitId);
+                if (position.HasValue)
+                {
+                    // TODO: Add range checking here when spell range is implemented
+                    validTargets.Add((unit, position.Value));
+                }
+            }
+        }
+        
+        return validTargets;
+    }
+
+    /// <summary>
+    /// Handle attack targeting input
+    /// </summary>
+    private void HandleAttackTargeting()
+    {
+        string input = currentTargetingInput;
+        
+        // Parse the input as a number
+        if (int.TryParse(input, out int selection))
+        {
+            if (selection == 0)
+            {
+                // User cancelled - go back to act menu
+                currentPhase = ActionPhase.Targeting;
+                ShowActTargeting();
+                return;
+            }
+            
+            // Get the valid targets from the stored field
+            if (targetingData is List<(PlayerUnit unit, Point position)> validTargets && 
+                selection >= 1 && selection <= Math.Min(validTargets.Count, 9))
+            {
+                // Valid selection - get the selected target
+                var (selectedUnit, selectedPosition) = validTargets[selection - 1];
+                
+                // Create act targeting data with proper spell configuration
+                targetingData = new ActTargetingData
+                {
+                    AbilityName = "Attack",
+                    TargetPoint = selectedPosition,
+                    SpellName = CreateAttackSpell(selectedPosition)
+                };
+                
+                Console.WriteLine($"Selected target: Unit {selectedUnit.UnitId} at ({selectedPosition.x},{selectedPosition.y})");
+                currentPhase = ActionPhase.Confirming;
+                ShowConfirmation();
+            }
+            else
+            {
+                Console.WriteLine("Invalid selection. Please try again.");
+                ShowAttackTargeting();
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a number.");
+            ShowAttackTargeting();
         }
     }
 
@@ -373,7 +499,7 @@ public class UnitActionState : State
     /// </summary>
     private void HandleConfirmation()
     {
-        string confirmation = targetingData?.ToString() ?? "Y";
+        string confirmation = confirmationInput ?? "Y";
         
         if (confirmation.ToUpper() == "Y")
         {
@@ -382,10 +508,13 @@ public class UnitActionState : State
         }
         else
         {
-            // Go back to command selection
+            // Go back to command selection and reset all state
             currentPhase = ActionPhase.SelectingCommand;
+            targetingSubPhase = TargetingSubPhase.SelectingAbility;
             selectedCommand = "";
             targetingData = null;
+            currentTargetingInput = "";
+            confirmationInput = "";
             ShowCommandMenu();
         }
     }
@@ -459,6 +588,18 @@ public class UnitActionState : State
         return moveSpell;
     }
 
+    /// <summary>
+    /// Create a spell for the Attack command
+    /// </summary>
+    private SpellName CreateAttackSpell(Point targetPosition)
+    {
+        SpellName attackSpell = new SpellName();
+        attackSpell.AbilityName = "Attack";  // Set to "Attack" instead of default "dummy"
+        attackSpell.BaseQ = 999;
+        attackSpell.TargetPoint = targetPosition;
+
+        return attackSpell;
+    }
 
 
     /// <summary>
@@ -476,11 +617,11 @@ public class UnitActionState : State
                     waitingForUserInput = false;
                     break;
                 case ActionPhase.Targeting:
-                    targetingData = input;
+                    currentTargetingInput = input;
                     waitingForUserInput = false;
                     break;
                 case ActionPhase.Confirming:
-                    targetingData = input;
+                    confirmationInput = input;
                     waitingForUserInput = false;
                     break;
             }

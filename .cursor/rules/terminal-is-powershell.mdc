@@ -1,4 +1,6 @@
 ---
+description: Terminal usage rules
+globs:
 alwaysApply: true
 ---
-cursor: Remember that the user uses PowerShell as their terminal shell. Always assume PowerShell syntax for terminal commands and scripts.
+- use Powershell syntax for terminal commands

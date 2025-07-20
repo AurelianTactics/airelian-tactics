@@ -58,6 +58,21 @@ public class StateManager
     public GameTimeManager GameTimeManager { get; private set; }
 
     /// <summary>
+    /// Shared combat team manager instance used by all states
+    /// </summary>
+    public CombatTeamManager CombatTeamManager { get; private set; }
+
+    /// <summary>
+    /// Shared alliance manager instance used by all states
+    /// </summary>
+    public AllianceManager AllianceManager { get; private set; }
+
+    /// <summary>
+    /// Shared victory condition instance used by all states
+    /// </summary>
+    public VictoryCondition VictoryCondition { get; private set; }
+
+    /// <summary>
     /// World tick counter for game time progression
     /// </summary>
     public int WorldTick { get; private set; } = -1;
@@ -85,6 +100,9 @@ public class StateManager
         SpellService = new SpellService();
         StatusService = new StatusService();
         Board = new Board();
+        
+        // Note: CombatTeamManager, AllianceManager, and VictoryCondition are initialized 
+        // later in GameInitState when game configuration is available
         
         // Initialize game time manager with services
         GameTimeManager = new GameTimeManager(UnitService, SpellService, StatusService, Board);
@@ -285,5 +303,69 @@ public class StateManager
     public void CompleteCurrentState()
     {
         currentStateCompleted = true;
+    }
+
+    /// <summary>
+    /// Initialize the alliance manager with the game configuration
+    /// </summary>
+    public void InitializeAllianceManager()
+    {
+        if (gameContext != null && gameContext.GameConfig != null && 
+            gameContext.GameConfig.General != null && gameContext.GameConfig.General.Alliances != null)
+        {
+            AllianceManager = new AllianceManager(gameContext.GameConfig.General.Alliances);
+            Console.WriteLine("Initialized alliance manager with alliance configurations from game config");
+        }
+        else
+        {
+            AllianceManager = new AllianceManager();
+            Console.WriteLine("Initialized empty alliance manager with default neutral relationships");
+        }
+    }
+
+    /// <summary>
+    /// Initialize the victory condition with the game configuration
+    /// </summary>
+    public void InitializeVictoryCondition()
+    {
+        if (gameContext != null && gameContext.GameConfig != null && gameContext.GameConfig.General != null)
+        {
+            string victoryConditionString = gameContext.GameConfig.General.VictoryCondition;
+            VictoryCondition = new VictoryCondition(victoryConditionString);
+            Console.WriteLine($"Victory condition set to: {victoryConditionString}");
+        }
+        else
+        {
+            VictoryCondition = new VictoryCondition();
+            Console.WriteLine("Using default victory condition: Last Team Standing");
+        }
+    }
+
+    /// <summary>
+    /// Initialize combat teams in the combat team manager
+    /// </summary>
+    public void InitializeCombatTeams()
+    {
+        // Initialize the combat team manager first
+        CombatTeamManager = new CombatTeamManager();
+        
+        if (gameContext != null && gameContext.Teams != null)
+        {
+            Console.WriteLine($"Initializing {gameContext.Teams.Count} combat teams");
+            
+            // Create combat teams
+            int teamId = 0;
+            foreach (var teamConfig in gameContext.Teams)
+            {
+                CombatTeam combatTeam = new CombatTeam(teamId, teamConfig.IsAI);
+                CombatTeamManager.AddTeam(combatTeam);
+                Console.WriteLine($"Created combat team {teamId} (AI: {teamConfig.IsAI})");
+                teamId++;
+            }
+        }
+        else
+        {
+            Console.WriteLine("No teams found in Game Context");
+        }
     }
 } 

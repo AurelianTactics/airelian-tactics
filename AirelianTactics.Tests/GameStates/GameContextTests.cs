@@ -12,7 +12,7 @@ namespace AirelianTactics.Tests.GameStates
     {
         private StateManager stateManager = null!;
         private GameInitState initState = null!;
-        private MapSetupState mapSetupState = null!;
+        private CombatState combatState = null!;
         private string testGameConfigPath = null!;
         private List<string> testTeamConfigPaths = new List<string>();
 
@@ -25,14 +25,14 @@ namespace AirelianTactics.Tests.GameStates
             // Setup state manager and states
             stateManager = new StateManager();
             initState = new TestGameInitState(stateManager, testGameConfigPath);
-            mapSetupState = new MapSetupState(stateManager);
+            combatState = new CombatState(stateManager);
 
             // Register the states
             stateManager.RegisterState(initState);
-            stateManager.RegisterState(mapSetupState);
+            stateManager.RegisterState(combatState);
 
             // Define the flow - use the exact types that were registered
-            stateManager.DefineStateFlow<TestGameInitState, MapSetupState>();
+            stateManager.DefineStateFlow<TestGameInitState, CombatState>();
         }
 
         [TestCleanup]
@@ -69,8 +69,8 @@ namespace AirelianTactics.Tests.GameStates
             
             // Assert - both states should reference the same GameContext instance
             Assert.IsNotNull(initState.GameContext);
-            Assert.IsNotNull(mapSetupState.GameContext);
-            Assert.AreSame(initState.GameContext, mapSetupState.GameContext);
+            Assert.IsNotNull(combatState.GameContext);
+            Assert.AreSame(initState.GameContext, combatState.GameContext);
         }
 
         [TestMethod]
@@ -101,29 +101,29 @@ namespace AirelianTactics.Tests.GameStates
         }
 
         [TestMethod]
-        public void MapSetupState_ShouldHaveAccessToAllTeams()
+        public void CombatState_ShouldHaveAccessToAllTeams()
         {
             // Arrange
             stateManager.ChangeState<TestGameInitState>();
             stateManager.Update(); // Load team config in GameInitState
             
             // Act
-            stateManager.ChangeState<MapSetupState>();
+            stateManager.ChangeState<CombatState>();
             
             // Assert
-            Assert.IsNotNull(mapSetupState.GameContext.Teams);
-            Assert.AreEqual(2, mapSetupState.GameContext.Teams.Count);
+            Assert.IsNotNull(combatState.GameContext.Teams);
+            Assert.AreEqual(2, combatState.GameContext.Teams.Count);
             
             // Check first team
-            var team1 = mapSetupState.GameContext.Teams[0];
+            var team1 = combatState.GameContext.Teams[0];
             Assert.AreEqual("Test Team 1", team1.TeamName);
             
             // Check second team
-            var team2 = mapSetupState.GameContext.Teams[1];
+            var team2 = combatState.GameContext.Teams[1];
             Assert.AreEqual("Test Team 2", team2.TeamName);
             
             // Verify backwards compatibility
-            Assert.AreEqual(team1, mapSetupState.GameContext.TeamConfig);
+            Assert.AreEqual(team1, combatState.GameContext.TeamConfig);
         }
 
         private void CreateTestConfigs()

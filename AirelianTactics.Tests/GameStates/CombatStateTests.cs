@@ -8,14 +8,14 @@ namespace AirelianTactics.Tests.GameStates
     [TestClass]
     public class CombatStateTests
     {
-        private Mock<StateManager> mockStateManager = null!;
+        private StateManager stateManager = null!;
         private CombatState combatState = null!;
 
         [TestInitialize]
         public void Setup()
         {
-            // Arrange - Create mock state manager for each test
-            mockStateManager = new Mock<StateManager>();
+            // Arrange - Create real state manager for each test
+            stateManager = new StateManager();
         }
 
         [TestCleanup]
@@ -23,14 +23,14 @@ namespace AirelianTactics.Tests.GameStates
         {
             // Clean up after each test
             combatState = null!;
-            mockStateManager = null!;
+            stateManager = null!;
         }
 
         [TestMethod]
         public void Constructor_InitializesServicesAndInheritsCorrectly()
         {
             // Act - Create the CombatState
-            combatState = new CombatState(mockStateManager.Object);
+            combatState = new CombatState(stateManager);
 
             // Assert - Verify the constructor properly initializes everything
             
@@ -41,49 +41,35 @@ namespace AirelianTactics.Tests.GameStates
             // 2. Verify initial state flags
             Assert.IsFalse(combatState.IsCompleted, "IsCompleted should be false initially");
 
-            // 3. Verify private fields are initialized correctly using reflection
-            // Check hasCompletedCombat field
-            var hasCompletedCombatField = typeof(CombatState).GetField("hasCompletedCombat", 
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(hasCompletedCombatField, "hasCompletedCombat field should exist");
-            var hasCompletedCombatValue = (bool)hasCompletedCombatField!.GetValue(combatState)!;
-            Assert.IsFalse(hasCompletedCombatValue, "hasCompletedCombat should be false initially");
-
-            // Check unitService field is initialized
+            // 3. Verify services are null before Enter() is called (correct design)
             var unitServiceField = typeof(CombatState).GetField("unitService", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(unitServiceField, "unitService field should exist");
             var unitServiceValue = unitServiceField!.GetValue(combatState);
-            Assert.IsNotNull(unitServiceValue, "unitService should be initialized");
-            Assert.IsInstanceOfType(unitServiceValue, typeof(UnitService), "unitService should be of type UnitService");
+            Assert.IsNull(unitServiceValue, "unitService should be null until Enter() is called");
 
-            // Check combatTeamManager field is initialized
-            var combatTeamManagerField = typeof(CombatState).GetField("combatTeamManager", 
+            // 4. Call Enter() to initialize services (this will get services from real StateManager)
+            combatState.Enter();
+
+            // 5. Verify services are now initialized after Enter()
+            unitServiceValue = unitServiceField!.GetValue(combatState);
+            Assert.IsNotNull(unitServiceValue, "unitService should be initialized after Enter()");
+            Assert.AreSame(stateManager.UnitService, unitServiceValue, "unitService should be the same instance from StateManager");
+
+            // Check other basic services are initialized
+            var spellServiceField = typeof(CombatState).GetField("spellService", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(combatTeamManagerField, "combatTeamManager field should exist");
-            var combatTeamManagerValue = combatTeamManagerField!.GetValue(combatState);
-            Assert.IsNotNull(combatTeamManagerValue, "combatTeamManager should be initialized");
-            Assert.IsInstanceOfType(combatTeamManagerValue, typeof(CombatTeamManager), "combatTeamManager should be of type CombatTeamManager");
+            Assert.IsNotNull(spellServiceField, "spellService field should exist");
+            var spellServiceValue = spellServiceField!.GetValue(combatState);
+            Assert.IsNotNull(spellServiceValue, "spellService should be initialized after Enter()");
+            Assert.AreSame(stateManager.SpellService, spellServiceValue, "spellService should be the same instance from StateManager");
 
-            // 4. Verify other fields are not prematurely initialized (should be null until Enter() is called)
-            var victoryConditionField = typeof(CombatState).GetField("victoryCondition", 
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(victoryConditionField, "victoryCondition field should exist");
-            var victoryConditionValue = victoryConditionField!.GetValue(combatState);
-            Assert.IsNull(victoryConditionValue, "victoryCondition should be null until Enter() is called");
-
-            var allianceManagerField = typeof(CombatState).GetField("allianceManager", 
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.IsNotNull(allianceManagerField, "allianceManager field should exist");
-            var allianceManagerValue = allianceManagerField!.GetValue(combatState);
-            Assert.IsNull(allianceManagerValue, "allianceManager should be null until Enter() is called");
-
-            // 5. Verify the state manager reference is stored correctly
+            // 6. Verify the state manager reference is stored correctly
             var stateManagerField = typeof(State).GetField("stateManager", 
                 BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(stateManagerField, "stateManager field should exist in base State class");
             var stateManagerValue = stateManagerField!.GetValue(combatState);
-            Assert.AreSame(mockStateManager.Object, stateManagerValue, "StateManager reference should be stored correctly");
+            Assert.AreSame(stateManager, stateManagerValue, "StateManager reference should be stored correctly");
         }
     }
 } 

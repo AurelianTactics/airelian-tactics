@@ -1,6 +1,7 @@
 {
   "teamId": "1",
   "teamName": "AI Team",
+  "isAI": true,
   "units": [
     {
       "unitId": 1,

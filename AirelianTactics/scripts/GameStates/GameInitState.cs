@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq; // Added for Max() and OrderBy()
+using AirelianTactics.Services; // Added for UnitService
 
 /// <summary>
 /// Game initialization state.
@@ -49,6 +51,14 @@ public class GameInitState : State
             // Load the map configuration
             LoadMapConfiguration();
             Console.WriteLine("Map configuration loaded successfully.");
+            
+            // Initialize game services with loaded data
+            InitializeBoard();
+            InitializeUnits();
+            PlaceUnitsOnBoard();
+            
+            // Initialize combat objects
+            InitializeCombatObjects();
             
             Console.WriteLine("Game initialization complete!");
             // Mark this state as completed
@@ -205,5 +215,206 @@ public class GameInitState : State
         {
             Console.WriteLine("No teams were loaded from the game configuration.");
         }
+    }
+
+    /// <summary>
+    /// Initialize the board using the map configuration from game context
+    /// </summary>
+    private void InitializeBoard()
+    {
+        var board = stateManager.Board;
+        
+        if (GameContext != null && GameContext.GameConfig != null && GameContext.GameConfig.Map != null)
+        {
+            board.Load(GameContext.GameConfig.Map);
+            Console.WriteLine("Board initialized from map configuration");
+        }
+        else
+        {
+            Console.WriteLine("No map configuration found in Game Context - board will be empty");
+        }
+    }
+
+    /// <summary>
+    /// Initialize all units from all teams using snake draft for fair unit ID assignment
+    /// </summary>
+    private void InitializeUnits()
+    {
+        var unitService = stateManager.UnitService;
+        
+        if (GameContext == null || GameContext.Teams == null)
+        {
+            Console.WriteLine("No teams found in Game Context");
+            return;
+        }
+
+        Console.WriteLine($"Initializing units for {GameContext.Teams.Count} teams");
+
+        // First, collect all unit configs with their team information
+        var allUnitData = new List<(UnitConfig unitConfig, int teamId)>();
+        
+        for (int teamId = 0; teamId < GameContext.Teams.Count; teamId++)
+        {
+            var teamConfig = GameContext.Teams[teamId];
+            if (teamConfig != null && teamConfig.Units != null)
+            {
+                foreach (var unitConfig in teamConfig.Units)
+                {
+                    allUnitData.Add((unitConfig, teamId));
+                }
+            }
+        }
+
+        if (allUnitData.Count == 0)
+        {
+            Console.WriteLine("No units found to initialize");
+            return;
+        }
+
+        // Group units by team to handle snake draft
+        var unitsByTeam = new List<List<(UnitConfig unitConfig, int teamId)>>();
+        for (int teamId = 0; teamId < GameContext.Teams.Count; teamId++)
+        {
+            unitsByTeam.Add(new List<(UnitConfig unitConfig, int teamId)>());
+        }
+
+        foreach (var (unitConfig, teamId) in allUnitData)
+        {
+            unitsByTeam[teamId].Add((unitConfig, teamId));
+        }
+
+        // Find the maximum number of units any team has
+        int maxUnitsPerTeam = unitsByTeam.Max(teamUnits => teamUnits.Count);
+
+        // Assign unit IDs using snake draft
+        int currentUnitId = 0;
+        
+        for (int round = 0; round < maxUnitsPerTeam; round++)
+        {
+            bool isEvenRound = (round % 2) == 0;
+            
+            if (isEvenRound)
+            {
+                // Forward order: Team 0, 1, 2, ...
+                for (int teamId = 0; teamId < GameContext.Teams.Count; teamId++)
+                {
+                    if (round < unitsByTeam[teamId].Count)
+                    {
+                        var (unitConfig, actualTeamId) = unitsByTeam[teamId][round];
+                        CreateAndAddPlayerUnit(unitConfig, actualTeamId, currentUnitId, unitService);
+                        currentUnitId++;
+                    }
+                }
+            }
+            else
+            {
+                // Reverse order: Team ..., 2, 1, 0
+                for (int teamId = GameContext.Teams.Count - 1; teamId >= 0; teamId--)
+                {
+                    if (round < unitsByTeam[teamId].Count)
+                    {
+                        var (unitConfig, actualTeamId) = unitsByTeam[teamId][round];
+                        CreateAndAddPlayerUnit(unitConfig, actualTeamId, currentUnitId, unitService);
+                        currentUnitId++;
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine($"Snake draft completed. Assigned {currentUnitId} unit IDs across {GameContext.Teams.Count} teams");
+    }
+
+    /// <summary>
+    /// Create a PlayerUnit and add it to the unit service with the specified unit ID
+    /// </summary>
+    private void CreateAndAddPlayerUnit(UnitConfig unitConfig, int teamId, int assignedUnitId, UnitService unitService)
+    {
+        // Create player unit from unit config with the assigned unit ID
+        PlayerUnit playerUnit = new PlayerUnit(
+            unitConfig.InitialCT,
+            unitConfig.Speed,
+            unitConfig.PA,
+            unitConfig.HP,
+            unitConfig.Move,
+            unitConfig.Jump,
+            assignedUnitId,  // Use the snake draft assigned ID
+            teamId
+        );
+        
+        // Add the unit to the unit service with the specific ID
+        unitService.AddUnitWithId(playerUnit, assignedUnitId);
+        
+        Console.WriteLine($"Created unit with snake draft ID {assignedUnitId} (original ID: {unitConfig.UnitId}) for team {teamId}");
+    }
+
+    /// <summary>
+    /// Place units from unitService onto the board tiles.
+    /// </summary>
+    private void PlaceUnitsOnBoard()
+    {
+        var unitService = stateManager.UnitService;
+        var board = stateManager.Board;
+        
+        if (unitService == null || unitService.unitDict == null || unitService.unitDict.Count == 0)
+        {
+            Console.WriteLine("No units found to place on board");
+            return;
+        }
+
+        if (board == null || board.tiles == null || board.tiles.Count == 0)
+        {
+            Console.WriteLine("No board tiles available for unit placement");
+            return;
+        }
+
+        // Get units sorted by UnitId (lowest first)
+        var sortedUnits = unitService.unitDict.Values
+            .OrderBy(unit => unit.UnitId)
+            .ToList();
+
+        // Get tiles in dictionary iteration order
+        var availableTiles = board.tiles.Values.ToList();
+
+        int tileIndex = 0;
+        int unitsPlaced = 0;
+
+        foreach (var unit in sortedUnits)
+        {
+            if (tileIndex >= availableTiles.Count)
+            {
+                Console.WriteLine($"Warning: Not enough tiles to place all units. Placed {unitsPlaced}/{sortedUnits.Count} units");
+                break;
+            }
+
+            var tile = availableTiles[tileIndex];
+            bool placed = board.PlaceUnitOnTile(tile, unit.UnitId);
+            
+            if (placed)
+            {
+                Console.WriteLine($"Placed unit {unit.UnitId} (Team {unit.TeamId}) at position {tile.pos}");
+                unitsPlaced++;
+            }
+            else
+            {
+                Console.WriteLine($"Failed to place unit {unit.UnitId} at position {tile.pos} - tile may be occupied");
+            }
+            
+            tileIndex++;
+        }
+
+        Console.WriteLine($"Unit placement complete: {unitsPlaced} units placed on board");
+    }
+
+    /// <summary>
+    /// Initialize combat-specific objects that depend on game configuration
+    /// </summary>
+    private void InitializeCombatObjects()
+    {
+        // Initialize combat objects using StateManager methods
+        stateManager.InitializeAllianceManager();
+        stateManager.InitializeVictoryCondition();
+        stateManager.InitializeCombatTeams();
+        
+        Console.WriteLine("Combat objects initialization complete!");
     }
 } 

@@ -442,6 +442,76 @@ public class Board
 		GetTile(newTile.pos).UnitId = pu.UnitId;
 	}
 
+	/// <summary>
+	/// Print the board layout for debugging purposes.
+	/// Shows X for empty tiles and unit IDs for occupied tiles.
+	/// Formatted for terminal readability.
+	/// </summary>
+	public void PrintMap()
+	{
+		Console.WriteLine("=== MAP LAYOUT ===");
+		
+		if (tiles.Count == 0)
+		{
+			Console.WriteLine("No tiles on board");
+			Console.WriteLine("==================");
+			return;
+		}
+
+		// Get the bounds of the board
+		int minX = minBoardPoint.x;
+		int maxX = maxBoardPoint.x;
+		int minY = minBoardPoint.y;
+		int maxY = maxBoardPoint.y;
+
+		// Print from top to bottom (higher Y values first)
+		for (int y = maxY; y >= minY; y--)
+		{
+			// Print row header
+			Console.Write($"{y,2}| ");
+			
+			// Print each column in the row
+			for (int x = minX; x <= maxX; x++)
+			{
+				Point position = new Point(x, y);
+				Tile tile = GetTile(position);
+				
+				if (tile == null)
+				{
+					// No tile exists at this position
+					Console.Write("   ");
+				}
+				else if (tile.UnitId == null)
+				{
+					// Empty tile
+					Console.Write(" X ");
+				}
+				else
+				{
+					// Occupied tile - show unit ID
+					Console.Write($"{tile.UnitId.Value,2} ");
+				}
+			}
+			Console.WriteLine(); // End of row
+		}
+		
+		// Print separator line
+		Console.Write("    ");
+		for (int x = minX; x <= maxX; x++)
+		{
+			Console.Write("___");
+		}
+		Console.WriteLine();
+		
+		// Print column headers
+		Console.Write("    ");
+		for (int x = minX; x <= maxX; x++)
+		{
+			Console.Write($"{x,2} ");
+		}
+		Console.WriteLine();
+		Console.WriteLine("==================");
+	}
 
 	#endregion
 

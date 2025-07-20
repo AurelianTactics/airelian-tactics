@@ -233,7 +233,7 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
             made not. just a print statement and nothing serious
 
 
-7. integrates the core game engine and loop parts
+DONE 7. integrates the core game engine and loop parts
     DONE game engine and loop brainstorming
         - me: maybe plan out the game loop a bit better with my queue ideas
         So the abstraction is three fold
@@ -422,35 +422,25 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
         need to fill out CalculateBasicDamage
             make it like 999 HP and do a subtract health from unit and incapaciteate unit
 
-    learn more about agent rules and set up some reuls file
+    DONE learn more about agent rules and set up some reuls file
 
-    testing issues
-    
+    DONE GameTimeManager shouldn't ber created new with combatstate. should exist like a service
 
-            Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.
-            at UnitActionState.CreateAndQueueGameTimeObject() in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\scripts\GameStates\UnitActionState.cs:line 399
-            at UnitActionState.HandleConfirmation() in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\scripts\GameStates\UnitActionState.cs:line 376
-            at UnitActionState.Update() in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\scripts\GameStates\UnitActionState.cs:line 107
-            at StateManager.Update() in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\scripts\GameStates\StateManager.cs:line 
-            164
-            at AirelianTactics.Program.Main(String[] args) in C:\Users\james\github_repos\airelian-tactics\AirelianTactics\Program.cs:line 54
+    DONE need to dislpay some info for testing purposes
+        unit CT, HP and is incapacitated
+        map
 
-    stop for testing
-        This ballooned a bit in complexity.
+    DONE move some combatstate init stuff like alliances, teams, victory conditions to statemanager and gameinitstate
+
+ 
+    DONE stop for testing
         need to test core game loop works
         test that can select actions and see actions
         need to test that the activeturn wait works
         need to test that wait objects are being implemented
 
-
-    once wait works
-        then add move
-        then add act
-        need to test mid active turn works
-
-    hold off on act for now
-
-    so for now midactive turn or active turn, need to handle inputs
+    
+    DONE so for now midactive turn or active turn, need to handle inputs
         can have AI do wait for now
         or can start having the user inputs
             wait
@@ -464,7 +454,7 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                     will have to do a basic calculation
                     will have to apply it to the target
 
-    need something that executes the gameTimeObjects. Ask the AI on the process
+    DONE need something that executes the gameTimeObjects. Ask the AI on the process
         me: I want to describe the types of things
             mid turn or active turn, then user or AI controls the unit
             other things than it resolves and will do something like resolve a spell or what not. hold off implementation
@@ -473,31 +463,43 @@ DONE 5. 1 BEFORE STARTING THIS MAKE SURE GAME COMPILES
                 so maybe add that object to GTO. call it CombatActionObject. flesh it out as you start adding and developing it
             backlog: executes things from the queue (can act like it does)
             current version: shortcut to do the instant attack as only ability so far
-    Prompt:
 
-
-    - run this all by the AI. seems like it iwll work but is it good? bit odd calling from Program.cs.
+    DONE run this all by the AI. seems like it iwll work but is it good? bit odd calling from Program.cs.
         kind of hogs the thread in a way. guess will have to add some robust interrupt handling and back to it parts
             how would it work with user wanting to do UI stuff while game is unfolding? guess would have to make UI part seperate
                 and can decide to have UI interrupt or UI just run
 
+    DONE once wait works
+        DONE then add move
+        LATER need to test mid active turn works
+        test act works
+            can't target self
+            only 3 amage
+
+    DONE victory condition works (all units incapacitated or max turns)
+        goes to end game state and prints map and units
+
+
+
+
+DONE 8. what else is needed for MVP
+    
+    if unit or team is AI then unit generates the actions
+        AI just attacks
+        set team as is AI only
+        set victory condition as some low number of events
+
+9. 
     - test cases
     - documentation
 
 
 
-8. what else is needed for MVP
-    movement works
-    waiting works
-    attack works
-    can quit / interrupt combat loop
-        option to set it to wait or not. can toggle it so combat can proceed or not
-        way to raise a flag for the interrupt
-        can always quit
-        option for user to quit on their turn
-        seperate this into playing modes (one play mode is watching) and testing and debugging
- 
-9. minimal version of "UI" for testing with player interaction
+Next items
+How well does this minimal version play with an outer source?
+    web ui?
+    unity?
+    backlog: RL library
 
 10. what is needed for logging and analysis
     - minimal version

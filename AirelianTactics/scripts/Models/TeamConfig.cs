@@ -16,6 +16,11 @@ public class TeamConfig
     public string TeamName { get; set; }
 
     /// <summary>
+    /// Whether this team is controlled by AI.
+    /// </summary>
+    public bool IsAI { get; set; } = false;
+
+    /// <summary>
     /// The units belonging to this team.
     /// </summary>
     public List<UnitConfig> Units { get; set; } = new List<UnitConfig>();

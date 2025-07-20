@@ -146,5 +146,26 @@ namespace AirelianTactics.Services
             unit.EndTurn();
 
         }
+
+        /// <summary>
+        /// Print unit information for debugging purposes.
+        /// Displays team, unit ID, CT, HP, and incapacitated status ordered by unit ID.
+        /// </summary>
+        public void PrintUnitInfo()
+        {
+            Console.WriteLine("=== UNIT INFO ===");
+            Console.WriteLine("Team | ID | CT  | HP  | Incap");
+            Console.WriteLine("-----|----|----|-------|------");
+            
+            // Order units by UnitId
+            var sortedUnits = _unitDict.Values.OrderBy(u => u.UnitId);
+            
+            foreach (var unit in sortedUnits)
+            {
+                string incapStatus = unit.IsIncapacitated ? "YES" : "NO";
+                Console.WriteLine($" {unit.TeamId,3} | {unit.UnitId,2} | {unit.StatTotalCT,3} | {unit.StatTotalHP,5} | {incapStatus,-5}");
+            }
+            Console.WriteLine("================");
+        }
     }
 } 
